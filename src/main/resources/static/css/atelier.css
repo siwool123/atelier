@@ -1,0 +1,52 @@
+* {
+    font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif;
+	font-size: 14px;
+}
+a, a:hover, a:active {
+    text-decoration: none;
+    color: black;
+}
+
+ul {
+    list-style: none;
+    padding: 0; margin:0; color: black;
+}
+input[type="text"], input[type="number"], input[type="password"], select {border:1px solid #dddddd; height:30px; padding-left:10px; outline:none; background-color: white;}
+.btnb {border:none; background-color:#4a4a4a; color:white; padding:7px 16px;}
+.btnw {border:1px solid #cecece; background-color:white; padding:7px 16px;}
+.active>.page-link, .page-link.active {background-color:#4a4a4a !important; border-color:#4a4a4a !important; border-radius: 0 !important;}
+.fa-heart {color:gray; font-size:20px; margin:0 10px; cursor:pointer;}
+.fa-angle-left, .fa-angles-left, .fa-angle-right, .fa-angles-right {font-size: 18px;}
+
+.container {
+    max-width: 1200px !important;
+    overflow: hidden;
+    margin: 0 auto;
+}
+li, a {
+    list-style: none;
+    text-decoration: none;
+}
+.ci-banner {position: absolute; top: 40px;}
+#ptop i {opacity: 0.5 !important; z-index: 300; font-size: 40px;
+	display:scroll; position:fixed; bottom:30px; right:30px; }
+.sticky-top {background-color: white;}
+
+#mynavbar {display: inline; float:right; }
+#mynavbar ul li {
+    display: inline; margin:50px 20px 20px 20px; float:left; text-align: center;
+}
+#mynavbar ul li a {padding: 50px 10px 20px 10px !important; font-weight: 900 !important;}
+#mynavbar ul li:hover > a, #mynavbar ul li.on > a { border-bottom: 3px solid black !important;  }
+.download:hover {background-color: black; color: white;}
+
+.swiper-slide {color:white; font-weight:bolder; padding-top:100px; font-size:16px !important;}
+.swiper-slide span { font-size: 30px; letter-spacing: 0.3em; animation-name: example; animation-duration: 2s;}
+@keyframes example {0%   {opacity: 0; transform: translate(0, 30px);}}
+.swiper-button-prev {margin-left:20px !important;}
+.swiper-button-next {margin-right:20px !important;}
+.swiper {width: 100%;height: 100%;}
+:root {--swiper-theme-color: white !important;}
+.swiper-pagination-bullet {border-radius:0 !important; width:30vw !important; height:3px !important;}
+div.appdown a {padding:20px; background:white; border-radius:5px; margin-right:20px;}
+#container div, #container div img {position:absolute;user-select: none;overflow:hidden; background-size: cover !important;}
