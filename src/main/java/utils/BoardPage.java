@@ -70,4 +70,30 @@ public class BoardPage {
 		 pagingStr += "</ul>";
 	     return pagingStr;
 	}
+	
+	public static String pagingImg2 (int totalcnt, int pageSize, int blockPage, int pageNum) {
+		String pagingStr = "<ul class='pagination pagination-sm justify-content-center'>"; 
+		
+		int totalPages = (int) Math.ceil((double)totalcnt / pageSize);
+		int pageTemp = ((pageNum-1)/blockPage)*blockPage+1;
+
+		if(pageTemp!=1) {
+			pagingStr += "<li class='page-item'><i class='fa-solid fa-angles-left'></i></li>";
+			pagingStr += "<li class='page-item'><i class='fa-solid fa-angle-left'></i></li>";
+		}
+		
+		int blockcnt = 1;
+		while(blockcnt <= blockPage && pageTemp <= totalPages) {
+			if(pageTemp==pageNum) pagingStr += "<li class='page-item active'>"+pageTemp+"</li>";
+			else pagingStr += "<li class='page-item'>"+pageTemp+"</li>";
+			pageTemp++;
+			blockcnt++;
+		}
+		 if (pageTemp <= totalPages) {
+	        pagingStr += "<li class='page-item'><i class='fa-solid fa-angle-right'></i></li>";
+	        pagingStr += "<li class='page-item'><i class='fa-solid fa-angles-right'></i></li>";
+	     }
+		 pagingStr += "</ul>";
+	     return pagingStr;
+	}
 }

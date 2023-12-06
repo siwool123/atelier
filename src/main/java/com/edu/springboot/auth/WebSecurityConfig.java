@@ -1,16 +1,21 @@
 package com.edu.springboot.auth;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class WebSecurityConfig {
@@ -33,11 +38,10 @@ public class WebSecurityConfig {
 		http.csrf((csrf) -> csrf.disable()).cors((cors) -> cors.disable())
 		.authorizeHttpRequests((request) -> request
 				.dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD).permitAll()
-				.requestMatchers("/").permitAll()
-				.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-				.requestMatchers("/guest/**").permitAll()
-				.requestMatchers("/member/**").hasAnyRole("USER", "ADMIN")
-				.requestMatchers("/admin/**").hasRole("ADMIN")
+				.requestMatchers("/", "/css/**", "/js/**", "/images/**", "/rest/**", "/shop/**", "/shop", "/view/**", "/view", "/uploads/**", "/error").permitAll()
+				.requestMatchers("/member/**").hasAnyRole("MEMBER", "ARTIST", "ADMIN")
+				.requestMatchers("/artist/**", "/artist").hasAnyRole("ARTIST", "ADMIN")
+				.requestMatchers("/admin/**", "/admin").hasRole("ADMIN")
 				.anyRequest().authenticated() ); //어떠한 요청이라도 인증필요
 		
 	/* 로그인페이지에대한 디자인 커스터마이징
@@ -51,10 +55,12 @@ public class WebSecurityConfig {
 		로그아웃페이지에대한 디자인 커스터마이징
 		logoutUrl : 로그아웃 위한 요청명
 		logoutSuccessUrl : 로그아웃후 이동할위치 		  */
+		
+		
 		http.formLogin(formLogin -> formLogin
 				.loginPage("/login") 		// default : /login
 				.loginProcessingUrl("/loginAction")
-//				.failureUrl("/myError.do") 		// default : /login?error
+//				.failureUrl("/error") 		// default : /login?error
 				.failureHandler(myAuthFailureHandler)
 				.usernameParameter("my_id") 	// default : username
 				.passwordParameter("my_pass")	// default : password
@@ -68,19 +74,14 @@ public class WebSecurityConfig {
 		return http.build();
 	}
 	
-	/* 로그인후 획득할수있는 권한에 대한 설정한다. user/1234로 로그인하면 USER 권한 획득한다. admin/1234는 ADMIN 권한 획득
-	 * 해당정보는 메모리에저장. DB에저장하기위해선 별도의 커스터마이징 필요	 */
-	@Bean
-	public UserDetailsService users() {
-		UserDetails user = User.builder().username("user").password(passwordEncoder().encode("1234")).roles("USER").build();
-		UserDetails admin = User.builder().username("admin").password(passwordEncoder().encode("1234")).roles("USER", "ADMIN").build();
-		
-		//메모리에 사용자정보를 담는다
-		return new InMemoryUserDetailsManager(user, admin);
-	}
+	@Autowired
+	private DataSource dataSource;
 	
-	//패스워드 인코더(암호화)
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	@Autowired
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.jdbcAuthentication().dataSource(dataSource)
+		.usersByUsernameQuery("select id, pass, enabled from member where id=?")
+		.authoritiesByUsernameQuery("select id, authority from member where id=?")
+		.passwordEncoder(new BCryptPasswordEncoder());
 	}
 }

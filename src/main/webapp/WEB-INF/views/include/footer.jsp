@@ -24,7 +24,7 @@
 	</div>
 	
 	<div class="col-sm-3">
-	실시간 채팅 운영시간 <br/>
+	<b>실시간 채팅 운영시간</b> <br/>
 	평일 10:00 ~ 18:00<br/>
 	(토, 일, 공휴일 휴무)<br/>
 	점심시간 평일 13:00 ~ 14:00<br/>
@@ -33,4 +33,4 @@
 	</div>
 </div>
 </div>
-<a id="ptop" href="#pageTop" style="opacity:0.5 !important"><i class="bi bi-arrow-up-circle-fill"></i></a>
+<a id="ptop" href="#pageTop" style="opacity:0.5 !important"><i class="bi bi-chevron-double-up"></i></a>

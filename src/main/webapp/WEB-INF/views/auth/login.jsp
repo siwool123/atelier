@@ -20,21 +20,16 @@
 		</p>
 		</c:if>
 		<!-- 시큐리티 설정파일에 지정된 요청명으로 action 속성값기술 -->
-		<form action="/myLoginAction.do" method="post">
+		<form action="/loginAction" method="post">
 			<div class="form-floating mb-3 mt-3">
-				<input type="text" class="form-control" id="user_id" 
-					placeholder="Enter email" name="my_id">
+				<input type="text" class="form-control" id="user_id" placeholder="Enter email" name="my_id">
 				<label for="user_id">아이디</label>
 			</div>	
 			<div class="form-floating mt-3 mb-3">
-				<input type="password" class="form-control" id="user_pwd" 
-					placeholder="Enter password" name="my_pass">
+				<input type="password" class="form-control" id="user_pwd" placeholder="Enter password" name="my_pass">
 				<label for="user_pwd">비밀번호</label>
 			</div>	
-			<div class="d-grid">
-				<button type="submit" class="btn btn-primary btn-block">
-					Submit</button>
-			</div>
+			<div class="d-grid"><button type="submit" class="btn btn-primary btn-block">Submit</button></div>
 		</form>
 	</c:if>
 	<!-- 로그인되었을때 출력되는 부분. 로그인아이디와 로그아웃버튼 출력 -->
