@@ -37,7 +37,13 @@ public interface IBoardService {
 	//작품좋아요버튼
 	public PlikeDTO plview(int pidx, int midx);
 	public int pldelete(int lidx);
-	public int pladd(int pidx, int aidx, int midx);
+	public int pladd(@Param("pidx") int pidx, @Param("aidx") int aidx, @Param("midx") int midx);
+	public int plikecount(int pidx);
+	public int updateplcnt(int plcnt, int pidx);
+	
+	//작가페이지 리뷰보기
+	public List<ReviewDTO> rvlistbya(ParameterDTO parameterDTO);
+	public List<ProductDTO> productsbyas(ParameterDTO parameterDTO);
 }
 
 

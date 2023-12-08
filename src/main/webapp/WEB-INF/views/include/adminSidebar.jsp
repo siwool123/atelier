@@ -55,7 +55,7 @@
             <li class="nav-item"><a class="nav-link" href="./admin/member"><i class="fas fa-fw fa-table"></i> <span>회원관리</span><span class="badge badge-danger">3+</span></a></li>
             <hr class="sidebar-divider d-none d-md-block">
             
-            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="margin-top:100px !important">
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="margin:100px 10px 0 0 !important">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">

@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -78,17 +80,30 @@ public class BoardRestController {
 		return map;		
 	}
 	
-	@PostMapping("member/rest/plike")
-	public int plikeplus(HttpServletRequest req, Principal principal, Model model) {
+	@GetMapping("/rest/plike")
+	public int plikeplus(@RequestParam int pidx, Principal principal) {
 		int result = 0;
-		String user_id = principal.getName();
-		MemberDTO memberDTO = dao.mview(user_id);
-		int pidx = Integer.parseInt(req.getParameter("pidx"));
-		ProductDTO productDTO = dao.pview(pidx);
-		PlikeDTO plikeDTO = dao.plview(pidx, memberDTO.getMidx());
-		if(plikeDTO!=null) {
-			result = dao.pldelete(plikeDTO.getLidx()) * -1;
-		}else {result = dao.pladd(pidx, productDTO.getAidx(), memberDTO.getMidx());}
+		System.out.println(dao.pview(pidx).getAidx());
+		try {
+			if(principal!=null) {String user_id = principal.getName();  
+				System.out.println(user_id);
+				MemberDTO memberDTO = dao.mview(user_id);
+				if(memberDTO!=null) {
+					System.out.println(memberDTO.getMidx());
+					PlikeDTO plikeDTO = dao.plview(pidx, memberDTO.getMidx());
+					if(plikeDTO!=null) { 
+						System.out.println(plikeDTO.getLidx());
+						result = dao.pldelete(plikeDTO.getLidx()) * -1;
+					}else {result = dao.pladd(pidx, dao.pview(pidx).getAidx(), memberDTO.getMidx());}
+			}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("찜 실패");
+		}
+		int plcnt = dao.plikecount(pidx);
+		dao.updateplcnt(plcnt, pidx);
+		
 		return result;
 	}
 	

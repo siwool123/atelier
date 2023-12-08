@@ -15,6 +15,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -39,10 +41,11 @@ public class WebSecurityConfig {
 		.authorizeHttpRequests((request) -> request
 				.dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD).permitAll()
 				.requestMatchers("/", "/css/**", "/js/**", "/images/**", "/rest/**", "/shop/**", "/shop", "/view/**", "/view", "/uploads/**", "/error").permitAll()
-				.requestMatchers("/member/**").hasAnyRole("MEMBER", "ARTIST", "ADMIN")
+				.requestMatchers("/vartist", "/vartist/**").permitAll()
+				.requestMatchers("/member/**").hasAnyRole("USER", "ARTIST", "ADMIN")
 				.requestMatchers("/artist/**", "/artist").hasAnyRole("ARTIST", "ADMIN")
 				.requestMatchers("/admin/**", "/admin").hasRole("ADMIN")
-				.anyRequest().authenticated() ); //어떠한 요청이라도 인증필요
+				/* .anyRequest().authenticated() */ ); //어떠한 요청이라도 인증필요
 		
 	/* 로그인페이지에대한 디자인 커스터마이징
 	  * loginPage : 로그인페이지의 요청명
@@ -84,4 +87,16 @@ public class WebSecurityConfig {
 		.authoritiesByUsernameQuery("select id, authority from member where id=?")
 		.passwordEncoder(new BCryptPasswordEncoder());
 	}
+	
+//	@Bean
+//    public PersistentTokenRepository tokenRepository(){
+//        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+//        jdbcTokenRepository.setDataSource(dataSource);
+//        return jdbcTokenRepository;
+//    }
+//
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 }

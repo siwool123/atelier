@@ -5,7 +5,7 @@
   .pagination {margin-top:420px !important;}
   .footer div div div.col-sm-3 {margin-top:30px;}
   .orderby li {width:23% !important;}
-  #navbarNavAltMarkup div a {margin:10px 20px 0 20px;}
+  #navbarNavAltMarkup div a {margin:10px 20px 0 20px !important;}
 	#navbarNavAltMarkup {margin-top:70px;}
 	.search {margin:20px;}
 	.btn3, .btn4 {display: block;}
@@ -19,7 +19,7 @@
 	.sc2 div div.arttile2 {width: 50% !important;}
 	.image {height: 160px !important;}
 	.arttile {margin-right:2% !important; margin-left:0 !important;}
-	
+	.imgback {padding:0 !important;}
 }
 #show_data { height:1340px;}
 * {font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif; font-size: 14px; }
@@ -88,7 +88,7 @@ b {font-weight: 900; margin-bottom: 20px;}
 .sub {height: 136px;}
 .sub .artist, .sub .ptype, .ptype span {font-size: 12px;}
 .sub .price {font-weight: bolder; font-size: 13px;}
-.page-link {color:black; padding:12px 20px;}
+.page-link {color:black; padding:10px 14px;}
 .pagination {margin-bottom:60px !important;}
 .page-link .fa-solid {font-size:14px;}
 input#pmin, input#pmax {height:30px; width: 100px; }
@@ -127,3 +127,9 @@ form[name='cartfrm'] button, form[name='payfrm'] button {width:96%}
 .arttile2 div span.year {font-size: 14px !important; letter-spacing: 0 !important;}
 .abtn {letter-spacing: 0; padding:0 10px;}
 .slbtn {color:grey; font-size: 24px; margin-left:10px;}
+.modal {--bs-modal-width: 96% !important}
+.modal-content {background-color: black; border-radius:0 !important}
+.modal-header * {color:white}
+.modal-header {border-bottom: none !important;}
+.bi-star-fill {color:grey;}
+.starActive {color:#C98A00;}

@@ -16,7 +16,12 @@ public class MemberDTO {
 	private int midx;
 	private java.sql.Date regidate;
 	private java.sql.Date leavedate;
+	private String profileo;
 	private String profiles;
+	private String placeo;
+	private String places;
 	private int total_point;
-	private int grade;
+	private String token;
+	private int enabled;
+	private String authority;
 }

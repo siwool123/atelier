@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-@Builder
-@ToString
 public class ReviewDTO {
 	private int ridx;
 	private int pidx;
@@ -20,4 +18,8 @@ public class ReviewDTO {
 	private String sfile1;
 	private String sfile2;
 	private String sfile3;
+	private String m_name;
+	private String psfile;
+	private String title;
+	private String a_name;
 }

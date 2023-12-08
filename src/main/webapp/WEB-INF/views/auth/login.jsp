@@ -7,6 +7,14 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script>
+    $("#rememberMe").click(function () {
+        if ($("input:checkbox[id='rememberMe']").is(":checked")) { Cookies.set("rememberMe", true);
+        } else { Cookies.set("rememberMe", false); }
+        alert("rememberMe");
+    })
+    if (Cookies.get("rememberMe") === 'true') { $("input:checkbox[id='rememberMe']").prop("checked", true); }
+</script>
 </head>
 <body class="m-5">
 	<h2>로그인 폼</h2>
@@ -25,10 +33,14 @@
 				<input type="text" class="form-control" id="user_id" placeholder="Enter email" name="my_id">
 				<label for="user_id">아이디</label>
 			</div>	
+			<label style="line-height:50px; padding-left:10px;"> 
+			<input name="remember-me" id="rememberMe" type="checkbox" th:checked="${rememeberMe}"> 자동로그인</label>
+			
 			<div class="form-floating mt-3 mb-3">
 				<input type="password" class="form-control" id="user_pwd" placeholder="Enter password" name="my_pass">
 				<label for="user_pwd">비밀번호</label>
 			</div>	
+			<%-- <div th:if="${param.error}" class="alert alert-danger">메일 혹은 비밀번호를 다시 확인해 주세요.</div> --%>
 			<div class="d-grid"><button type="submit" class="btn btn-primary btn-block">Submit</button></div>
 		</form>
 	</c:if>
@@ -39,5 +51,7 @@
 		<a href="/logout">Logout</a>	
 	</c:if>	
 	</div>
+	
+	
 </body>
 </html>

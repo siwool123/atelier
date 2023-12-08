@@ -141,5 +141,23 @@
 		SELECT * FROM p_like WHERE pidx=#{param1} AND midx=#{param2}
 	</select>
 	<delete id="pldelete">DELETE FROM p_like WHERE lidx=#{param1}</delete>
-	<insert id="pladd">INSERT INTO p_like VALUES (seq_p_like.nextval, #{param1}, #{param2}, #{param3})</insert>
+	<insert id="pladd">INSERT INTO p_like VALUES (seq_p_like.nextval, #{pidx}, #{aidx}, #{midx})</insert>
+	<select id="plikecount">SELECT count(*) FROM p_like WHERE pidx=#{param1}</select>
+	<update id="updateplcnt">UPDATE product SET p_like = #{param1} WHERE pidx=#{param2}</update>
+	
+	<select id="rvlistbya" resultType="com.edu.springboot.restboard.ReviewDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM review WHERE aidx = #{aidx}
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="productsbyas" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM product WHERE aidx=#{aidx} AND sold=#{sold}
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	
 </mapper> 

@@ -27,4 +27,5 @@ public class ProductDTO {
 	private int sold;
 	private int midx;
 	private String m_name;
+	private String material;
 }

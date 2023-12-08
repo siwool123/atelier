@@ -1,44 +1,24 @@
 package com.edu.springboot;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.imageio.ImageIO;
-
-import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 import com.edu.springboot.restboard.ProductDTO;
 import com.edu.springboot.restboard.ReviewDTO;
 import com.edu.springboot.restboard.ParameterDTO;
-import com.edu.springboot.restboard.PlikeDTO;
 import com.edu.springboot.restboard.ArtistDTO;
 import com.edu.springboot.restboard.CartDTO;
 import com.edu.springboot.restboard.IBoardService;
 import com.edu.springboot.restboard.MemberDTO;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import utils.BoardPage;
 import utils.SecurityUtils;
@@ -65,6 +45,12 @@ public class MainController {
 	public String adminMember() {
 		
 		return "admin/adminMember";
+	}
+	
+	@RequestMapping("/admin/noticewrite")
+	public String noticewrite() {
+		
+		return "admin/adminNoticeWrite";
 	}
 	
 	@RequestMapping("/shop")
@@ -107,12 +93,14 @@ public class MainController {
 		
 		String user_id = null;
 		if(principal != null) {user_id = principal.getName();}
+		System.out.println(user_id);
 		
 		ProductDTO productDTO = dao.pview(pidx);
-		if(productDTO == null) {return "auth/error";}
+		if(productDTO == null) {return "error";}
 		int aidx = productDTO.getAidx();
 		ArtistDTO artistDTO = dao.aview(aidx);
 		
+		productDTO.setP_like(dao.plikecount(pidx));
 		productDTO.setP_intro(productDTO.getP_intro().replaceAll("\n", "<br/>"));
 		artistDTO.setA_history(artistDTO.getA_history().replaceAll("\n", "<br/>"));
 		artistDTO.setA_intro(artistDTO.getA_intro().replaceAll("\n", "<br/>"));
@@ -127,6 +115,61 @@ public class MainController {
 		model.addAttribute("user_id", user_id);
 		
 		return "view";
+	}
+	
+	@RequestMapping("/vartist")
+	public String view (@RequestParam int aidx, Model model, ParameterDTO parameterDTO, HttpServletRequest req) {
+
+		int pageSize = 8;//한 페이지당 게시물 수
+		int blockPage = 5;//한 블럭당 페이지 번호 수
+		int pageNum = (req.getParameter("pageNum")==null || req.getParameter("pageNum").equals(""))? 1 : Integer.parseInt(req.getParameter("pageNum"));
+		
+		int start = (pageNum-1) * pageSize + 1; //현재 페이지에 출력한 게시물의 구간을 계산한다.
+		int end = pageNum * pageSize;
+		parameterDTO.setStart(start); //계산된 값은 DTO에 저장한다.
+		parameterDTO.setEnd(end);
+		parameterDTO.setAidx(aidx);
+		
+		ArtistDTO artistDTO = dao.aview(aidx);
+		artistDTO.setA_history(artistDTO.getA_history().replaceAll("\n", "<br/>"));
+		artistDTO.setA_intro(artistDTO.getA_intro().replaceAll("\n", "<br/>"));
+		
+		List<ProductDTO> aplist = dao.selectbya(aidx);
+		
+		List<ReviewDTO> rlist = dao.rvlistbya(parameterDTO);
+		int rstarsum = 0;
+		for(ReviewDTO rdto:rlist) {rstarsum += rdto.getStar();}
+		int staravg = rstarsum/rlist.size();
+		int soldsum = 0, likesum = 0;
+		for(ProductDTO pdto:aplist) {
+			if(pdto.getSold()==1) {soldsum++;}
+			likesum += pdto.getP_like();
+		}
+		
+		parameterDTO.setSold(0);
+		List<ProductDTO> plist0 = dao.productsbyas(parameterDTO);
+		model.addAttribute("plist0", plist0);
+		
+		parameterDTO.setSold(1);
+		List<ProductDTO> plist1 = dao.productsbyas(parameterDTO);
+		model.addAttribute("plist1", plist1);
+		
+		String pagingImg0 = BoardPage.pagingImg(aplist.size()-soldsum, pageSize, blockPage, pageNum, req.getContextPath()+"/viewartist?aidx="+aidx+"&sold=0?");
+		String pagingImg1 = BoardPage.pagingImg(soldsum, pageSize, blockPage, pageNum, req.getContextPath()+"/viewartist?aidx="+aidx+"&sold=1?");
+		String pagingImgr = BoardPage.pagingImg(rlist.size(), pageSize, blockPage, pageNum, req.getContextPath()+"/viewartist?aidx="+aidx+"&review?");
+		
+		model.addAttribute("pagingImg0", pagingImg0);
+		model.addAttribute("pagingImg1", pagingImg1);
+		model.addAttribute("pagingImgr", pagingImgr);
+		
+		model.addAttribute("adto", artistDTO);
+		model.addAttribute("aplist", aplist);
+		model.addAttribute("rlist", rlist);
+		model.addAttribute("staravg", staravg);
+		model.addAttribute("soldsum", soldsum);
+		model.addAttribute("likesum", likesum);
+		
+		return "viewartist";
 	}
 	
 	@RequestMapping("/cart")
@@ -162,16 +205,17 @@ public class MainController {
 	
 	/* 커스텀로그인페이지매핑. 스프링시큐리티는 세션사용해서 로그인정보저장하지만 개발자가 직접 접근할수없으므로, Principal 객체통해 로그인아이디를 얻어올수있다 */
 	@RequestMapping("/login")
-	public String login1(Principal principal, Model model) {
+	public String login1(Principal principal, Model model, HttpServletRequest req) {
+		
 		try {
 			String user_id = principal.getName(); //로그인아이디 얻어온다.
 			model.addAttribute("user_id", user_id); //아이디를 모델객체에 저장
+			if(user_id!=null) return "home";
 			System.out.println("로그인에 성공했습니다.");
 		}catch (Exception e){
 			/* 최초접근시엔 로그인정보가 없으므로 널포인터 예외 발생하므로 예외처리해야한다. */
 			System.out.println("로그인 전입니다.");
 		} 
-		if (SecurityUtils.isLoggedIn()) return "home";
 		return "auth/login";
 	}
 	

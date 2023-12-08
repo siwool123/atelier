@@ -12,8 +12,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
 
 <!-- <script src="https://code.jquery.com/jquery-latest.min.js"></script> -->
-<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script> -->
 <script src="https://kit.fontawesome.com/f101226514.js" crossorigin="anonymous"></script>
 <!-- swiper 플러그인 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
@@ -24,7 +24,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
 <script src="../js/atelier.js"></script>
 <link href="../css/atelier.css" rel="stylesheet" type="text/css" />
-
 </head>
 <body id="pageTop">
     <nav class="navbar navbar-expand-sm sticky-top borer-bottom">
@@ -42,7 +41,7 @@
               <a class="nav-link" href="#">작가페이지</a>
               <a class="nav-link" href="#"><i class="bi bi-bag"></i></a>
               <c:choose>
-	              <c:when test="${empty principal.getName() }">
+	              <c:when test="${empty pageContext.request.userPrincipal }">
 	              	<a class="nav-link" href="./login" >LOGIN</a>
 	              </c:when>
 	              <c:otherwise>

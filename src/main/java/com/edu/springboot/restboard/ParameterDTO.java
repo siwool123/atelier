@@ -6,7 +6,9 @@ import lombok.Data;
 
 @Data
 public class ParameterDTO {
-	private String pidx;
+	private int pidx;
+	private int aidx;
+	private int sold;
 	private String pageNum;
 	private String sField;
 	private ArrayList<String> sWord;
