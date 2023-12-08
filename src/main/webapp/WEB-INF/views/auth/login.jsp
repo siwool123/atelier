@@ -8,12 +8,49 @@
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script>
-    $("#rememberMe").click(function () {
-        if ($("input:checkbox[id='rememberMe']").is(":checked")) { Cookies.set("rememberMe", true);
-        } else { Cookies.set("rememberMe", false); }
-        alert("rememberMe");
-    })
-    if (Cookies.get("rememberMe") === 'true') { $("input:checkbox[id='rememberMe']").prop("checked", true); }
+var cName, cValue;
+var setCookie = function(name, value, exp){
+    var date = new Date();
+    console.log("1970-01-01부터 지금까지의 밀리초 : "+date.getTime());
+    date.setTime(date.getTime()+exp*24*60*60*1000);
+    console.log("유효시간", date.toUTCString());
+    document.cookie = name+"="+value+";expires="+date.toUTCString()+";path =/";
+};
+var getCookie = function(name){
+    var values = document.cookie.split(";");
+    for(var i=0; i<values.length; i++){
+        var value = values[i].trim().split("=");
+        if(value[0]==name){
+            return unescape(value[1]);
+        }
+    }
+    return null;
+};
+function mCookie(cName, cValue){
+    // var cName = document.getElementById("cName").value;
+    // var cValue = document.getElementById("cValue").value;
+    setCookie(cName, cValue, 1);
+    alert("쿠키가 생성되었습니다.");
+    location.reload();
+}
+function rCookie(){
+    var cName = document.getElementById("cName").value;
+    if(getCookie(cName)==null){ alert("해당 이름으로 생성된 쿠키가 없습니다.");}
+    else { alert("쿠키값 : "+getCookie(cName)); }
+}
+function dCookie(){
+    var cName = document.getElementById("cName").value;
+    var cValue = document.getElementById("cValue").value;
+    setCookie(cName, cValue, -2);
+    alert("쿠키가 삭제되었습니다.");
+    location.reload();
+}
+function closeWin(){ mCookie("popupWin", "off1");}
+onload = function(){
+    var popupWinValue = getCookie("popupWin");
+    if(popupWinValue=="off1") document.getElementById("popupWin").style.display = "none";
+    else document.getElementById("popupWin").style.display = "block";
+}
 </script>
 </head>
 <body class="m-5">
@@ -34,7 +71,7 @@
 				<label for="user_id">아이디</label>
 			</div>	
 			<label style="line-height:50px; padding-left:10px;"> 
-			<input name="remember-me" id="rememberMe" type="checkbox" th:checked="${rememeberMe}"> 자동로그인</label>
+			<input name="saveid" id="saveid" type="checkbox" onclick="saveid('${user_id}');"> 아이디저장</label>
 			
 			<div class="form-floating mt-3 mb-3">
 				<input type="password" class="form-control" id="user_pwd" placeholder="Enter password" name="my_pass">
