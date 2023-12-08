@@ -159,5 +159,4 @@
 			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
 	</select>
 	
-	
 </mapper> 

@@ -8,12 +8,9 @@
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script>
-var cName, cValue;
 var setCookie = function(name, value, exp){
     var date = new Date();
-    console.log("1970-01-01부터 지금까지의 밀리초 : "+date.getTime());
     date.setTime(date.getTime()+exp*24*60*60*1000);
-    console.log("유효시간", date.toUTCString());
     document.cookie = name+"="+value+";expires="+date.toUTCString()+";path =/";
 };
 var getCookie = function(name){
@@ -24,35 +21,40 @@ var getCookie = function(name){
     }
     return null;
 };
-function mCookie(cName, cValue){
-    // var cName = document.getElementById("cName").value;
-    // var cValue = document.getElementById("cValue").value;
-    setCookie(cName, cValue, 1);
-    alert("쿠키가 생성되었습니다.");
-    //location.reload();
-}
+
 function rCookie(){
-    var cName = document.getElementById("cName").value;
-    if(getCookie(cName)==null){ alert("해당 이름으로 생성된 쿠키가 없습니다.");}
-    else { alert("쿠키값 : "+getCookie(cName)); }
+    if(getCookie("saveid")==null){ alert("해당 이름으로 생성된 쿠키가 없습니다.");}
+    else { alert("쿠키값 : "+getCookie("saveid")); }
+}  
+
+function saveId(){ 
+	 var saveid2 = document.getElementById("saveid");
+	 var user_id2 = document.getElementById("user_id");
+	 
+	 if(saveid2.checked) {
+		 setCookie("saveid", user_id2.value, 1);
+		//alert("쿠키가 생성되었습니다.");
+		//location.reload();
+		 user_id2.value = userid;
+	 }else {
+		 var user_id2 = document.getElementById("user_id");
+		 setCookie("saveid", user_id2.value, -2);
+		//alert("쿠키가 삭제되었습니다.");
+	 }
+	 
 }
-function dCookie(){
-    var cName = document.getElementById("cName").value;
-    var cValue = document.getElementById("cValue").value;
-    setCookie(cName, cValue, -2);
-    alert("쿠키가 삭제되었습니다.");
-    location.reload();
-}
-function saveid(){ mCookie("saveid", "y");}
 onload = function(){
     var saveidval = getCookie("saveid");
-    var saveid = document.getElementById("saveid");
-    var user_id = document.getElementById("user_id");
+    var saveid2 = document.getElementById("saveid");
+    var user_id2 = document.getElementById("user_id");
     
-    if(saveidval=="y") {
-    	saveid.checked = true;
-    	user_id.value = '${user_id}';
-    } else saveid.checked = false;
+    if(saveidval!=null) {
+    	saveid2.checked = true;
+    	user_id2.value = saveidval;
+    } else {
+    	saveid2.checked = false;
+    	setCookie("saveid", user_id2.value, -2);
+    }
 }
 </script>
 </head>
@@ -74,7 +76,7 @@ onload = function(){
 				<label for="user_id">아이디</label>
 			</div>	
 			<label style="line-height:50px; padding-left:10px;"> 
-			<input name="saveid" id="saveid" type="checkbox" onclick="saveid();"> 아이디저장</label>
+			<input name="saveid" id="saveid" type="checkbox" onclick="saveId();"> 아이디저장</label>
 			
 			<div class="form-floating mt-3 mb-3">
 				<input type="password" class="form-control" id="user_pwd" placeholder="Enter password" name="my_pass">
@@ -91,7 +93,6 @@ onload = function(){
 		<a href="/logout">Logout</a>	
 	</c:if>	
 	</div>
-	
 	
 </body>
 </html>

@@ -22,7 +22,6 @@ public class ProductDTO {
 	private String p_intro;
 	private int framed;
 	private java.sql.Date regidate;
-	private String ofile;
 	private String sfile;
 	private int sold;
 	private int midx;

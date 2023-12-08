@@ -314,8 +314,8 @@ function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/
 	    	<div class="arttile mb-5">
                <div class="image"><a href="./view?pidx=${row.pidx }"> 
                <c:choose>
-                   	<c:when test="${row.ofile.length()>40 }">
-               			<img src="${row.ofile }" alt="" />
+                   	<c:when test="${row.sfile.length()>40 }">
+               			<img src="${row.sfile }" alt="" />
                		</c:when>
                    	<c:otherwise>
                    		<img src="./uploads/${row.sfile }" alt="" />

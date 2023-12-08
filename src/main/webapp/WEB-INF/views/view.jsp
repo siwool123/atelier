@@ -70,7 +70,7 @@ th {color:#c5c5c5 !important;}
     <div class="row py-5">
         <div class="col-sm-6 imgback"><div class="image2">
         	<c:if test="${not empty pdto}">
-        		<c:set var="imageSource" value="${pdto.ofile.length() > 40 ? pdto.ofile : './uploads/' + pdto.sfile}" />
+        		<c:set var="imageSource" value="${pdto.sfile.length() > 40 ? pdto.sfile : './uploads/' + pdto.sfile}" />
    				 <img src="${imageSource}" alt="작품이미지" data-bs-toggle="modal" data-bs-target="#myModal_img" />
         	</c:if>
         </div></div>
@@ -224,7 +224,7 @@ let currentUrl = window.document.location.href;
                 <div class="swiper-slide arttile2" > 
                     <div class="image"><a href="./view?pidx=${row.pidx }"> 
 		               <c:choose>
-		                   	<c:when test="${row.ofile.length()>40 }"><img src="${row.ofile }" alt="" /></c:when>
+		                   	<c:when test="${row.sfile.length()>40 }"><img src="${row.sfile }" alt="" /></c:when>
 		                   	<c:otherwise><img src="../uploads/${row.sfile }" alt="" /></c:otherwise>
 		               </c:choose>
                			</a>

@@ -52,20 +52,20 @@ public class BoardPage {
 		int pageTemp = ((pageNum-1)/blockPage)*blockPage+1;
 
 		if(pageTemp!=1) {
-			pagingStr += "<li class='page-item'><a class='page-link' href='"+reqUrl+"&pageNum=1'><i class='fa-solid fa-angles-left'></i></a></li>";
-			pagingStr += "<li class='page-item'><a class='page-link' href='"+reqUrl+"&pageNum="+(pageTemp-1)+"'><i class='fa-solid fa-angle-left'></i></a></li>";
+			pagingStr += "<li class='page-item'><a class='page-link' href='"+reqUrl+"pageNum=1'><i class='fa-solid fa-angles-left'></i></a></li>";
+			pagingStr += "<li class='page-item'><a class='page-link' href='"+reqUrl+"pageNum="+(pageTemp-1)+"'><i class='fa-solid fa-angle-left'></i></a></li>";
 		}
 		
 		int blockcnt = 1;
 		while(blockcnt <= blockPage && pageTemp <= totalPages) {
 			if(pageTemp==pageNum) pagingStr += "<li class='page-item'><a class='page-link active'>"+pageTemp+"</a></li>";
-			else pagingStr += "<li class='page-item'><a class='page-link' href='"+reqUrl+"&pageNum="+pageTemp+"'>"+pageTemp+"</a></li>";
+			else pagingStr += "<li class='page-item'><a class='page-link' href='"+reqUrl+"pageNum="+pageTemp+"'>"+pageTemp+"</a></li>";
 			pageTemp++;
 			blockcnt++;
 		}
 		 if (pageTemp <= totalPages) {
-	        pagingStr += "<li class='page-item'><a class='page-link' href='" + reqUrl + "&pageNum="+pageTemp+"'><i class='fa-solid fa-angle-right'></i></a></li>";
-	        pagingStr += "<li class='page-item'><a class='page-link' href='" + reqUrl + "&pageNum="+totalPages+"'><i class='fa-solid fa-angles-right'></i></a></li>";
+	        pagingStr += "<li class='page-item'><a class='page-link' href='" + reqUrl + "pageNum="+pageTemp+"'><i class='fa-solid fa-angle-right'></i></a></li>";
+	        pagingStr += "<li class='page-item'><a class='page-link' href='" + reqUrl + "pageNum="+totalPages+"'><i class='fa-solid fa-angles-right'></i></a></li>";
 	     }
 		 pagingStr += "</ul>";
 	     return pagingStr;
@@ -96,4 +96,5 @@ public class BoardPage {
 		 pagingStr += "</ul>";
 	     return pagingStr;
 	}
+	
 }

@@ -12,10 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import utils.BoardPage;
 
 //메서드에서 보든 반환값은 웹브라우저에 즉시 출력된다.
 @RestController
@@ -105,6 +107,22 @@ public class BoardRestController {
 		dao.updateplcnt(plcnt, pidx);
 		
 		return result;
+	}
+	
+	@GetMapping("/rest/vartist")
+	public List<ProductDTO> a0view (@RequestParam int aidx, @RequestParam int sold, ParameterDTO parameterDTO) {
+		System.out.println("rest호출됨");
+		int pageSize = 8;//한 페이지당 게시물 수
+		int pageNum = (parameterDTO.getPageNum()==null) ? 1 : Integer.parseInt(parameterDTO.getPageNum()); //페이지번호가져오기
+		int start = (pageNum-1) * pageSize + 1; //현재 페이지에 출력한 게시물의 구간을 계산한다.
+		int end = pageNum * pageSize;
+		parameterDTO.setStart(start); //계산된 값은 DTO에 저장한다.
+		parameterDTO.setEnd(end);
+		parameterDTO.setAidx(aidx);
+		parameterDTO.setSold(sold);
+		List<ProductDTO> aplist = dao.productsbyas(parameterDTO);
+		
+		return aplist;
 	}
 	
 }

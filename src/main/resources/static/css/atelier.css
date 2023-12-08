@@ -18,10 +18,9 @@
 	.varrow {top:-30px !important;}
 	.sc2 div div.arttile2 {width: 50% !important;}
 	.image {height: 160px !important;}
-	.arttile {margin-right:2% !important; margin-left:0 !important;}
+	.arttile {margin-right:1% !important; margin-left:0 !important;}
 	.imgback {padding:0 !important;}
 }
-#show_data { height:1340px;}
 * {font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif; font-size: 14px; }
 a, a:hover { text-decoration: none;  color: black; }
 ul {list-style: none; padding: 0; margin:0; color: black;}
@@ -89,7 +88,7 @@ b {font-weight: 900; margin-bottom: 20px;}
 .sub .artist, .sub .ptype, .ptype span {font-size: 12px;}
 .sub .price {font-weight: bolder; font-size: 13px;}
 .page-link {color:black; padding:10px 14px;}
-.pagination {margin-bottom:60px !important;}
+.pagination {margin-bottom:60px !important; clear: both;}
 .page-link .fa-solid {font-size:14px;}
 input#pmin, input#pmax {height:30px; width: 100px; }
 
@@ -133,3 +132,4 @@ form[name='cartfrm'] button, form[name='payfrm'] button {width:96%}
 .modal-header {border-bottom: none !important;}
 .bi-star-fill {color:grey;}
 .starActive {color:#C98A00;}
+.aprofile {display: inline; float:left;}
