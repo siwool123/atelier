@@ -35,8 +35,8 @@ public class EmailRestController {
 		return result;
 	}
 	
-	//비밀번호 찾기 이메일 인증 번호 발송 
-	@PostMapping("/rest/findPass")
+	//비밀번호 찾기 이메일 인증 번호 발송  
+	@PostMapping("/rest/findPass") 
 	public HashMap<String, String> findPass (HttpServletRequest req, HttpSession session, Model model, InfoDTO infoDTO) {
 		System.out.println("인증번호요청도착"+req.getParameter("id"));
 		HashMap<String, String> findPassMap = new HashMap<String, String>();
