@@ -14,7 +14,7 @@
 	통신판매업 : 제 2023-서울종로C-0001호 <br/>
 	TEL 070-1234-1234<br/>
 	EMIL info@atelier.co.kr<br/>
-	<a href="/admin/index">ADMIN PAGE</a> 
+	<a href="/admin">ADMIN PAGE</a> 
 	</div>
 	
 	<div class="col-sm-3">

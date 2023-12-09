@@ -14,8 +14,6 @@
 <script type="text/javascript">
 $(document).ready( function() {
 	$('#navbarNavAltMarkup div a:first').addClass( 'active' );
-	$('a.btn2:first').addClass( 'active' );
-	$('a#total').addClass( 'active' );
 	var maxprice = window.location.href.includes('pmax') ? getParameterByName('pmax') : ${maxPrice}
 	$('input#pmax').val(maxprice);
 	$('.orderby li a').click( function(){
@@ -28,18 +26,6 @@ $(document).ready( function() {
 		$('a').removeClass('active');
 		$(this).addClass('active');
 	});
-	$('.btn2').click(function (e) {
-        e.preventDefault(); // 기존의 클릭 이벤트 방지
-        // 현재 URL 가져오기
-        var currentUrl = window.location.href.includes('orderby') ? window.location.href.slice(0, -11) : window.location.href;
-        var orderbyValue = $(this).attr('href').replace('?', ''); // .btn2의 href 값 가져오기
-        // 현재 URL에 이미 매개 변수가 있는지 확인
-        var separator = currentUrl.includes('?') ? '&' : '?';
-        // 새로운 URL 생성
-        var newUrl = currentUrl + separator + orderbyValue;
-        // 새로운 URL로 이동
-        window.location.href = newUrl;
-    });
 	$('.page-link').click(function (e) {
         e.preventDefault(); // 기존의 클릭 이벤트 방지
         var cUrl = window.location.href.includes('pageNum') ? window.location.href.slice(0, -10) : window.location.href;
@@ -50,38 +36,10 @@ $(document).ready( function() {
         window.location.href = cUrl + separator + plValue;
     });
 	
-    // 모든 .btn2에 대해 순회
-    $('.btn2').each(function () {
-        var hrefValue = $(this).attr('href').slice(-2);
-        // 현재 orderby와 href의 값이 일치하면 active 클래스 추가
-        if (getParameterByName('orderby') === hrefValue) {  $(this).addClass('active'); $(this).parent('li').addClass('active');
-        } else { $(this).removeClass('active'); $(this).parent('li').removeClass('active');}  // 일치하지 않으면 active 클래스 제거
-    });
-    $('a.btn1').each(function () {
-        var hrefValue2 = $(this).attr('href').slice(-2);
-        // 현재 파라미터값과 href의 값이 일치하면 active 클래스 추가
-        if (getParameterByName('sell') === hrefValue2 || getParameterByName('ori') === hrefValue2 || 
-        		getParameterByName('size') === hrefValue2 || getParameterByName('cate') === hrefValue2 || getParameterByName('ptype') === hrefValue2) {  
-        	$(this).addClass('active'); $(this).parent('li').addClass('active');
-        } else { $(this).removeClass('active'); $(this).parent('li').removeClass('active');}  // 일치하지 않으면 active 클래스 제거
-    });
-    
     if(window.location.href.includes('pmin')) {$('#range').addClass('active');}
-    
     $(".title").each(function() {$(this).text($(this).text().slice(0, 24)); });
-    $(".year").each(function() { $(this).text($(this).text().slice(0, 4));});
-    $(".price2").each(function() { $(this).text(numberWithCommas($(this).text()));});
- 	$(".price3 b").each(function() { $(this).text(numberWithCommas($(this).text()));});
   });
 
-//3자리마다 컴마를 찍는 함수
-function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
-
- function getParameterByName(name) { 
-     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
-     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
- }
     /*    if (getParameterByName('pmin')!='') {
         var pmin_vlu = getParameterByName('pmin');
         var pmax_vlu = getParameterByName('pmax');
@@ -314,12 +272,8 @@ function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/
 	    	<div class="arttile mb-5">
                <div class="image"><a href="./view?pidx=${row.pidx }"> 
                <c:choose>
-                   	<c:when test="${row.sfile.length()>40 }">
-               			<img src="${row.sfile }" alt="" />
-               		</c:when>
-                   	<c:otherwise>
-                   		<img src="./uploads/${row.sfile }" alt="" />
-                	</c:otherwise>
+                   	<c:when test="${row.sfile.length()>40 }"><img src="${row.sfile }" alt="" /></c:when>
+                   	<c:otherwise><img src="./uploads/${row.sfile }" alt="" /></c:otherwise>
                </c:choose>
                </a></div>
                <div class="sub p-3">
@@ -328,7 +282,7 @@ function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/
                    <div class="ptype">${row.p_type }, <span class="year">${row.regidate }</span> <br/>${row.size1 } x ${row.size2 } cm </div>
                    <c:choose>
                    	<c:when test="${row.sold==1 }">
-                   		<div class="price mt-1" style="color:#af0000;">● SOLD</span></div>
+                   		<div class="price mt-1" style="color:#af0000;">● SOLD</div>
                    	</c:when>
                    	<c:otherwise>
                    		<div class="price mt-1">￦ <span class="price2">${row.price }</span></div>

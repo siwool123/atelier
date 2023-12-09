@@ -44,6 +44,15 @@ public interface IBoardService {
 	//작가페이지 리뷰보기
 	public List<ReviewDTO> rvlistbya(ParameterDTO parameterDTO);
 	public List<ProductDTO> productsbyas(ParameterDTO parameterDTO);
+	
+	//장바구니 아이템 중복여부확인
+	public CartDTO cartview(ParameterDTO parameterDTO);
+	//장바구니목록불러오기
+	public List<CartDTO> cartsview(int midx);
+	//장바구니 추가
+	public int cartadd(ParameterDTO parameterDTO);
+	//장바구니 삭제
+	public int delete(int pidx);
 }
 
 

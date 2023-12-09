@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,12 +11,9 @@
 <script type="text/javascript">
 $( document ).ready( function() {
 	$('#navbarNavAltMarkup div a:first').addClass( 'active' );
-    $(".year").each(function() { $(this).text($(this).text().slice(0, 4));});
-    $(".price2").each(function() { $(this).text(numberWithCommas($(this).text()));});
- 	$(".price3 b").each(function() { $(this).text(numberWithCommas($(this).text()));});
  	$('#kakaotalk-sharing-btn').click(function(){$(this).removeClass('active');});
  	
-	$('.plike, .vtitle').click(function(){
+	$('.plike').click(function(){
  		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
 		$.ajax({
 			type : 'get', //전송방식
@@ -31,6 +27,22 @@ $( document ).ready( function() {
                 alert('찜 추가삭제가 작동하지 않습니다.');
             }
 		});
+	}); 
+	$('.cart').click(function(){
+ 		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
+ 		$.ajax({
+			type : 'get', //전송방식
+			contentType : 'text/html;charset:utf-8', //컨텐츠타입
+			dataType : 'json', //콜백데이터 타입
+			url : 'rest/cart', 
+			data : {pidx : ${pdto.pidx}},
+			success : sucFunc2,
+			error: function (jqXHR, textStatus, e) {
+                console.error('AJAX Error:', textStatus, e);
+                alert('장바구니추가버튼이 작동하지 않습니다.');
+            }
+		});
+ 		window.location.href = '/member/cart?pidx='+${pdto.pidx};
 	}); 
 });
 function sucFunc(resD){
@@ -46,17 +58,24 @@ function sucFunc(resD){
 		alert("찜에서 삭제되었습니다.");
 	}else alert("찜 추가삭제가 작동하지 않습니다.");
 }
-// 3자리마다 컴마를 찍는 함수
-function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
-function getParameterByName(name) { 
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+function sucFunc2(resD){
+	console.log('장바구니 콜백데이터', resD);
+	var cart = $('.cart');
+	if(resD==1) {
+		alert("장바구니에 추가되었습니다.");
+		cart.text($(this).text() + ' 1');
+		window.location.href = 'member/cart';
+	}else if(resD==-1) { alert("장바구니에 동일 작품이 있습니다. ");
+	}else alert("장바구니가 작동하지 않습니다.");
 }
 </script> 
 
 <style>
 th {color:#c5c5c5 !important;}
+@media (max-width: 600px) {
+  .cart {padding:15px 30px !important;}
+  .pay {padding:15px 44px !important}
+}
 </style>
 </head>
 <body>
@@ -119,8 +138,8 @@ let currentUrl = window.document.location.href;
   });
 </script>
             <div class="mt-4" style="display: flex; align-items: center;">
-            <form action="./cart?pidx=${pdto.pidx}" name="cartfrm" ><button type="submit" class="btn3" ${pdto.sold == 1 ? 'disabled' : ''}><i class="bi bi-bag"></i>&nbsp;&nbsp;&nbsp;ADD TO CART</button></form>
-            <form action="./pay?pidx=${pdto.pidx}" name="payfrm"><button type="submit" class="btn4" ${pdto.sold == 1 ? 'disabled' : ''}><i class="bi bi-credit-card-2-back"></i>&nbsp;&nbsp;&nbsp;PAY NOW</button></form></div>
+            <button class="btn3 cart" ${pdto.sold == 1 ? 'disabled' : ''} style="margin-right:10px;"><i class="bi bi-bag"></i>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+			<button class="btn4 pay" ${pdto.sold == 1 ? 'disabled' : ''}><i class="bi bi-credit-card-2-back"></i>&nbsp;&nbsp;&nbsp;PAY NOW</button></div>
         </div>
     </div>
     </div>
@@ -262,5 +281,3 @@ let currentUrl = window.document.location.href;
 </div>
 </body>
 </html>
- 
- 

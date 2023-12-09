@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -118,7 +119,7 @@ public class MainController {
 	public String view (@RequestParam int aidx, Model model, ParameterDTO parameterDTO, HttpServletRequest req) {
 		
 		int pageSize = 8;//한 페이지당 게시물 수
-		int blockPage = 5;//한 블럭당 페이지 번호 수
+		int blockPage = 20;//한 블럭당 페이지 번호 수
 		int pageNum = (req.getParameter("pageNum")==null || req.getParameter("pageNum").equals(""))? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
 		int start = (pageNum-1) * pageSize + 1; //현재 페이지에 출력한 게시물의 구간을 계산한다.
@@ -153,8 +154,8 @@ public class MainController {
 		List<ProductDTO> plist1 = dao.productsbyas(parameterDTO);
 		model.addAttribute("plist1", plist1);
 		
-		String pagingImg0 = BoardPage.pagingImg(aplist.size()-soldsum, pageSize, blockPage, pageNum, req.getContextPath());
-		String pagingImg1 = BoardPage.pagingImg(soldsum, pageSize, blockPage, pageNum, req.getContextPath());
+		String pagingImg0 = BoardPage.pagingImg2(aplist.size()-soldsum, pageSize, blockPage, pageNum);
+		String pagingImg1 = BoardPage.pagingImg2(soldsum, pageSize, blockPage, pageNum);
 		String pagingImgr = BoardPage.pagingImg(rlist.size(), pageSize, blockPage, pageNum, req.getContextPath());
 		
 		model.addAttribute("pagingImg0", pagingImg0);
@@ -171,72 +172,38 @@ public class MainController {
 		return "viewartist";
 	}
 	
-	@RequestMapping("/vartist2")
-	public String vartist2(@RequestParam int aidx, Model model, HttpServletRequest req, ParameterDTO parameterDTO) {
+	@RequestMapping("/member/index")
+	public String mindex (Principal principal, Model model, MemberDTO memberDTO) {
 		
-		ArtistDTO artistDTO = dao.aview(aidx);
-		
-		int pageSize = 8;//한 페이지당 게시물 수
-		int blockPage = 5;//한 블럭당 페이지 번호 수
-		int pageNum = (req.getParameter("pageNum")==null || req.getParameter("pageNum").equals(""))? 1 : Integer.parseInt(req.getParameter("pageNum"));
-		
-		int start = (pageNum-1) * pageSize + 1; //현재 페이지에 출력한 게시물의 구간을 계산한다.
-		int end = pageNum * pageSize;
-		parameterDTO.setStart(start); //계산된 값은 DTO에 저장한다.
-		parameterDTO.setEnd(end);
-		parameterDTO.setAidx(aidx);
-		
-		List<ProductDTO> aplist = dao.selectbya(aidx);
-		int soldsum = 0, likesum = 0;
-		for(ProductDTO pdto:aplist) {
-			if(pdto.getSold()==1) {soldsum++;}
-			likesum += pdto.getP_like();}
-		
-//		Map<String, Integer> map = new HashMap<>();
-//		map.put("totalcnt", aplist.size());
-//		map.put("soldsum", soldsum);
-//		map.put("staravg", staravg);
-//		map.put("likesum", likesum);
-		
-		String pagingImg0 = BoardPage.pagingImg2(aplist.size()-soldsum, pageSize, blockPage, pageNum);
-		
-		model.addAttribute("pagingImg0", pagingImg0);
-		model.addAttribute("aplist", aplist);
-		model.addAttribute("soldsum", soldsum);
-		model.addAttribute("adto", artistDTO);
-		
-		return "viewartist2";
+		return "member/index";
 	}
 	
-	@RequestMapping("/cart")
-	public String welcome2(Principal principal, Model model, HttpServletRequest req, ProductDTO productDTO, MemberDTO memberDTO, CartDTO cartDTO) {
+	@PostMapping("/member/delete")
+	public String pidxdelete(@RequestParam int pidx, Model model) {
+		int result = dao.delete(pidx);
+		System.out.println("장바구니에서 작품 삭제결과:"+result);
+		model.addAttribute("result", result);
+		return "redirect:member/cart";
+	}
+	
+	@RequestMapping("/member/cart")
+	public String cart(Principal principal, Model model, MemberDTO memberDTO) {
 		try {
-			int pidx = Integer.parseInt(req.getParameter("pidx"));
 			String user_id = principal.getName(); //로그인아이디 얻어온다.
 			memberDTO = dao.mview(user_id);
-			cartDTO.setMidx(memberDTO.getMidx());
-			cartDTO.setPidx(pidx);
-			
-			List<CartDTO> clist = dao.cview(memberDTO.getMidx());
-			clist.add(cartDTO);
+			List<CartDTO> clist = dao.cartsview(memberDTO.getMidx());
 			
 			List<ProductDTO> plist = new ArrayList<>();
-			for(CartDTO cdto : clist) {
-				productDTO = dao.pview(cdto.getPidx());
+			for(CartDTO cartDTO : clist) {
+				ProductDTO productDTO = dao.pview(cartDTO.getPidx());
 				plist.add(productDTO);
 			}
-			
 			model.addAttribute("plist", plist);
 			model.addAttribute("mdto", memberDTO);
 		}catch (Exception e){
-			System.out.println("로그인 전입니다.");
+			System.out.println("장바구니 목록 조회 실패");
 		}
-		return "cart";
-	}
-	
-	@RequestMapping("/member/index")
-	public String welcome2() {
-		return "member";
+		return "member/cart";
 	}
 	
 	/* 커스텀로그인페이지매핑. 스프링시큐리티는 세션사용해서 로그인정보저장하지만 개발자가 직접 접근할수없으므로, Principal 객체통해 로그인아이디를 얻어올수있다 */

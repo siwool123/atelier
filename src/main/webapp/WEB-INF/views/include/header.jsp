@@ -28,12 +28,12 @@
 <body id="pageTop">
     <nav class="navbar navbar-expand-sm sticky-top borer-bottom">
         <div class="container">
-        <a class="navbar-brand" href="./shop" ><img src="../images/atelier.png" alt="logo" style="width:140px;" ></a>
+        <a class="navbar-brand" href="/shop" ><img src="../images/atelier.png" alt="logo" style="width:140px;" ></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link" href="./shop">SHOP</a>
+              <a class="nav-link" href="/shop">SHOP</a>
               <a class="nav-link" href="#">AUCTION</a>
               <a class="nav-link" href="#">FAQ</a>
               <a class="nav-link" href="#">COMPANY</a>
@@ -42,10 +42,10 @@
               <a class="nav-link" href="#"><i class="bi bi-bag"></i></a>
               <c:choose>
 	              <c:when test="${empty pageContext.request.userPrincipal }">
-	              	<a class="nav-link" href="./login" >LOGIN</a>
+	              	<a class="nav-link" href="/login" >LOGIN</a>
 	              </c:when>
 	              <c:otherwise>
-	              	<a class="nav-link" href="./logout" >LOGOUT</a>
+	              	<a class="nav-link" href="/logout" >LOGOUT</a>
 	              </c:otherwise>
               </c:choose>
             </div>

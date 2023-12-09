@@ -14,51 +14,59 @@
 <script type="text/javascript">
 $( document ).ready( function() {
 	$('#navbarNavAltMarkup div a:first').addClass( 'active' );
-    $(".year").each(function() { $(this).text($(this).text().slice(0, 4));});
-    $(".price2").each(function() { $(this).text(numberWithCommas($(this).text()));});
- 	$(".price3 b").each(function() { $(this).text(numberWithCommas($(this).text()));});
- 	$('#kakaotalk-sharing-btn').click(function(){$(this).removeClass('active');});
-	$('.plike, .vtitle').click(function(){
- 		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
+	$('#onsale3 ul li.page-item').click(function(){
+		console.log('트리거호출됨');
+		$('#onsale3 ul li.page-item').removeClass('active');
+		$(this).addClass('active');
 		$.ajax({
 			type : 'get', //전송방식
+			contentType : 'application/json;charset:utf-8',
 			dataType : 'json', //콜백데이터 타입
-			url : 'rest/plike?pidx=${pdto.pidx}', 
-			data : {pidx : ${pdto.pidx}},
-			success : sucFunc,
-			error: function (jqXHR, textStatus, e) {
-                console.error('AJAX Error:', textStatus, e);
-                alert('찜 추가삭제가 작동하지 않습니다.');
-            }
-		});
+			url : './rest/vartist', //요청url
+			data : {aidx : ${adto.aidx}, sold : 0, pageNum : $(this).text()}, //파라미터 (객체형태로전송)
+			success : function(rdata0){
+				console.log(rdata0);
+				let tileData0 = '';
+				$(rdata0).each(function(index, data){
+					console.log(index, data);
+					var imgsrc = data.sfile.length>=40 ? data.sfile : './uploads/'+data.sfile;
+					tileData0 += "<div class='arttile mb-5'><div class='image'><a href='./view?pidx="+data.pidx+"'><img src='"+imgsrc+"' alt='작품이미지' /></a></div><div class='sub p-3'><div class='title mb-2 fw-bolder'>"+data.title+"</div><div class='artist'><i class='fa-solid fa-user' style='color:#dddddd'></i>&nbsp;&nbsp;"+data.m_name+"</div><div class='ptype'>"+
+					data.p_type+", <span class='year'>"+data.regidate+"</span> <br/>"+data.size1+" x "+data.size2+" cm </div><div class='price mt-1'>￦ <span class='price2'>"+data.price+"</span></div></div></div>";
+				});
+				$('#onsale2').html(tileData0); 
+			}, //성공시호출할콜백함수
+			error : function(errD){console.log(errD.status+" : "+errD.statusText);}
+		});	
 	}); 
-	$('#soldbtn').click(function (e) {
-        e.preventDefault(); // 기존의 클릭 이벤트 방지
-        var cUrl = window.location.href.includes('pageNum') ? window.location.href.slice(0, -7) : window.location.href;
-        window.location.href = cUrl+"#sold";
-    });
+	$('#sold3 ul li.page-item').click(function(){
+		console.log('트리거호출됨');
+		$('#sold3 ul li.page-item').removeClass('active');
+		$(this).addClass('active');
+		$.ajax({
+			type : 'get', //전송방식
+			contentType : 'application/json;charset:utf-8',
+			dataType : 'json', //콜백데이터 타입
+			url : './rest/vartist', //요청url
+			data : {aidx : ${adto.aidx}, sold : 1, pageNum : $(this).text()}, //파라미터 (객체형태로전송)
+			success : function(rdata){
+				console.log(rdata);
+				let tileData1 = '';
+				$(rdata).each(function(index, data){
+					console.log(index, data);
+					var imgsrc = data.sfile.length>=40 ? data.sfile : './uploads/'+data.sfile;
+					tileData1 += "<div class='arttile mb-5'><div class='image'><a href='./view?pidx="+data.pidx+"'><img src='"+imgsrc+"' alt='작품이미지' /></a></div><div class='sub p-3'><div class='title mb-2 fw-bolder'>"+data.title+"</div><div class='artist'><i class='fa-solid fa-user' style='color:#dddddd'></i>&nbsp;&nbsp;"+data.m_name+"</div><div class='ptype'>"+data.p_type+", <span class='year'>"+data.regidate+"</span> <br/>"+data.size1+" x "+data.size2+" cm </div><div class='price mt-1' style='color:#af0000;'>● SOLD</div></div></div>";
+				});
+				$('#sold2').html(tileData1); 
+			}, //성공시호출할콜백함수
+			error : function(errD){console.log(errD.status+" : "+errD.statusText);}
+		});	
+		
+	});
+	$('#onsale3 ul li.page-item:first').trigger('click');
+	$('#soldbtn').click(function(){
+		$('#sold3 ul li.page-item:first').trigger('click');
+	});
 });
-function sucFunc(resD){
-	console.log('콜백데이터', resD);
-	var plike = $('.plike');
-	if(resD==1) {
-		plike.css({'color':'red'});
-		$('.plkcnt').html(parseInt($('.plkcnt').html())+1);
-		alert("찜에 추가되었습니다. 마이페이지 > 내공간에찜 에서 확인가능합니다.");
-	}else if(resD==-1) {
-		plike.css({'color':'grey'});
-		$('.plkcnt').html(parseInt($('.plkcnt').html())-1);
-		alert("찜에서 삭제되었습니다.");
-	}else alert("찜 추가삭제가 작동하지 않습니다.");
-}
-
-// 3자리마다 컴마를 찍는 함수
-function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
-function getParameterByName(name) { 
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
 </script> 
 <style>
 th {color:#c5c5c5 !important;}
@@ -72,6 +80,8 @@ th {color:#c5c5c5 !important;}
 .nav-tabs>li.active>a {color:white !important; background-color:black !important; border:none !important;}
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {border:none !important;}
 .atable tbody tr th i {margin-right:10px;} 
+.page-item {padding:10px 16px !important; border:1px solid #ededed; margin-left:-1px !important;}
+.page-item:hover {background-color:grey;}
 </style>
 </head>
 <body>
@@ -113,55 +123,17 @@ th {color:#c5c5c5 !important;}
   </ul>
   <div class="tab-content">
     <div id="onsale" class="tab-pane active">
-      
-      <c:choose>
-		<c:when test="${ empty plist0 }"> <div class="text-center"> 등록된 작품이 없습니다.</div></c:when> 
-		<c:otherwise> 
-		    <c:forEach items="${ plist0 }" var="row" varStatus="loop">  
-		    	<div class="arttile mb-5">
-	               <div class="image"><a href="./view?pidx=${row.pidx }"> 
-	                 <c:set var="imageSource" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
-	   				 <img src="${imageSource}" alt="작품이미지" />
-	               </a></div>
-	               <div class="sub p-3">
-	                   <div class="title mb-2 fw-bolder">${row.title }</div>
-	                   <div class="artist"><i class="fa-solid fa-user" style="color:#dddddd"></i>&nbsp;&nbsp;${row.m_name }</div>
-	                   <div class="ptype">${row.p_type }, <span class="year">${row.regidate }</span> <br/>${row.size1 } x ${row.size2 } cm </div>
-	                   <div class="price mt-1">￦ <span class="price2">${row.price }</span></div>
-	               </div>
-	           </div>
-		    </c:forEach>        
-		</c:otherwise>    
-	  </c:choose>
-      ${not empty pagingImg0 ? pagingImg0 : "" } 
+    	<div id="onsale2"></div>
+      	<div id="onsale3"> ${not empty pagingImg0 ? pagingImg0 : "" } </div>
       
     </div>
     <div id="sold" class="tab-pane">
-      
-      <c:choose>
-		<c:when test="${ empty plist1 }"> <div class="text-center"> 등록된 작품이 없습니다.</div></c:when> 
-		<c:otherwise> 
-		    <c:forEach items="${ plist1 }" var="row" varStatus="loop">  
-		    	<div class="arttile mb-5">
-	               <div class="image"><a href="./view?pidx=${row.pidx }"> 
-	                 <c:set var="imageSource" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
-	   				 <img src="${imageSource}" alt="작품이미지" />
-	               </a></div>
-	               <div class="sub p-3">
-	                   <div class="title mb-2 fw-bolder">${row.title }</div>
-	                   <div class="artist"><i class="fa-solid fa-user" style="color:#dddddd"></i>&nbsp;&nbsp;${row.m_name }</div>
-	                   <div class="ptype">${row.p_type }, <span class="year">${row.regidate }</span> <br/>${row.size1 } x ${row.size2 } cm </div>
-	                   <div class="price mt-1" style="color:#af0000;">● SOLD</div>
-	               </div>
-	           </div>
-		    </c:forEach>        
-		</c:otherwise>    
-	  </c:choose>
-		${not empty pagingImg1 ? pagingImg1 : "" }
+        <div id="sold2">아무것도없나?</div>
+		<div id="sold3">${not empty pagingImg1 ? pagingImg1 : "" }</div>
 		
     </div>
   </div>
-  
+		
   <div class="headerL2" style="clear:both;">리뷰 ${not empty rlist ? rlist.size() : "0" } </div>
 	<div class="headerL3">
 		<c:choose>
@@ -204,9 +176,6 @@ th {color:#c5c5c5 !important;}
 	</div>
   
 </div>
-   
 <%@ include file="./include/footer.jsp" %>
 </body>
 </html>
- 
- 

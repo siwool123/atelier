@@ -35,40 +35,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-$(function(){
-	$.ajaxSetup({
-		type : 'get', //전송방식
-		contentType : 'test/html;charset:utf-8', //컨텐츠타입
-		dataType : 'json', //콜백데이터 타입
-		error : errCallBack
-    })
-	$('.page-item').click(function(){
-		$.ajax({
-			url : './rest/productList.api', //요청url
-			data : {pageNum : $(this).text()}, //파라미터 (객체형태로전송)
-			success : sucCallBack, //성공시호출할콜백함수
-		});	
-	});
-	/*이벤트를 자동실행하고싶을떄 trigger 사용한다. 페이지 로드될때 사용자가 버튼클릭한것과 동일한 동작수행*/
-	$('.page-item:first').trigger('click');
-});
-function sucCallBack(resD) {
-	let tableData = '';
-	$(resD).each(function(index, data){
-		tableData += "<div class='arttile'><div class='image'><a href='./view?pidx="+data.pidx
-				+"> <img src='./uploads/"+data.sfile+" alt='' /></a></div><div class='sub p-3'><div class='title mb-2'>"
-				+data.title+"</div><div class='artist'><i class='fa-solid fa-user' style='color:#dddddd'></i>&nbsp;&nbsp;"
-				+data.m_name+"</div><div class='method'>"+data.p_type+", "+data.regidate+"<br/>"+data.size1+" x "+data.size2
-				+" cm </div><div class='price mt-1'>￦ <span class='price2'>"+data.price+"</span></div></div></div>";
-	});
-	$('#show_data').html(tableData); //앞에서만든 tr태그를 테이블에적용
-}
-function errCallBack(errD) {
-	console.log(errD.status+" : "+errD.statusText);
-}
-
 $( document ).ready( function() {
-	$('#navbarNavAltMarkup div a:first').addClass( 'active' );
+	 $(".year").each(function() { $(this).text($(this).text().slice(0, 4));});
+    $(".price2").each(function() { $(this).text(numberWithCommas($(this).text()));});
+ 	$(".price3 b").each(function() { $(this).text(numberWithCommas($(this).text()));});
+ 	
 	$('a.btn2:first').addClass( 'active' );
 	$('a#total').addClass( 'active' );
 	$('.orderby li a').click( function(){
@@ -114,17 +85,19 @@ $( document ).ready( function() {
         	$(this).addClass('active'); $(this).parent('li').addClass('active');
         } else { $(this).removeClass('active'); $(this).parent('li').removeClass('active');}  // 일치하지 않으면 active 클래스 제거
     });
+    
+    // 장바구니 전부 선택
+    $("#chkAll").click(function () {
+        if ($("#chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
+        else $("input[name=chk]").prop("checked", false);
+    });
+    $("input[name=chk]").click(function () {
+        var total = $("input[name=chk]").length;
+        var checked = $("input[name=chk]:checked").length;
+        if (total != checked) $("#chkAll").prop("checked", false);
+        else $("#chkAll").prop("checked", true);
+    });
   });
-document.addEventListener("DOMContentLoaded", function() {
-  // 3자리마다 컴마를 찍는 함수
-  function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
-});
-
-    function getParameterByName(name) { 
-        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
-        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-    }
 
 document.addEventListener("DOMContentLoaded", function() {
     var titleElements = document.querySelectorAll(".title");
@@ -147,7 +120,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // 3자리마다 컴마를 찍는 함수
-    function numberWithCommas(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+    function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+    //주소창에서 파라미터 가져오는 함수
+    function getParameterByName(name) { 
+	    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
+	    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
   });

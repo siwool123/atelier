@@ -125,4 +125,28 @@ public class BoardRestController {
 		return aplist;
 	}
 	
+	@GetMapping("/rest/cart")
+	public int cartview (@RequestParam int pidx, ParameterDTO parameterDTO, Principal principal) {
+		
+		System.out.println("rest호출됨");
+		int result = 0;
+		try { 
+			String user_id = principal.getName(); //로그인아이디 얻어온다.  
+			System.out.println(user_id);
+			MemberDTO memberDTO = dao.mview(user_id);
+			if(memberDTO!=null) {
+				parameterDTO.setMidx(memberDTO.getMidx());
+				parameterDTO.setPidx(pidx);
+				CartDTO cartDTO = dao.cartview(parameterDTO);
+				if(cartDTO!=null) {  System.out.println(cartDTO.getCidx());
+					result = -1;
+				}else {result = dao.cartadd(parameterDTO);}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("장바구니호출 실패");
+		}
+		
+		return result;
+	}
 }

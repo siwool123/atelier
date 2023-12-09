@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class ParameterDTO {
+	private int midx;
 	private int pidx;
 	private int aidx;
 	private int sold;

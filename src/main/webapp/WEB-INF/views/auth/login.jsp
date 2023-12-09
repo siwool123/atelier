@@ -5,8 +5,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>Atelier</title>
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+<link href="./css/atelier.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script>
 var setCookie = function(name, value, exp){
     var date = new Date();
@@ -56,11 +58,17 @@ onload = function(){
     	setCookie("saveid", user_id2.value, -2);
     }
 }
+$( document ).ready( function() {
+	$('.nav-link').removeClass( 'active' );
+	$('.nav-link:last').addClass( 'active' );
+});
 </script>
 </head>
-<body class="m-5">
-	<h2>로그인 폼</h2>
-	<div style="width:600px;" class="border border-2 border-success rounded p-5">
+<body>
+<%@ include file="../include/header.jsp" %>
+	<div class="container mx-auto m-5 p-5 text-center">
+	<h2 class="fw-bolder">로그인</h2>
+	<div style="width:600px;" class="border p-5 mx-auto m-5">
 	<!-- 로그인한아이디 없다면 로그인폼 표시 > 매개변수에 error가 있다면 에러메세지표시 -->	
 	<c:if test="${empty user_id }" var="loginResult">
 		<c:if test="${param.error != null}">
@@ -75,15 +83,15 @@ onload = function(){
 				<input type="text" class="form-control" id="user_id" placeholder="Enter email" name="my_id">
 				<label for="user_id">아이디</label>
 			</div>	
-			<label style="line-height:50px; padding-left:10px;"> 
-			<input name="saveid" id="saveid" type="checkbox" onclick="saveId();"> 아이디저장</label>
+		<div class="my-3 pb-5">	<label style="padding-left:10px; float:left;"> 
+			<input name="saveid" id="saveid" type="checkbox" onclick="saveId();"> 아이디저장</label> <a href="#" style="float:right;">비밀번호 찾기</a> </div>
 			
-			<div class="form-floating mt-3 mb-3">
+			<div class="form-floating my-5">
 				<input type="password" class="form-control" id="user_pwd" placeholder="Enter password" name="my_pass">
 				<label for="user_pwd">비밀번호</label>
 			</div>	
 			<%-- <div th:if="${param.error}" class="alert alert-danger">메일 혹은 비밀번호를 다시 확인해 주세요.</div> --%>
-			<div class="d-grid"><button type="submit" class="btn btn-primary btn-block">Submit</button></div>
+			<div class="d-grid mt-5"><button type="submit" class="btn btn-primary btn-block">Submit</button></div>
 		</form>
 	</c:if>
 	<!-- 로그인되었을때 출력되는 부분. 로그인아이디와 로그아웃버튼 출력 -->
@@ -93,6 +101,7 @@ onload = function(){
 		<a href="/logout">Logout</a>	
 	</c:if>	
 	</div>
-	
+	</div>
+<%@ include file="../include/footer.jsp" %>
 </body>
 </html>

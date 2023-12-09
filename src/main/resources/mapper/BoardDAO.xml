@@ -129,9 +129,7 @@
 	<select id="mview" resultType="com.edu.springboot.restboard.MemberDTO">
 		SELECT * FROM member WHERE id = #{param1}
 	</select>
-	<select id="cview" resultType="com.edu.springboot.restboard.CartDTO">
-		SELECT * FROM cart WHERE midx = #{param1}
-	</select>
+	
 	
 	<insert id="write" >
 		INSERT INTO product (pidx, title, content, id) VALUES (seq_product.nextval, #{title}, #{content}, #{id})
@@ -159,4 +157,14 @@
 			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
 	</select>
 	
+	<select id="cartview" resultType="com.edu.springboot.restboard.CartDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM cart WHERE midx=#{midx} AND pidx=#{pidx}
+	</select>
+	<select id="cartsview" resultType="com.edu.springboot.restboard.CartDTO">
+		SELECT * FROM cart WHERE midx = #{param1}
+	</select>
+	<insert id="cartadd" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		INSERT INTO cart VALUES (seq_cart.nextval, #{pidx}, #{midx})
+	</insert>
+	<delete id="delete">DELETE FROM cart WHERE pidx=#{param1}</delete>
 </mapper> 

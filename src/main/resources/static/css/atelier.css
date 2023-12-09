@@ -133,3 +133,8 @@ form[name='cartfrm'] button, form[name='payfrm'] button {width:96%}
 .bi-star-fill {color:grey;}
 .starActive {color:#C98A00;}
 .aprofile {display: inline; float:left;}
+
+ .leftmenu li a {font-size: 18px; width: 100%; font-weight: 600; border:1px solid black; } 
+ .leftmenu li a:hover, .leftmenu li a:hover i, .leftmenu li a.active, .leftmenu li a.active i {background-color: #005bac; color: white;}
+ .leftmenu li {padding: 18px 10px 18px 15px;}
+.leftmenu .bi-chevron-right {float: right; line-height: 24px; color:grey; }
