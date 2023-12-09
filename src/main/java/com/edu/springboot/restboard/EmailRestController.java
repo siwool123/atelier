@@ -68,7 +68,7 @@ public class EmailRestController {
 				findPassCheckMap.put("findPassCheckSuc", "-1");
 				return findPassCheckMap;
 			} else if (Integer.parseInt(infoDTO.getFindPassNum().toString()) == Integer.parseInt(session.getAttribute("findPassNum").toString())) {
-				System.out.println("인증번호 일치");
+				System.out.println("인증번호 일치"); 
 				
 				MemberDTO findPassCheckDaoResult = dao.mview(memberDTO.getId());
 				
