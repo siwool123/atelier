@@ -4,6 +4,7 @@ import java.io.File;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
@@ -147,12 +148,18 @@ public class EmailController {
 	//회원가입
 	@PostMapping("/guest/regist")
 	public String Regist(MemberDTO memberDTO, Model model) {
+		String regSuc = "";
 		System.out.println("id : "+memberDTO.getId()+"+ pass : "+memberDTO.getPass()+"+ m_name : "+memberDTO.getM_name()+"+ phone : "+memberDTO.getPhone()+"+ zip : "+memberDTO.getZip()+"+ addr1 : "+memberDTO.getAddr1()+"+ addr2 : "+memberDTO.getAddr2()+"+ midx : "+memberDTO.getMidx()+"+ regidate : "+memberDTO.getRegidate());
+		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String securePw = encoder.encode(memberDTO.getPass());
+		memberDTO.setPass(securePw);
 		int result = dao.minsert(memberDTO);
-		if (result == 1 ) {model.addAttribute("regSuc", "1");
-		} else { model.addAttribute("regSuc", "0"); }
+		if (result == 1 ) {regSuc = "1";
+		} else { regSuc = "0"; }
+		model.addAttribute("regSuc", regSuc);
 		model.addAttribute("loginPage","1");
-		return "member/signup";
+		return "auth/login";
 	}
 	
 	//비밀번호찾기

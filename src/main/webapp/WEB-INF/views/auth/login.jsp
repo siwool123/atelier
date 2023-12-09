@@ -8,12 +8,10 @@
 <title>Atelier</title>
 <link href="./css/atelier.css" rel="stylesheet" type="text/css" />
 <script src="./js/atelier.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <!-- 다음 주소 찾기 api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
@@ -99,28 +97,45 @@ onload = function(){
     	setCookie("saveid", user_id2.value, -2);
     }
     
+    document.querySelector('#navbarNavAltMarkup div a:last').classList.add('active');
+    
     <c:choose>
 		<c:when test="${regSuc == '1'}">alert("회원가입에 성공했습니다. 로그인 해주세요.");</c:when> <%--회원가입 성공--%>
 		<c:otherwise>alert("회원가입에 실패했습니다. 다시 시도해 주세요.");</c:otherwise> <%--회원가입 실패--%>
 	</c:choose>
 }
-
 </script>
 <style>
 @media (max-width: 600px) {
   .loginbox {width:100% !important;}
+  .nav-tabs {width:100% !important;}
+  .table {width:100% !important;}
+ 
 }	
-* {font-size:14px;}
+
 .ruleSpan { cursor: pointer; }	
 .modal {--bs-modal-width: 80% !important}
+.nav-tabs {width:600px;}
+.nav-tabs li {width:49%;}
+.nav-tabs>li>a {border-radius:0 !important; border:none !important; }
+.nav-tabs>li.active>a {color:white !important; background-color:black !important; border:none !important;}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {border:none !important;}
+table {width:600px !important;}
+input, button {font-size:14px !important;}
+button {padding:10px !important;}
+#agreeCheck {margin-right:10px;}
+.btn-outline-secondary {width:100% !important; float:left;}
+.btn-outline-danger {padding:10px; width:45% }
+pre {background-color:white !important; border: none !important; padding:30px; 
+white-space: pre-wrap; font-size:14px; font-weight:400;}
+#navbarNavAltMarkup div.navbar-nav a.nav-link:last {padding-bottom:17px !important; border-bottom: 3px solid black !important; }
 </style>
 </head>
 <body>
 <%@ include file="../include/header.jsp" %>
-
 <div class="container mx-auto m-5 p-5 text-center">
 
-<ul class="nav nav-tabs my-5">
+<ul class="nav nav-tabs my-5 mx-auto">
     <li class="active"><a data-toggle="tab" href="#login">로그인</a></li>
     <li><a data-toggle="tab" href="#signup" id="signupbtn">회원가입</a></li>
   </ul>
@@ -147,7 +162,7 @@ onload = function(){
 				<label for="user_pwd">비밀번호</label>
 			</div>	
 			<%-- <div th:if="${param.error}" class="alert alert-danger">메일 혹은 비밀번호를 다시 확인해 주세요.</div> --%>
-			<div class="d-grid mt-5"><button type="submit" class="fs-4 btn btn-primary btn-block">LOGIN</button></div>
+			<div class="d-grid mt-5"><button type="submit" class="fs-4 btn btn-primary btn-block p-3">LOGIN</button></div>
 		</form>
 	</c:if>
 	<!-- 로그인되었을때 출력되는 부분. 로그인아이디와 로그아웃버튼 출력 -->
@@ -161,12 +176,13 @@ onload = function(){
     </div>
     <div id="signup" class="tab-pane">
         
-			<form name="myMotherform" action="regist" method="post" onsubmit="return formValidate(this);" novalidate>
-				<table class="table table-borderless">
-					<tr>
-						<td colspan="2" style="text-align: center;">
-							<button class="btn btn-outline-danger" data-bs-toggle="button" style="margin-right:20px;">일반회원</button> 
-							<button type="button" class="btn btn-outline-danger artist">작가회원</button>
+			<form name="myMotherform" action="guest/regist" method="post" onsubmit="return formValidate(this);" novalidate>
+				<table class="table table-borderless mx-auto">
+				<colgroup><col width=80%><col width=20%></colgroup>
+					<tr style="height:100px">
+						<td colspan="2" style="text-align: center; ">
+							<button class="btn btn-outline-danger member" data-bs-toggle="button" style="margin-right:20px;">일반회원</button> 
+							<button class="btn btn-outline-danger artist">작가회원</button>
 						</td>
 					</tr>
 					<tr>
@@ -203,14 +219,14 @@ onload = function(){
 						<td colspan="2"></td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" class="form-check-input" id="agreeCheck" style="width: 20px; height: 20px;"></input>
+						<td colspan="2"><input type="checkbox" class="form-check-input" id="agreeCheck" style="width: 20px; height: 20px;"></input>
 						<span class="ruleSpan" data-bs-toggle="modal" data-bs-target="#usingRule" style=""><b><u>이용약관</u></b></span>과 
 						<span class="ruleSpan" data-bs-toggle="modal" data-bs-target="#infoRule"><b><u>개인정보취급방침</u></b></span>에 동의합니다.
 						</td>
 					</tr>
 					<tr>
 						<td align="center" colspan="2"><div class="d-grid gap-2 col-8 mx-auto">
-						<input type="submit" value="회원가입" class="btn btn-outline-secondary" /></div></td>
+						<input type="submit" value="회원가입" class="btn btn-outline-secondary p-3" /></div></td>
 					</tr>
 				</table>
 			</form>
@@ -221,17 +237,17 @@ onload = function(){
 <%@ include file="../include/footer.jsp" %>
 
 <div class="modal" id="usingRule">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h4 class="modal-title fw-bolder">이용약관 </h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+        <h4 class="modal-title fw-bolder p-1">이용약관 </h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body text-center"> 
-<pre style="white-space: pre-wrap; font-family: 'Noto Sans KR', sans-serif;">
+      <div class="modal-body"> 
+<pre style="font-family: 'Noto Sans KR', sans-serif; ">
 제1조(목적)
-이 약관은 (주)아뜰리에(이하 “회사”라 한다)가 운영하는 아뜰리에 웹사이트와 모바일 어플리케이션(이하 “몰”이라 한다)에서 제공하는 인터넷 관련 서비스(이하 “서비스”라 한다)를 이용함에 있어 사이버 몰과 이용자의 권리,의무 및 책임사항을 규정함을 목적으로 합니다.
+이 약관은 (주)아뜰리에 (이하 “회사”라 한다)가 운영하는 아뜰리에 웹사이트와 모바일 어플리케이션(이하 “몰”이라 한다)에서 제공하는 인터넷 관련 서비스(이하 “서비스”라 한다)를 이용함에 있어 사이버 몰과 이용자의 권리,의무 및 책임사항을 규정함을 목적으로 합니다.
 ※「PC통신, 무선 등을 이용하는 전자상거래에 대해서도 그 성질에 반하지 않는 한 이 약관을 준용합니다.」
 
 제2조(정의)
@@ -424,17 +440,17 @@ onload = function(){
 </div>
 
 <div class="modal" id="infoRule">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h4 class="modal-title fw-bolder">개인정보취급방침 </h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+        <h4 class="modal-title fw-bolder p-1">개인정보취급방침 </h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body text-center">
+      <div class="modal-body">
 		
-<pre style="white-space: pre-wrap; font-family: 'Noto Sans KR', sans-serif;">
-'주식회사 아뜰리에(Atelier Inc.)'는 (이하 '회사'는) 고객님의 개인정보를 중요시하며, "정보통신망 이용촉진 및 정보보호"에 관한 법률을 준수하고 있습니다.
+<pre style="font-family: 'Noto Sans KR', sans-serif; ">
+'주식회사 아뜰리에 (Atelier Inc.)'는 (이하 '회사'는) 고객님의 개인정보를 중요시하며, "정보통신망 이용촉진 및 정보보호"에 관한 법률을 준수하고 있습니다.
 회사는 개인정보취급방침을 통하여 고객님께서 제공하시는 개인정보가 어떠한 용도와 방식으로 이용되고 있으며, 개인정보보호를 위해 어떠한 조치가 취해지고 있는지 알려드립니다.
 
 회사는 개인정보취급방침을 개정하는 경우 웹사이트 공지사항(또는 개별공지)을 통하여 공지할 것입니다.

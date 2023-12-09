@@ -76,6 +76,10 @@ th {color:#c5c5c5 !important;}
   .cart {padding:15px 30px !important;}
   .pay {padding:15px 44px !important}
 }
+.modal {--bs-modal-width: 96% !important}
+.modal-content {background-color: black; border-radius:0 !important}
+.modal-header * {color:white}
+.modal-header {border-bottom: none !important;}
 </style>
 </head>
 <body>

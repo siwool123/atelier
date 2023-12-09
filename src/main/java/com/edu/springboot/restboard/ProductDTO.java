@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-@Builder
-@ToString
 public class ProductDTO {
 	private String title;
 	private int pidx;

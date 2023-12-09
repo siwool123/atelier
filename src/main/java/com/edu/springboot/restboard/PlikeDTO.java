@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-@Builder
-@ToString
 public class PlikeDTO {
 	private int lidx;
 	private int pidx;

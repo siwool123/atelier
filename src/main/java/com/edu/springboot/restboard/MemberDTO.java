@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class MemberDTO {
 	private String id;
 	private String pass;
@@ -16,12 +15,11 @@ public class MemberDTO {
 	private int midx;
 	private java.sql.Date regidate;
 	private java.sql.Date leavedate;
-	private String profileo;
 	private String profiles;
-	private String placeo;
 	private String places;
 	private int total_point;
 	private String token;
 	private int enabled;
 	private String authority;
+	
 }

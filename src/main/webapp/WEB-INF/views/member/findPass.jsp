@@ -18,11 +18,8 @@ $(function () {
 		$.ajax({
 			type: "POST",
 			url: "/rest/findPass",
-			data: {
-				id : $("#findPassId").val(),
-			},
+			data: { id : $("#findPassId").val(), },
 			dataType: 'json',
-			
 			success: function(findPassMap) {
 				if(findPassMap.findPassIdSuc == "0") {
 					$("#findPassId").attr("class", "form-control is-invalid");

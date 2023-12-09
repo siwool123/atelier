@@ -34,6 +34,11 @@
 		delete from member where id=#{id}
 	</delete>
 	
+	<!-- 비번변경 -->
+	<update id="mpedit" parameterType="com.edu.springboot.restboard.MemberDTO"> 
+		update member set pass=#{pass} where id=#{id} 
+	</update>
+	
 	<!-- 프로필 업로드 -->
 	<update id="uploadProfile" parameterType="com.edu.springboot.restboard.MemberDTO">
 		update member set profiles=#{profiles} where id=#{id}

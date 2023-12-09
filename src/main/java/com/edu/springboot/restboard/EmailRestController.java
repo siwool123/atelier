@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,7 +54,7 @@ public class EmailRestController {
 		return findPassMap;
 	}
 	
-	//비밀번호 찾기 인증번호 확인하기
+	//비밀번호 찾기 인증번호 확인하기  
 	@PostMapping("/rest/findPassCheck")
 	public HashMap<String,String> findPassCheck(MemberDTO memberDTO, InfoDTO infoDTO, HttpSession session, Model model) {
 		HashMap<String, String> findPassCheckMap = new HashMap<String, String>();
@@ -70,6 +71,14 @@ public class EmailRestController {
 				System.out.println("인증번호 일치");
 				
 				MemberDTO findPassCheckDaoResult = dao.mview(memberDTO.getId());
+				
+				BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+				String securePw = encoder.encode(findPassCheckDaoResult.getPass());
+				findPassCheckDaoResult.setPass(securePw);
+				findPassCheckDaoResult.setId(memberDTO.getId());
+				
+				int result = 0;
+				result = dao.mpedit(findPassCheckDaoResult);
 				
 				findPassCheckMap.put("m_name", findPassCheckDaoResult.getM_name());
 				findPassCheckMap.put("pass", findPassCheckDaoResult.getPass());

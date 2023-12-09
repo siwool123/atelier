@@ -21,4 +21,7 @@ public interface IMemberService {
 	public int mdelete(MemberDTO memberDTO);
 	//프로필 사진 업로드
 	public int uploadProfile(MemberDTO memberDTO);
+	
+	//비번변경
+	public int mpedit(MemberDTO memberDTO);
 }
