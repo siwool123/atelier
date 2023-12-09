@@ -41,7 +41,7 @@ public class WebSecurityConfig {
 		.authorizeHttpRequests((request) -> request
 				.dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD).permitAll()
 				.requestMatchers("/", "/css/**", "/js/**", "/images/**", "/rest/**", "/shop/**", "/shop", "/view/**", "/view", "/uploads/**", "/error").permitAll()
-				.requestMatchers("/vartist").permitAll()
+				.requestMatchers("/vartist", "/guest", "/guest/**").permitAll()
 				.requestMatchers("/member/**").hasAnyRole("USER", "ARTIST", "ADMIN")
 				.requestMatchers("/artist/**", "/artist").hasAnyRole("ARTIST", "ADMIN")
 				.requestMatchers("/admin/**", "/admin").hasRole("ADMIN")

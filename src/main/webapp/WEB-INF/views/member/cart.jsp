@@ -31,7 +31,7 @@ function deletepidx(pidx) {
 </head>
 <body>
 <form name="delFrm" id="delFrm" ><input type="hidden" name="pidx" /></form>
-<%@ include file="./member/index.jsp" %>
+<%@ include file="index.jsp" %>
 <%-- <c:set var="user_id" value="
 <sec:authorize access="isAuthenticated()"><sec:authentication property="name"/></sec:authorize>
 "></c:set>  <div>${user_id } 님 로그인을 환영합니다.</div> --%>
