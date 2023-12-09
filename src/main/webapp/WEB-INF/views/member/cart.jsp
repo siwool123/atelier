@@ -38,6 +38,7 @@ function deletepidx(pidx) {
     <div class="container">
     <div class="row my-5">
         <div class="col-sm-2"><%@ include file="../include/memberSidebar.jsp" %></div>
+        
         <div class="col-sm-10 pl-5">
 			<div class="headerL2">장바구니 ${not empty plist ? plist.size() : "0" }</div>
 			<table class="table table-hover">
