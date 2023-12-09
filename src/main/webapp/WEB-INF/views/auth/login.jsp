@@ -126,9 +126,12 @@ button {padding:10px !important;}
 #agreeCheck {margin-right:10px;}
 .btn-outline-secondary {width:100% !important; float:left;}
 .btn-outline-danger {padding:10px; width:45% }
+#user_id, #user_pwd {height:50px !important;}
 pre {background-color:white !important; border: none !important; padding:30px; 
 white-space: pre-wrap; font-size:14px; font-weight:400;}
 #navbarNavAltMarkup div.navbar-nav a.nav-link:last {padding-bottom:17px !important; border-bottom: 3px solid black !important; }
+#staticBackdrop {--bs-modal-width: 40% !important}
+
 </style>
 </head>
 <body>
@@ -155,7 +158,7 @@ white-space: pre-wrap; font-size:14px; font-weight:400;}
 				<label for="user_id">아이디</label>
 			</div>	
 		<div class="my-3 pb-5">	<label style="padding-left:10px; float:left;"> 
-			<input name="saveid" id="saveid" type="checkbox" onclick="saveId();"> 아이디저장</label> <a href="guest/findPass" style="float:right;">비밀번호 찾기</a> </div>
+			<input name="saveid" id="saveid" type="checkbox" onclick="saveId();"> 아이디저장</label> <a href="guest/findPass" style="float:right;">임시 비밀번호 받기</a> </div>
 			
 			<div class="form-floating my-5">
 				<input type="password" class="form-control" id="user_pwd" placeholder="Enter password" name="my_pass">
@@ -182,7 +185,7 @@ white-space: pre-wrap; font-size:14px; font-weight:400;}
 					<tr style="height:100px">
 						<td colspan="2" style="text-align: center; ">
 							<button class="btn btn-outline-danger member" data-bs-toggle="button" style="margin-right:20px;">일반회원</button> 
-							<button class="btn btn-outline-danger artist">작가회원</button>
+							<button class="btn btn-outline-danger artist" data-bs-toggle="modal" data-bs-target="#staticBackdrop">작가회원</button>
 						</td>
 					</tr>
 					<tr>
@@ -514,6 +517,22 @@ white-space: pre-wrap; font-size:14px; font-weight:400;}
 </pre>		
 		
 	 </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="staticBackdrop">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title fw-bolder">작가회원 가입하기</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center p-5"> 
+		작가회원으로 전환은 일반회원 가입 후, <br/> <b style="color:red;">마이페이지 > 작가신청</b> 페이지에서 진행해주세요.
+	</div>
+
     </div>
   </div>
 </div>

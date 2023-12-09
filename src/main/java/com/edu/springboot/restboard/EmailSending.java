@@ -29,10 +29,10 @@ public class EmailSending {
 		
 		try {
 			
-			// 5자리 난수 생성
+			// 8자리 난수 생성
 			Random rand  = new Random();
 	        String randNum = "";
-	        for(int i=0; i<5; i++) {
+	        for(int i=0; i<8; i++) {
 	            String ran = Integer.toString(rand.nextInt(10));
 	            randNum+=ran;
 	        }
@@ -51,7 +51,7 @@ public class EmailSending {
 			// 메일의 내용
 //			if(infoDTO.getFormat().equals("text")) {
 			// 메일을 Text 형식으로 발송한다. 순수한 문자열만 전송된다.
-			h.setText("인증번호 : "+randNum);
+			h.setText("임시 비밀번호 : "+randNum);
 //			}
 //			else {
 //				/* HTML 형식으로 지정한 경우 미리 만들어둔 메일템플릿(HTML)의
@@ -70,7 +70,7 @@ public class EmailSending {
 			mailSender.send(m);
 			infoDTO.setContent(randNum);
 			System.out.println("es randNum을 infoDTO content에 저장 : "+infoDTO.getContent());
-			System.out.println("메일 전송 완료");
+			System.out.println("메일 전송 완료 : "+randNum);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -81,9 +81,9 @@ public void findPassEmailSender(InfoDTO infoDTO, MemberDTO memberDTO) {
 		
 		try {
 			
-			Random rand  = new Random(); // 5자리 난수 생성
+			Random rand  = new Random(); // 8자리 난수 생성
 	        String randNum = "";
-	        for(int i=0; i<5; i++) {
+	        for(int i=0; i<8; i++) {
 	            String ran = Integer.toString(rand.nextInt(10));
 	            randNum+=ran;
 	        }
@@ -98,9 +98,9 @@ public void findPassEmailSender(InfoDTO infoDTO, MemberDTO memberDTO) {
 			// 받는사람
 			h.setTo(memberDTO.getId());
 			// 메일 제목
-			h.setSubject("atelier 비밀번호 찾기 인증번호 입니다.");
+			h.setSubject("atelier 임시 비밀번호 발송");
 			// 메일의 내용. Text 형식으로 발송한다. 순수한 문자열만 전송된다.
-			h.setText("인증번호 : "+randNum);
+			h.setText("임시 비밀번호 : "+randNum);
 			
 			// 여기서 메일 발송
 			mailSender.send(m);

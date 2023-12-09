@@ -13,7 +13,7 @@
 <script>
 $(function () {
 	$('#navbarNavAltMarkup div a:last').addClass( 'active' );
-	//인증번호 발송 버튼 클릭시
+	//임시 비밀번호 발송 버튼 클릭시
 	$("#findPassNumBtn").click(function(){
 		$.ajax({
 			type: "POST",
@@ -27,6 +27,9 @@ $(function () {
 					console.log("아이디 조회 성공 data : "+findPassMap);
 					$("#findPassId").attr("class", "form-control is-valid");
 					$("#findPassId").attr("readonly", true);
+				} else if(findPassMap.pwresetresult=="1"){
+					console.log("임시비번으로 회원정보변경 성공 : "+findPassMap);
+					$('#pwresetR').text("임시 비밀번호로 회원정보변경 성공");
 				}
 			}
 		})
@@ -44,7 +47,7 @@ $(function () {
 			success: function(findPassCheckMap) {
 				console.log("비교성공. checkSuc : "+findPassCheckMap.findPassCheckSuc);
 				if(findPassCheckMap.findPassCheckSuc == "0") {
-					$("#passNumInvalidFeedback").text("인증번호가 일치하지 않습니다.");
+					$("#passNumInvalidFeedback").text("임시 비밀번호가 일치하지 않습니다.");
 					$("#userFindPassNum").attr("class", "form-control is-invalid");
 				} else if(findPassCheckMap.findPassCheckSuc == "1") {
 					console.log("인증 data : "+findPassCheckMap);
@@ -58,13 +61,13 @@ $(function () {
 							);
 				} else if(findPassCheckMap.findPassCheckSuc == "-1"){
 					$("#userFindPassNum").attr("class", "form-control is-invalid");
-					$("#passNumInvalidFeedback").text("인증번호를 발송해주세요.");
+					$("#passNumInvalidFeedback").text("임시 비밀번호를 발송해주세요.");
 				} else if(findPassCheckMap.findPassCheckSuc == "-2"){
 					$("#userFindPassNum").attr("class", "form-control is-invalid");
-					$("#passNumInvalidFeedback").text("인증번호를 입력해주세요.");
+					$("#passNumInvalidFeedback").text("임시 비밀번호를 입력해주세요.");
 				} else if(findPassCheckMap.findPassCheckSuc == "-3"){
 					$("#userFindPassNum").attr("class", "form-control is-invalid");
-					$("#passNumInvalidFeedback").text("인증번호가 일치하지 않습니다.");
+					$("#passNumInvalidFeedback").text("임시 비밀번호가 일치하지 않습니다.");
 				}
 			}
 		})
@@ -81,25 +84,31 @@ input {width:90%;}
 </head>
 <body>
 <%@include file="../include/header.jsp"%>
-	<div class="container mx-auto m-5 p-5 text-center d-grid mx-auto">
-					<h2 class="fw-bolder p-3" id="findPassTitle">비밀번호 찾기</h2>
-					<p>가입시 등록하신 이메일을 입력해 주세요.</p>
+	<div class="container m-5 p-5 text-center d-grid">
+					<h2 class="fw-bolder p-3 mx-auto" id="findPassTitle">임시 비밀번호 받기</h2>
+					<p class="mx-auto">가입시 등록하신 이메일을 입력해 주세요.<br/>
+					이메일로 발송된 임시 비밀번호로 로그인하여 <br/>
+							<b>마이페이지 > 정보수정</b> 페이지에서 비밀번호를 변경하세요.	
+					</p>
 					<!-- <p class="mx-auto">이메일로 비밀번호 재설정 링크가 발송됩니다.</p> -->
 				
 					<table class="table table-borderless m-5 mx-auto" novalidate style="width:600px;" >
 					<colgroup><col width=70%><col width=30%></colgroup>
 						<tr>
 							<td>
-							<input type="hidden" id="findPassSubject" value="atelier 비밀번호 찾기 인증번호 입니다." />
+							<input type="hidden" id="findPassSubject" value="atelier 임시 비밀번호 입니다." />
 							<input type="email" class="form-control" name="findPassId" id="findPassId" placeholder="EMAIL">
-							<div class="valid-feedback">인증번호가 발송되었습니다.</div><div class="invalid-feedback">가입된 아이디가 없습니다.</div></td>
-							<td><button id="findPassNumBtn" class="btn btn-outline-danger">인증번호 발송</button></td>
+							<div class="valid-feedback mt-5 fs-6">임시 비밀번호가 발송되었습니다.<br/>
+							이메일로 발송된 임시 비밀번호로 로그인하여 <br/>
+							<b>마이페이지 > 정보수정</b> 페이지에서 비밀번호를 변경하세요.							
+							</div><div class="invalid-feedback">가입된 아이디가 없습니다.</div></td>
+							<td><button id="findPassNumBtn" class="btn btn-outline-danger">임시 비밀번호 발송</button></td>
 						</tr>
-						<tr>
-							<td><input type="text" id="userFindPassNum" class="form-control" placeholder="수신이메일 내 인증번호를 입력하세요.">
-							<div id="passNumInvalidFeedback" class="invalid-feedback">인증번호가 일치하지 않습니다.</div></td>
-							<td><button id="infdPassCheckBtn" class="btn btn-outline-danger">인증번호 확인</button></td>
-						</tr>
+						<!-- <tr>
+							<td><input type="text" id="userFindPassNum" class="form-control" placeholder="수신이메일 내 임시 비밀번호를 입력하세요.">
+							<div id="passNumInvalidFeedback" class="invalid-feedback">임시 비밀번호가 일치하지 않습니다.</div></td>
+							<td><button id="infdPassCheckBtn" class="btn btn-outline-danger">임시 비밀번호 확인</button></td>
+						</tr> -->
 						<tr id="findPassPass" class="d-none text-center">
 							<td colspan="2" id="idAndPass"></td>
 						</tr>
@@ -107,6 +116,8 @@ input {width:90%;}
 							<td colspan="2"><button type="button" id="findPassLogBtn" class="btn btn-outline-danger" onClick="location.href='login'">로그인 하기</button></td>
 						</tr>
 					</table>
+					<div class="mx-auto" id="pwresetR" style="color:red"></div>
+					<button class="btn btn-outline-danger my-5 mx-auto p-2" onClick="location.href='/login'" style="width:50%">로그인 하기</button>
 		</div>
 <%@include file="../include/footer.jsp"%>
 </body>

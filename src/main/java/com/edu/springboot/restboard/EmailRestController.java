@@ -50,6 +50,17 @@ public class EmailRestController {
 			email.findPassEmailSender(infoDTO, memberDTO); //아이디가 존재할 경우 이메일을 발송한다.
 			findPassMap.put("findPassIdSuc", "1"); //맵 suc 키에 1을 담는다.
 			session.setAttribute("findPassNum", infoDTO.getFindPassNum()); //세션 영역에 인증번호를 저장한다.
+			
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			String securePw = encoder.encode(infoDTO.getFindPassNum());
+			memberDTO.setPass(securePw);
+			memberDTO.setId(memberDTO.getId());
+			
+			int result = 0;
+			result = dao.mpedit(memberDTO); //임시비번으로 회원비번변경
+			System.out.println("임시비번으로 회원비번변경 성공 : "+result);
+			
+			findPassMap.put("pwresetresult", result+"");
 		} 
 		return findPassMap;
 	}
@@ -78,7 +89,7 @@ public class EmailRestController {
 				findPassCheckDaoResult.setId(memberDTO.getId());
 				
 				int result = 0;
-				result = dao.mpedit(findPassCheckDaoResult);
+				result = dao.mpedit(findPassCheckDaoResult); //임시비번으로 회원비번변경
 				
 				findPassCheckMap.put("m_name", findPassCheckDaoResult.getM_name());
 				findPassCheckMap.put("pass", findPassCheckDaoResult.getPass());
