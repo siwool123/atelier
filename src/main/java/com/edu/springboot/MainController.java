@@ -65,7 +65,7 @@ public class MainController {
 		int totalCount = dao.totalCount(parameterDTO);
 		//페이징을 위한 설정값(하드코딩)
 		int pageSize = 9;//한 페이지당 게시물 수
-		int blockPage = 5;//한 블럭당 페이지 번호 수
+		int blockPage = 10;//한 블럭당 페이지 번호 수
 		/* 목록에 첫 진입시에는 페이지 번호가 없으므로 무조건 1로 설정하고, 파라미터로 전달된 페이지 번호가 있다면 받은 후 정수로 변경해서 설정한다. */
 		int pageNum = (req.getParameter("pageNum")==null || req.getParameter("pageNum").equals(""))? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
@@ -85,7 +85,7 @@ public class MainController {
 		return "home";
 	}
 	
-	@RequestMapping("/view")
+	@RequestMapping(value={"/view", "/member/view"})
 	public String view (@RequestParam int pidx, Model model, Principal principal, ParameterDTO parameterDTO) {
 		
 		String user_id = null;
@@ -178,13 +178,15 @@ public class MainController {
 		return "member/index";
 	}
 	
-	@PostMapping("/member/delete")
-	public String pidxdelete(@RequestParam int pidx, Model model) {
-		int result = dao.delete(pidx);
-		System.out.println("장바구니에서 작품 삭제결과:"+result);
-		model.addAttribute("result", result);
-		return "redirect:member/cart";
-	}
+//	@PostMapping("/member/delete")
+//	public String pidxdelete(HttpServletRequest req, Model model) {
+//		int result = 0;
+//		int pidx = Integer.parseInt(req.getParameter("pidx"));
+//		result = dao.delCart(pidx);
+//		System.out.println("장바구니에서 작품 삭제결과:"+result);
+//		model.addAttribute("result", result);
+//		return "/member/cart";
+//	}
 	
 	@RequestMapping("/member/cart")
 	public String cart(Principal principal, Model model, MemberDTO memberDTO) {

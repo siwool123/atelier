@@ -17,6 +17,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -45,7 +46,8 @@ public class WebSecurityConfig {
 				.requestMatchers("/member/**").hasAnyRole("USER", "ARTIST", "ADMIN")
 				.requestMatchers("/artist/**", "/artist").hasAnyRole("ARTIST", "ADMIN")
 				.requestMatchers("/admin/**", "/admin").hasRole("ADMIN")
-				/* .anyRequest().authenticated() */ ); //어떠한 요청이라도 인증필요
+				/* .anyRequest().authenticated() */ //어떠한 요청이라도 인증필요
+				); 
 		
 	/* 로그인페이지에대한 디자인 커스터마이징
 	  * loginPage : 로그인페이지의 요청명

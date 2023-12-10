@@ -166,5 +166,5 @@
 	<insert id="cartadd" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		INSERT INTO cart VALUES (seq_cart.nextval, #{pidx}, #{midx})
 	</insert>
-	<delete id="delete">DELETE FROM cart WHERE pidx=#{param1}</delete>
+	<delete id="delCart">DELETE FROM cart WHERE pidx=#{param1}</delete>
 </mapper> 

@@ -146,7 +146,16 @@ public class BoardRestController {
 			e.printStackTrace();
 			System.out.println("장바구니호출 실패");
 		}
-		
 		return result;
 	}
+	
+	@PostMapping("/member/delCart")
+	public int pidxdelete(HttpServletRequest req, Model model) {
+		int result = 0;
+		int pidx = Integer.parseInt(req.getParameter("pidx"));
+		result = dao.delCart(pidx);
+		System.out.println("장바구니에서 작품 삭제결과:"+result);
+		return result;
+	}
+	
 }

@@ -28,7 +28,8 @@ public class EmailRestController {
 	
 	//이메일 중복 검사	
 	@PostMapping("/rest/emailOverlap")
-	public int emailcheck (@RequestParam String id) {
+	public int emailcheck (HttpServletRequest req) {
+		String id = req.getParameter("id");
 		int result = 0;
 		MemberDTO memberDTO = dao.mview(id);
 		if(memberDTO!=null) {result = 1;}

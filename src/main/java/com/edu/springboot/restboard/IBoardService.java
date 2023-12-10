@@ -52,7 +52,7 @@ public interface IBoardService {
 	//장바구니 추가
 	public int cartadd(ParameterDTO parameterDTO);
 	//장바구니 삭제
-	public int delete(int pidx);
+	public int delCart(int pidx);
 }
 
 

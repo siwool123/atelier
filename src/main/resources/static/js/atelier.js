@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 $( document ).ready( function() {
-	 $(".year").each(function() { $(this).text($(this).text().slice(0, 4));});
-    $(".price2").each(function() { $(this).text(numberWithCommas($(this).text()));});
- 	$(".price3 b").each(function() { $(this).text(numberWithCommas($(this).text()));});
+	 $('.year').each(function() { $(this).text($(this).text().slice(0, 4));});
+    $('.price2, #tprice, #tprice2').each(function() { $(this).text(numberWithCommas($(this).text()));});
+ 	$('.price3 b').each(function() { $(this).text(numberWithCommas($(this).text()));});
  	
 	$('a.btn2:first').addClass( 'active' );
 	$('a#total').addClass( 'active' );
@@ -94,6 +94,16 @@ $( document ).ready( function() {
     $("input[name=chk]").click(function () {
         var total = $("input[name=chk]").length;
         var checked = $("input[name=chk]:checked").length;
+        
+        var sum = 0;
+        $('input[name=chk]:checked').each(function() {
+            // 체크된 제품의 가격을 가져와서 총합에 더함
+            sum += parseInt($(this).closest('tr').find('.price2').text().replace(/,/g, ''));
+        });
+        
+        $('#tnum').html(checked);
+         $('#tprice').html(numberWithCommas(sum));
+         
         if (total != checked) $("#chkAll").prop("checked", false);
         else $("#chkAll").prop("checked", true);
     });
@@ -138,6 +148,21 @@ function postOpen() {
 			console.log(data.address);
 
 			let frm = document.myMotherform;
+			frm.zip.value = data.zonecode;
+			frm.addr1.value = data.address;
+			frm.addr2.focus();
+		}
+	}).open();
+}
+
+function postOpen2() {
+	new daum.Postcode({
+		oncomplete : function(data) {
+			console.log(data);
+			console.log(data.zonecode);
+			console.log(data.address);
+
+			let frm = document.destinationFm;
 			frm.zip.value = data.zonecode;
 			frm.addr1.value = data.address;
 			frm.addr2.focus();
@@ -302,4 +327,40 @@ $(function () {
 		$("#registBtn").attr("class", "btn btn-outline-danger active")
 	}) */
 	
+	function inputMsg(frm) {
+	    var choiceMsg = frm.msg.value;
+	    if (choiceMsg == '직접입력') {
+	        frm.msg2.readOnly = false;
+	        frm.msg2.focus();
+	    }else {
+	        frm.msg2.value = choiceMsg;
+	        frm.msg2.readOnly = true;
+	    }
+	}
+	
 });
+
+$(document).on('change', '#chkAll', function() {
+    $('input[name=chk]').prop('checked', this.checked);
+    updateTotal();
+});
+
+$(document).on('change', 'input[name=chk]', function() {
+    updateTotal();
+});
+// 3자리마다 컴마를 찍는 함수
+function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+function updateTotal() {
+    var total = $('input[name=chk]').length;
+    var totalChecked = $('input[name=chk]:checked').length;
+
+    $('#chkAll').prop('checked', total === totalChecked);
+
+    var sum = 0;
+    $('input[name=chk]:checked').each(function() {
+        sum += parseInt($(this).closest('tr').find('.price2').text().replace(/,/g, ''), 10);
+    });
+	console.log(sum);
+    $('#tnum').text(totalChecked);
+    $('#tprice, #tprice2').html(numberWithCommas(sum));
+}

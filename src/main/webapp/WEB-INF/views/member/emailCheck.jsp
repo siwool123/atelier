@@ -28,10 +28,8 @@
 			}
 			$.ajax({
 				type: "POST",
-				url: "emailOverlap",
-				data: {
-					id : id
-				},
+				url: "/rest/emailOverlap",
+				data: {id : id},
 				dataType: 'json',
 				success: function (data) {
 					console.log("성공 data : "+data);
@@ -55,7 +53,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col" style="padding: 30px; text-align: center;">
-				<form name="overlapFrm" action="guest/emailSend" method="post" novalidate>
+				<form name="overlapFrm" action="/guest/emailSend" method="post" novalidate>
 				<table class="table table-borderless">
 					<tr>
 						<td class="userVal">
@@ -79,7 +77,7 @@
 				</table>
 				</form>
 
-				<form action="guest/checknum" method="post" novalidate>
+				<form action="/guest/checknum" method="post" novalidate>
 					<table class="table table-borderless">
 					<tr>
 						<td>

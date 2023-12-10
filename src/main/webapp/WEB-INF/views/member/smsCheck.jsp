@@ -27,7 +27,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col" style="padding: 20px; text-align: center;">
-				<form name="smsOverlapFrm" action="guest/smsauth" method="post">
+				<form name="smsOverlapFrm" action="/guest/smsauth" method="post">
 					<table class="table table-borderless">
 						<td class="userVal">
 							<!-- 인증문자 받는 사람 -->
@@ -39,7 +39,7 @@
 					</table>
 				</form>
 
-				<form action="guest/smscheck" method="post">
+				<form action="/guest/smscheck" method="post">
 					<table class="table table-borderless">
 						<tr>
 							<td>

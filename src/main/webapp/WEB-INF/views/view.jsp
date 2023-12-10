@@ -34,15 +34,12 @@ $( document ).ready( function() {
 			type : 'get', //전송방식
 			contentType : 'text/html;charset:utf-8', //컨텐츠타입
 			dataType : 'json', //콜백데이터 타입
-			url : 'rest/cart', 
+			url : '/rest/cart', 
 			data : {pidx : ${pdto.pidx}},
 			success : sucFunc2,
-			error: function (jqXHR, textStatus, e) {
-                console.error('AJAX Error:', textStatus, e);
-                alert('장바구니추가버튼이 작동하지 않습니다.');
-            }
+			error: function (errD) {console.log(errD.status+" : "+errD.statusText);
+				alert('장바구니 담기 실패');}
 		});
- 		window.location.href = '/member/cart?pidx='+${pdto.pidx};
 	}); 
 });
 function sucFunc(resD){
@@ -64,8 +61,12 @@ function sucFunc2(resD){
 	if(resD==1) {
 		alert("장바구니에 추가되었습니다.");
 		cart.text($(this).text() + ' 1');
-		window.location.href = 'member/cart';
-	}else if(resD==-1) { alert("장바구니에 동일 작품이 있습니다. ");
+		if(confirm("장바구니로 이동하시겠습니까?")){window.location.href = '/member/cart';}
+		
+	}else if(resD==-1) { 
+		alert("장바구니에 동일 작품이 있습니다. ");
+		if(confirm("장바구니로 이동하시겠습니까?")){window.location.href = '/member/cart';}
+	
 	}else alert("장바구니가 작동하지 않습니다.");
 }
 </script> 

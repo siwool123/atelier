@@ -78,47 +78,80 @@ $(function () {
 <tr id="suc1" class="text-center text-primary d-none"> */
 </script>
 <style>
+@media (max-width: 600px) {
+  .findPass {width:100% !important}
+}	
 .btn-outline-danger {float:right !important;}
-input {width:90%;}
+.leftmenu li:nth-child(3) {background-color: black;}
+.leftmenu li:nth-child(3) a, .leftmenu li:nth-child(3) a i {color:white}
+#findPassId { border-radius:0; display:inline;}
+table tr td input, able tr td button {float:left:}
+.login {float:left !important; margin-left:200px !important;}
+
 </style>
 </head>
 <body>
 <%@include file="../include/header.jsp"%>
-	<div class="container m-5 p-5 text-center d-grid">
-					<h2 class="fw-bolder p-3 mx-auto" id="findPassTitle">임시 비밀번호 받기</h2>
-					<p class="mx-auto">가입시 등록하신 이메일을 입력해 주세요.<br/>
-					이메일로 발송된 임시 비밀번호로 로그인하여 <br/>
-							<b>마이페이지 > 정보수정</b> 페이지에서 비밀번호를 변경하세요.	
-					</p>
-					<!-- <p class="mx-auto">이메일로 비밀번호 재설정 링크가 발송됩니다.</p> -->
+	<div class="container m-5 p-5 text-center mx-auto">
+	<div class="row">
+		<div class="col-sm-2"><%@ include file="../include/loginSidebar.jsp" %></div>
+		<div class="col-sm-10">
+		
+		<h2 class="fw-bolder p-3 mx-auto" id="findPassTitle">임시 비밀번호 받기</h2>
+		<p class="mx-auto">가입시 등록하신 이메일을 입력해 주세요.<br/>
+		이메일로 발송된 임시 비밀번호로 로그인하여 <br/>
+				<b>마이페이지 > 정보수정</b> 페이지에서 비밀번호를 변경하세요.	
+		</p>
+		
+		<div class="row mx-auto m-5 text-center findPass" style="width:500px;">
+			<div class="col-sm-8 text-center">
+				<input type="email" class="form-control" name="findPassId" id="findPassId" placeholder="EMAIL">
 				
-					<table class="table table-borderless m-5 mx-auto" novalidate style="width:600px;" >
-					<colgroup><col width=70%><col width=30%></colgroup>
-						<tr>
-							<td>
-							<input type="hidden" id="findPassSubject" value="atelier 임시 비밀번호 입니다." />
-							<input type="email" class="form-control" name="findPassId" id="findPassId" placeholder="EMAIL">
-							<div class="valid-feedback mt-5 fs-6">임시 비밀번호가 발송되었습니다.<br/>
-							이메일로 발송된 임시 비밀번호로 로그인하여 <br/>
-							<b>마이페이지 > 정보수정</b> 페이지에서 비밀번호를 변경하세요.							
-							</div><div class="invalid-feedback">가입된 아이디가 없습니다.</div></td>
-							<td><button id="findPassNumBtn" class="btn btn-outline-danger">임시 비밀번호 발송</button></td>
-						</tr>
-						<!-- <tr>
-							<td><input type="text" id="userFindPassNum" class="form-control" placeholder="수신이메일 내 임시 비밀번호를 입력하세요.">
-							<div id="passNumInvalidFeedback" class="invalid-feedback">임시 비밀번호가 일치하지 않습니다.</div></td>
-							<td><button id="infdPassCheckBtn" class="btn btn-outline-danger">임시 비밀번호 확인</button></td>
-						</tr> -->
-						<tr id="findPassPass" class="d-none text-center">
-							<td colspan="2" id="idAndPass"></td>
-						</tr>
-						<tr id="findPassLogBtn" class="d-none text-center">
-							<td colspan="2"><button type="button" id="findPassLogBtn" class="btn btn-outline-danger" onClick="location.href='login'">로그인 하기</button></td>
-						</tr>
-					</table>
-					<div class="mx-auto" id="pwresetR" style="color:red"></div>
-					<button class="btn btn-outline-danger my-5 mx-auto p-2" onClick="location.href='/login'" style="width:50%">로그인 하기</button>
+			</div>
+			<div class="col-sm-4 text-center">
+				<button id="findPassNumBtn" class="btn btn-outline-danger">임시 비밀번호 발송</button>
+			</div>
+			
+			<div class="valid-feedback mt-5 fs-6">임시 비밀번호가 발송되었습니다.<br/>
+				이메일로 발송된 임시 비밀번호로 로그인하여 <br/>
+				<b>마이페이지 > 정보수정</b> 페이지에서 비밀번호를 변경하세요.							
+				</div><div class="invalid-feedback">가입된 아이디가 없습니다.</div>
+				
+			<button class="btn btn-outline-danger my-5 mx-auto p-2 login" onClick="location.href='/login'" style="float:right !important">
+				로그인 하기</button>
 		</div>
+		
+		
+		<!-- <table class="table table-borderless m-5 mx-auto" novalidate style="width:600px;" >
+		<colgroup><col width=70%><col width=30%></colgroup>
+			<tr>
+				<td>
+				<input type="hidden" id="findPassSubject" value="atelier 임시 비밀번호 입니다." />
+				<input type="email" class="form-control" name="findPassId" id="findPassId" placeholder="EMAIL">
+				<div class="valid-feedback mt-5 fs-6">임시 비밀번호가 발송되었습니다.<br/>
+				이메일로 발송된 임시 비밀번호로 로그인하여 <br/>
+				<b>마이페이지 > 정보수정</b> 페이지에서 비밀번호를 변경하세요.							
+				</div><div class="invalid-feedback">가입된 아이디가 없습니다.</div></td>
+				<td><button id="findPassNumBtn" class="btn btn-outline-danger">임시 비밀번호 발송</button></td>
+			</tr>
+			=<tr>
+				<td><input type="text" id="userFindPassNum" class="form-control" placeholder="수신이메일 내 임시 비밀번호를 입력하세요.">
+				<div id="passNumInvalidFeedback" class="invalid-feedback">임시 비밀번호가 일치하지 않습니다.</div></td>
+				<td><button id="infdPassCheckBtn" class="btn btn-outline-danger">임시 비밀번호 확인</button></td>
+			</tr> =
+			<tr id="findPassPass" class="d-none text-center">
+				<td colspan="2" id="idAndPass"></td>
+			</tr>
+			<tr id="findPassLogBtn" class="d-none text-center">
+				<td colspan="2"><button type="button" id="findPassLogBtn" class="btn btn-outline-danger" onClick="location.href='login'">로그인 하기</button></td>
+			</tr>
+		</table>
+		<div class="mx-auto" id="pwresetR" style="color:red"></div>
+		<button class="btn btn-outline-danger my-5 mx-auto p-2" onClick="location.href='/login'" style="width:50%">로그인 하기</button> -->
+		
+		</div>
+	</div>
+</div>
 <%@include file="../include/footer.jsp"%>
 </body>
 </html>
