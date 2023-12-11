@@ -1,6 +1,5 @@
 package com.edu.springboot.restboard;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

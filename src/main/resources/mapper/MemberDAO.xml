@@ -23,7 +23,8 @@
 	
 	<!-- 회원 정보 수정 -->
 	<update id="mupdate" parameterType="com.edu.springboot.restboard.MemberDTO"> 
-		update member set pass=#{pass}, name=#{name} where id=#{id}
+		update member set pass=#{pass}, m_name=#{m_name}, zip=#{zip}, addr1=#{addr1}, addr2=#{addr2}, profiles=#{profiles}
+		where id=#{id}
 	</update> 
 	
 	<!-- 회원 탈퇴 -->
