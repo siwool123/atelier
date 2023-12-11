@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.edu.springboot.restboard.IBoardService">
+	<select id="pselectall" resultType="com.edu.springboot.restboard.ProductDTO">
+		SELECT * from product
+	</select>
+	<select id="selectbya" resultType="com.edu.springboot.restboard.ProductDTO">
+		SELECT * from product WHERE aidx=#{param1}
+	</select>
+	
+	<select id="minprice">
+		SELECT min(price) from product
+	</select>
+	<select id="maxprice">
+		SELECT max(price) from product
+	</select>
+
+	<select id="totalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT count(*) from product
+		<!-- 검색어가 null, 빈값이 아닐때만 where 절을 동적으로 추가한다. -->
+		<where>
+		<choose>
+			<when test="sWord!=null and !sWord.isEmpty()">
+				<foreach collection="sWord" item="str" separator="or">
+					title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+				</foreach>
+			</when>
+			<when test="pmin!=null and !pmin.isEmpty() and pmax!=null and !pmax.isEmpty()">
+				price BETWEEN #{pmin} AND #{pmax}
+			</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> sold = 1</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> sold = 0</when>
+			<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> size1=size2</when>
+			<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> size1 &gt; size2</when>
+			<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> size1 &lt; size2</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('xs')"> size2 BETWEEN 0 and 15</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('ss')"> size2 BETWEEN 15 and 25</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('mm')"> size2 BETWEEN 25 and 50</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('ll')"> size2 BETWEEN 50 and 100</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('xl')"> size2 &gt; 100</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('ac')"> p_type='아크릴'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('oi')"> p_type='유화'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('wa')"> p_type='수채화'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('in')"> p_type='수묵화'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('sk')"> p_type='스케치'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('mi')"> p_type='혼합/기타'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('na')"> theme='자연/풍경'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('pe')"> theme='인물'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('an')"> theme='동식물'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('ob')"> theme='사물'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('ab')"> theme='추상'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('ot')"> theme='기타'</when>
+		</choose>
+		</where>
+	</select>
+
+	<select id="selectProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		<!-- select * from product -->
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM product 
+					<where>
+						<choose>
+							<when test="sWord!=null and !sWord.isEmpty()">
+								<foreach collection="sWord" item="str" separator="or">
+									title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+								</foreach>
+							</when>
+							<when test="pmin!=null and !pmin.isEmpty() and pmax!=null and !pmax.isEmpty()">
+								price BETWEEN #{pmin} AND #{pmax}
+							</when>
+							<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> sold = 1</when>
+							<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> sold = 0</when>
+							<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> size1=size2</when>
+							<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> size1 &gt; size2</when>
+							<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> size1 &lt; size2</when>
+							<when test="size!=null and !size.isEmpty() and size.equals('xs')"> size2 BETWEEN 0 and 15</when>
+							<when test="size!=null and !size.isEmpty() and size.equals('ss')"> size2 BETWEEN 15 and 25</when>
+							<when test="size!=null and !size.isEmpty() and size.equals('mm')"> size2 BETWEEN 25 and 50</when>
+							<when test="size!=null and !size.isEmpty() and size.equals('ll')"> size2 BETWEEN 50 and 100</when>
+							<when test="size!=null and !size.isEmpty() and size.equals('xl')"> size2 &gt; 100</when>
+							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('ac')"> p_type='아크릴'</when>
+							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('oi')"> p_type='유화'</when>
+							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('wa')"> p_type='수채화'</when>
+							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('in')"> p_type='수묵화'</when>
+							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('sk')"> p_type='스케치'</when>
+							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('mi')"> p_type='혼합/기타'</when>
+							<when test="cate!=null and !cate.isEmpty() and cate.equals('na')"> theme='자연/풍경'</when>
+							<when test="cate!=null and !cate.isEmpty() and cate.equals('pe')"> theme='인물'</when>
+							<when test="cate!=null and !cate.isEmpty() and cate.equals('an')"> theme='동식물'</when>
+							<when test="cate!=null and !cate.isEmpty() and cate.equals('ob')"> theme='사물'</when>
+							<when test="cate!=null and !cate.isEmpty() and cate.equals('ab')"> theme='추상'</when>
+							<when test="cate!=null and !cate.isEmpty() and cate.equals('ot')"> theme='기타'</when>
+						</choose>
+				</where>
+				<if test='orderby != null and !orderby.isEmpty()'>
+				<choose>
+						<when test='orderby.equals("11")'> ORDER BY p_like DESC</when>
+						<when test='orderby.equals("22")'> ORDER BY price</when>
+						<when test='orderby.equals("33")'> ORDER BY price DESC</when>
+						<otherwise> ORDER BY pidx DESC </otherwise>
+				</choose>
+				</if>
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="search" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM product
+		<if test="sWord!=null">
+			WHERE
+			<foreach collection="sWord" item="str" open="(" close=")" separator="or">
+				title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+			</foreach>
+		</if>
+		ORDER BY pidx DESC
+	</select>
+	
+	<select id="pview" resultType="com.edu.springboot.restboard.ProductDTO">
+		SELECT * FROM product WHERE pidx = #{param1}
+	</select>
+	<select id="aview" resultType="com.edu.springboot.restboard.ArtistDTO">
+		SELECT * FROM artist WHERE aidx = #{param1}
+	</select>
+	<select id="rview" resultType="com.edu.springboot.restboard.ReviewDTO">
+		SELECT * FROM review WHERE pidx = #{param1}
+	</select>
+	<select id="mview" resultType="com.edu.springboot.restboard.MemberDTO">
+		SELECT * FROM member WHERE id = #{param1}
+	</select>
+	
+	
+	<insert id="write" >
+		INSERT INTO product (pidx, title, content, id) VALUES (seq_product.nextval, #{title}, #{content}, #{id})
+	</insert>
+	
+	<select id="plview" resultType="com.edu.springboot.restboard.PlikeDTO">
+		SELECT * FROM p_like WHERE pidx=#{param1} AND midx=#{param2}
+	</select>
+	<delete id="pldelete">DELETE FROM p_like WHERE lidx=#{param1}</delete>
+	<insert id="pladd">INSERT INTO p_like VALUES (seq_p_like.nextval, #{pidx}, #{aidx}, #{midx})</insert>
+	<select id="plikecount">SELECT count(*) FROM p_like WHERE pidx=#{param1}</select>
+	<update id="updateplcnt">UPDATE product SET p_like = #{param1} WHERE pidx=#{param2}</update>
+	
+	<select id="rvlistbya" resultType="com.edu.springboot.restboard.ReviewDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM review WHERE aidx = #{aidx}
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="productsbyas" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM product WHERE aidx=#{aidx} AND sold=#{sold}
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="cartview" resultType="com.edu.springboot.restboard.CartDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM cart WHERE midx=#{midx} AND pidx=#{pidx}
+	</select>
+	<select id="cartsview" resultType="com.edu.springboot.restboard.CartDTO">
+		SELECT * FROM cart WHERE midx = #{param1}
+	</select>
+	<insert id="cartadd" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		INSERT INTO cart VALUES (seq_cart.nextval, #{pidx}, #{midx})
+	</insert>
+	<delete id="delCart">DELETE FROM cart WHERE pidx=#{param1}</delete>
+	
+	<insert id="payorder" parameterType="com.edu.springboot.restboard.OrderDTO">
+		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message})
+	</insert>
+	
+	<insert id="bankorder" parameterType="com.edu.springboot.restboard.OrderDTO">
+		INSERT INTO order1 (oidx, midx, paymethod, price, receiver, r_phone, r_address, message, owner) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{owner})
+	</insert>
+	
+	<insert id="insertorder2" parameterType="com.edu.springboot.restboard.Order2DTO">
+		INSERT INTO order2 VALUES (seq_order2.nextval, #{oidx}, #{pidx}, #{aidx}, #{price}, #{midx})
+	</insert>
+	
+	<update id="setsold">UPDATE product SET sold=1 where pidx=#{param1}</update>
+	
+</mapper> 
