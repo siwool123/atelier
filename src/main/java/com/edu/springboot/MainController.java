@@ -32,7 +32,8 @@ public class MainController {
 	@Autowired
 	IBoardService dao;
 
-	/* 커스텀로그인페이지매핑. 스프링시큐리티는 세션사용해서 로그인정보저장하지만 개발자가 직접 접근할수없으므로, Principal 객체통해 로그인아이디를 얻어올수있다 */
+	/* 커스텀로그인페이지매핑. 스프링시큐리티는 세션사용해서 로그인정보저장하지만 
+	 * 개발자가 직접 접근할수없으므로, Principal 객체통해 로그인아이디를 얻어올수있다 */
 	@RequestMapping("/login")
 	public String login1(Principal principal, Model model, HttpServletRequest req) {
 		

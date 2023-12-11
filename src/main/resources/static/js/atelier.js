@@ -426,7 +426,9 @@ $( document ).ready( function() {
         $('.btn2').removeClass('active'); $('.btn2').parent('li').removeClass('active');
         $('#date').addClass('active'); $('#date').parent('li').addClass('active');
     }
-    
+    activeByParam('sell', 'on', '#onsale');
+	activeByParam('sell', 'so', '#sold');
+	
     activeByParam('ori', 'sq', '#square');
 	activeByParam('ori', 'la', '#landscape');
 	activeByParam('ori', 'po', '#portrait');

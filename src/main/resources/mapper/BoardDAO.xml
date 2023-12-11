@@ -179,9 +179,23 @@
 	</insert>
 	
 	<insert id="insertorder2" parameterType="com.edu.springboot.restboard.Order2DTO">
-		INSERT INTO order2 VALUES (seq_order2.nextval, #{oidx}, #{pidx}, #{aidx}, #{price}, #{midx})
+		INSERT INTO order2 (o2idx, oidx, pidx, aidx, price, midx) VALUES 
+		(seq_order2.nextval, #{oidx}, #{pidx}, #{aidx}, #{price}, #{midx})
 	</insert>
 	
 	<update id="setsold">UPDATE product SET sold=1 where pidx=#{param1}</update>
+	
+	<select id="orderNum">
+	SELECT oidx FROM (SELECT oidx FROM order1 WHERE midx=#{param1} ORDER BY orderdate DESC) WHERE ROWNUM = 1
+	</select>
+		
+	<update id="minusPoint">
+		UPDATE member SET total_point = total_point - #{param1} WHERE midx=#{param2}
+	</update>
+	
+	<insert id="pminsert" parameterType="com.edu.springboot.restboard.PointDTO">
+		INSERT INTO m_point (point_idx, midx, minus_point, oidx) VALUES 
+		(seq_point.nextval, #{midx}, #{minus_point}, #{oidx})
+	</insert>
 	
 </mapper> 

@@ -61,6 +61,14 @@ public interface IBoardService {
 	
 	//주문시 해당작품 판매완료로 변경
 	public int setsold(int pidx);
+	//주문번호구하기
+	public String orderNum(int midx);
+	//멤버테이블에 포인트 반영
+	public int minusPoint(int point, int midx);
+	//포인트테이블에삽입
+	public int pminsert(PointDTO pointDTO);
+	
+	
 }
 
 

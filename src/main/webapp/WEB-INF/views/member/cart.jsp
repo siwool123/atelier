@@ -27,10 +27,6 @@ $( document ).ready( function() {
         else $("input[name=chk]").prop("checked", false);
     }); 
     
-    /* $('#chkAll').click(function() { // 모든 체크박스의 상태를 전체 선택 체크박스에 맞게 변경
-        $('input[name=chk]').prop('checked', $('#chkAll').is(':checked')).trigger('click');
-    });*/
-    
     $('input[name=chk]').click(function () {
         var total = $('input[name=chk]').length;
         totalChecked = $('input[name=chk]:checked').length;
@@ -64,31 +60,31 @@ $( document ).ready( function() {
 	        alert('보유하신 포인트를 초과하였습니다.');
 	        $(this).val(0);
 	    }
+	    
+	    var ffprice = parseInt($('#tprice3').text().replace(/,/g, ''))-$(this).val();
+	    console.log(ffprice);
+	    $('#fprice').html(numberWithCommas(ffprice));
+	    $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
+	    $('input[name=oprice]').val(ffprice);
 	});
 });
 function deletepidx(pidx) {
 	if(confirm('정말로 삭제하시겠습니까?')) { 
- 	$(`#cartItem_${pidx}`).remove();
+ 	
    $.ajax({
         type: 'POST',
         url: '/member/delCart',  // 실제 서버 엔드포인트로 수정
         data: { pidx: pidx },
         success: function (response) {
-            if (response==1) { alert('장바구니에서 삭제되었습니다.');
+            if (response==1) { 
+            	$(`#cartItem_${pidx}`).remove();
+            	alert('장바구니에서 삭제되었습니다.');
+            	location.reload();
             } else { alert('장바구니에서 삭제 실패');}
         },
         error: function () { alert('장바구니 삭제 중 오류가 발생했습니다.'); }
     });
 	} 
-/* 	var fm = document.delFrm;
-    if (confirm("정말로 장바구니에서 삭제하시겠습니까?")) {
-    	fm.pidx.value = pidx;
-        fm.method = "post";
-        fm.action = "/member/delete";
-        fm.submit();
-        if('${result}'==='1') {alert('장바구니에서 삭제되었습니다.');}
-        else {alert('장바구니에서 삭제실패');}
-    } */
 }
 function postOpen2() {
 	new daum.Postcode({
@@ -245,6 +241,10 @@ table.order tr th, table.order tr td {padding-left:20px;}
 					<input type="hidden" name="oprice" id="oprice" />
 					</td>
 				</tr>
+				<tr>
+					<th>적립예정 포인트</th>
+					<td><span id="futurepoint">0</span> P</td>
+				</tr>
 			</table>
 			<div class="m-5">
 			<input type="hidden" name="paymethod" />
@@ -259,6 +259,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
         </div>
     </div>
     </div>
+    <div class="mx-auto">${not empty resultMsg ? resultMsg : "" }</div>
 <%@ include file="../include/footer.jsp" %>
 </body>
 

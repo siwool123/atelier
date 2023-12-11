@@ -79,8 +79,6 @@ th {color:#c5c5c5 !important;}
 }
 .modal {--bs-modal-width: 96% !important}
 .modal-content {background-color: black; border-radius:0 !important}
-.modal-header * {color:white}
-.modal-header {border-bottom: none !important;}
 </style>
 </head>
 <body>
@@ -274,9 +272,9 @@ let currentUrl = window.document.location.href;
   <div class="modal-dialog">
     <div class="modal-content">
 
-      <div class="modal-header">
+      <div class="modal-header" style="border-radius:0 !important;">
         <h4 class="modal-title fw-bolder">${pdto.title} </h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <c:set var="imgsize" value="${pdto.size1 / pdto.size2 >1.7 ? 'width' : 'height' }" />
       <div class="modal-body text-center" style="height:88vh"> <img src="${imageSource}" style="${imgsize}:100%" /> </div>

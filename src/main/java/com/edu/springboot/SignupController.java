@@ -23,7 +23,7 @@ import jakarta.servlet.http.Part;
 import utils.MyFunctions;
 
 @Controller
-public class EmailController {
+public class SignupController {
 	
 	@Autowired
 	EmailSending email;
@@ -159,10 +159,15 @@ public class EmailController {
 		
 		result = dao.minsert(memberDTO);
 		
-		if (result != 1 ) {System.out.println("회원가입실패");}
-		
-		model.addAttribute("result", result);
-		return "member/signup";
+		if (result == 1 ) {
+			System.out.println("회원가입성공");
+			model.addAttribute("result", result);
+			return "auth/login";
+		}else {
+			System.out.println("회원가입실패");
+			model.addAttribute("result", result);
+			return "member/signup";
+		}
 	}
 	
 	//임시비번받기
