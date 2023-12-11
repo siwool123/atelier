@@ -70,7 +70,7 @@ $( document ).ready( function() {
 		
 	</table>
 	
-	<a class="mx-auto btn1 p-3" href="/member/order" >주문내역 확인</a>
+	<a class="mx-auto btn1 p-3" href="/member/orderhistory" >주문내역 확인</a>
 </div>
 <%@ include file="../include/footer.jsp" %>
 </body>

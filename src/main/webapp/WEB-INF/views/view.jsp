@@ -41,6 +41,12 @@ $( document ).ready( function() {
 				alert('장바구니 담기 실패');}
 		});
 	}); 
+	
+	$('.pay').click(function(){
+ 		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
+ 		var pidx = getParameterByName('pidx');
+ 		window.location.href = '/member/order?pidx='+pidx;
+	}); 
 });
 function sucFunc(resD){
 	console.log('콜백데이터', resD);

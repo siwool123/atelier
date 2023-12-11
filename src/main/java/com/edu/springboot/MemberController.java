@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.internal.compiler.codegen.ExceptionLabel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,10 +67,18 @@ public class MemberController {
 	}
 	
 	@GetMapping("/member/orderResult")
-	public String orderresult(Model model, HttpSession session) {
+	public String orderresult(Principal principal, Model model, HttpSession session) {
 		model.addAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
 		OrderDTO orderDTO = (OrderDTO) session.getAttribute("odto");
-		model.addAttribute("odto", orderDTO);
+		
+		try {
+			String user_id = principal.getName(); //로그인아이디 얻어온다.
+			MemberDTO memberDTO = dao.mview(user_id);
+			orderDTO.setOidx(dao.orderNum(memberDTO.getMidx()));
+			model.addAttribute("odto", orderDTO);
+			
+		}catch(Exception e) { e.printStackTrace(); System.out.println("회원정보불러오기에러발생"); }
+		
 		return "member/orderResult";
 	}
 	
