@@ -90,7 +90,7 @@ public class MemberController {
 		List<Integer> resDelCartList = new ArrayList<>();
 		String paymethod = "";
 		try {
-			String user_id = principal.getName(); //로그인아이디 얻어온다.
+			String user_id = principal.getName(); //로그인아이디 얻어온다. 
 			
 			MemberDTO memberDTO = dao.mview(user_id);
 			
