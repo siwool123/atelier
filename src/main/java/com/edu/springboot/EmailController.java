@@ -160,7 +160,6 @@ public class EmailController {
 		result = dao.minsert(memberDTO);
 		
 		if (result != 1 ) {System.out.println("회원가입실패");}
-		
 		model.addAttribute("result", result);
 		return "member/signup";
 	}

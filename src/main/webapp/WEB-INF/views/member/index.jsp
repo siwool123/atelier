@@ -29,7 +29,7 @@ $( document ).ready( function() {
             <div class="col-sm-4" style="padding-top:10px;">
                 <i class="bi bi-person-circle bpc1"></i>
                 <table class="table table-borderless mtable">
-                    <tr><th style="color: black; font-weight: bolder;">  홍길동 님</th><td><a class="btn1" href="member/eidt">정보수정</a></td></tr>
+                    <tr><th style="color: black; font-weight: bolder;">  ${mdto.m_name} 님</th><td><a class="btn1" href="member/eidt">정보수정</a></td></tr>
                     <tr><th>총 주문</th><td>00000000 원 (1 건)</td></tr>
                     <tr><th>총 포인트</th><td>0000000 P</td></tr>
                 </table>

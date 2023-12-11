@@ -9,7 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -115,31 +117,39 @@ public class EmailRestController {
 		}
 	}
 	
-	@PostMapping("/member/uploadProfile")
-	public int uploadProfileProcess(HttpServletRequest req, Model model, Principal principal) {
-		int result = 0;
+	@PostMapping("member/profileUpload.do")
+	public String profileUpload(HttpServletRequest req, Model model, MemberDTO memberDTO) {
+		System.out.println("1");
+		String savedFileName;
+		System.out.println("2");
 		try {
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
+			System.out.println("3");
 			System.out.println("물리적 경로 : "+uploadDir);
-			
-			Part part = req.getPart("profileo");
+			System.out.println("4");
+			Part part = req.getPart("profileImage");
+			System.out.println("5");
 			String partHeader = part.getHeader("content-disposition");
+			System.out.println("6");
 			System.out.println("partHeader="+partHeader);
 			String[] phArr = partHeader.split("filename=");
-			String oFileName = phArr[1].trim().replace("\"","");
-			
-			if(!oFileName.isEmpty()) { part.write(uploadDir+File.separator+oFileName); }
-			String sFileName = MyFunctions.renameFile(uploadDir, oFileName);
-			
-			String user_id = principal.getName(); 
-			MemberDTO memberDTO = dao.mview(user_id);
-			memberDTO.setProfiles(sFileName);
-			memberDTO.setId(user_id);
-			result = dao.uploadProfile(memberDTO);
-			
+			System.out.println("7");
+			String originalFileName = phArr[1].trim().replace("\"","");
+			System.out.println("8");
+			if(!originalFileName.isEmpty()) {
+				part.write(uploadDir+File.separator+originalFileName);
+				System.out.println("9");
+			}
+			savedFileName = MyFunctions.renameFile(uploadDir, originalFileName);
+			System.out.println("파일 업로드 성공 / 저장된 파일 이름 : "+savedFileName);
+			return savedFileName;
 		}
-		catch (Exception e) { System.out.println("업로드 실패"); }
-		
-		return result;
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("업로드 실패");
+			savedFileName = "fail";
+			return savedFileName;
+		}
 	}
+	
 }
