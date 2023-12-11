@@ -53,6 +53,14 @@ public interface IBoardService {
 	public int cartadd(ParameterDTO parameterDTO);
 	//장바구니 삭제
 	public int delCart(int pidx);
+	
+	//주문추가
+	public int payorder(OrderDTO orderDTO);
+	public int bankorder(OrderDTO orderDTO);
+	public int insertorder2(Order2DTO order2DTO);
+	
+	//주문시 해당작품 판매완료로 변경
+	public int setsold(int pidx);
 }
 
 

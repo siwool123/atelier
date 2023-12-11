@@ -32,6 +32,33 @@ public class MainController {
 	@Autowired
 	IBoardService dao;
 
+	/* 커스텀로그인페이지매핑. 스프링시큐리티는 세션사용해서 로그인정보저장하지만 개발자가 직접 접근할수없으므로, Principal 객체통해 로그인아이디를 얻어올수있다 */
+	@RequestMapping("/login")
+	public String login1(Principal principal, Model model, HttpServletRequest req) {
+		
+		try {
+			String user_id = principal.getName(); //로그인아이디 얻어온다.
+			model.addAttribute("user_id", user_id); //아이디를 모델객체에 저장
+			if(user_id!=null) return "home";
+			System.out.println("로그인에 성공했습니다.");
+		}catch (Exception e){
+			/* 최초접근시엔 로그인정보가 없으므로 널포인터 예외 발생하므로 예외처리해야한다. */
+			System.out.println("로그인 전입니다.");
+		} 
+		return "auth/login";
+	}
+	
+	//로그인시도중에러발생한경우
+//	@RequestMapping("/error")
+//	public String login2() {
+//		return "auth/error";
+//	}
+	//로그인성공했으나 권한부족한경우
+	@RequestMapping("/denied")
+	public String login3() {
+		return "auth/denied";
+	}
+	
 	@RequestMapping("/admin")
 	public String admin() {
 		
@@ -170,69 +197,6 @@ public class MainController {
 		model.addAttribute("likesum", likesum);
 		
 		return "viewartist";
-	}
-	
-	@RequestMapping("/member/index")
-	public String mindex (Principal principal, Model model, MemberDTO memberDTO) {
-		
-		return "member/index";
-	}
-	
-//	@PostMapping("/member/delete")
-//	public String pidxdelete(HttpServletRequest req, Model model) {
-//		int result = 0;
-//		int pidx = Integer.parseInt(req.getParameter("pidx"));
-//		result = dao.delCart(pidx);
-//		System.out.println("장바구니에서 작품 삭제결과:"+result);
-//		model.addAttribute("result", result);
-//		return "/member/cart";
-//	}
-	
-	@RequestMapping("/member/cart")
-	public String cart(Principal principal, Model model, MemberDTO memberDTO) {
-		try {
-			String user_id = principal.getName(); //로그인아이디 얻어온다.
-			memberDTO = dao.mview(user_id);
-			List<CartDTO> clist = dao.cartsview(memberDTO.getMidx());
-			
-			List<ProductDTO> plist = new ArrayList<>();
-			for(CartDTO cartDTO : clist) {
-				ProductDTO productDTO = dao.pview(cartDTO.getPidx());
-				plist.add(productDTO);
-			}
-			model.addAttribute("plist", plist);
-			model.addAttribute("mdto", memberDTO);
-		}catch (Exception e){
-			System.out.println("장바구니 목록 조회 실패");
-		}
-		return "member/cart";
-	}
-	
-	/* 커스텀로그인페이지매핑. 스프링시큐리티는 세션사용해서 로그인정보저장하지만 개발자가 직접 접근할수없으므로, Principal 객체통해 로그인아이디를 얻어올수있다 */
-	@RequestMapping("/login")
-	public String login1(Principal principal, Model model, HttpServletRequest req) {
-		
-		try {
-			String user_id = principal.getName(); //로그인아이디 얻어온다.
-			model.addAttribute("user_id", user_id); //아이디를 모델객체에 저장
-			if(user_id!=null) return "home";
-			System.out.println("로그인에 성공했습니다.");
-		}catch (Exception e){
-			/* 최초접근시엔 로그인정보가 없으므로 널포인터 예외 발생하므로 예외처리해야한다. */
-			System.out.println("로그인 전입니다.");
-		} 
-		return "auth/login";
-	}
-	
-	//로그인시도중에러발생한경우
-//	@RequestMapping("/error")
-//	public String login2() {
-//		return "auth/error";
-//	}
-	//로그인성공했으나 권한부족한경우
-	@RequestMapping("/denied")
-	public String login3() {
-		return "auth/denied";
 	}
 	
 }

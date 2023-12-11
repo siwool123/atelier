@@ -6,7 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Atelier</title>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script> -->
 <!-- 다음 주소 찾기 api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <link href="../css/atelier.css" rel="stylesheet" type="text/css" />
@@ -16,7 +17,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
 <script type="text/javascript">
 $( document ).ready( function() {
- 	//$('.price2').text(numberWithCommas($('.price2').text()));
  	
  	var sum = 0;
  	var totalChecked = 0;
@@ -46,9 +46,28 @@ $( document ).ready( function() {
         if (total != totalChecked) $("#chkAll").prop("checked", false);
         else $("#chkAll").prop("checked", true);
     });  
+    
+    $('#point').focus(function () {
+        if ($(this).val() === '0') { $(this).val(''); }
+    });
+
+    // #point 인풋에서 포커스가 빠져나갔을 때, 값이 비어 있다면 0으로 설정
+    $('#point').blur(function () { if ($(this).val() === '') { $(this).val('0'); }
+    });
+    
+    // 장바구니에서 결제시 포인트 검증
+	$('#point').keyup(function() {
+		var enteredPoint = parseInt($(this).val());
+	    var maxPoint = parseInt($('#maxPoint').text());
+	
+	    if (enteredPoint > maxPoint) {
+	        alert('보유하신 포인트를 초과하였습니다.');
+	        $(this).val(0);
+	    }
+	});
 });
 function deletepidx(pidx) {
-	
+	if(confirm('정말로 삭제하시겠습니까?')) { 
  	$(`#cartItem_${pidx}`).remove();
    $.ajax({
         type: 'POST',
@@ -60,7 +79,7 @@ function deletepidx(pidx) {
         },
         error: function () { alert('장바구니 삭제 중 오류가 발생했습니다.'); }
     });
-	
+	} 
 /* 	var fm = document.delFrm;
     if (confirm("정말로 장바구니에서 삭제하시겠습니까?")) {
     	fm.pidx.value = pidx;
@@ -78,14 +97,14 @@ function postOpen2() {
 			console.log(data.zonecode);
 			console.log(data.address);
 
-			let frm = document.destinationFm;
+			let frm = document.orderFm;
 			frm.zip.value = data.zonecode;
 			frm.addr1.value = data.address;
-			frm.addr2.readOnly = false;
 			frm.addr2.focus();
 		}
 	}).open();
 }
+
 function inputMsg(frm) {
 	 var choiceMsg = frm.msg.value;
     if (choiceMsg == '직접입력') {
@@ -106,6 +125,8 @@ function inputMsg(frm) {
 .btn3, .btn4 {padding:0 6% !important;}
 .border li {line-height:40px;}
 input {margin-right:10px !important;}
+table.order tr th {background-color:#ededed;}
+table.order tr th, table.order tr td {padding-left:20px;}
 </style>
 </head>
 <body>
@@ -181,8 +202,8 @@ input {margin-right:10px !important;}
 			
 			<div style="height:50px;"></div>
 			<div class="headerL2 my-5">배송 및 결제 정보 </div>
-			<form action="" name="destinationFm" method="post">
-			<table class="table table-borderless">
+		<form action="/member/orderProc" name="orderFm" id="orderFm" method="post">
+			<table class="table table-borderless order">
 				<tr>
 					<th>수령인 / 연락처</th>
 					<td><input type="text" name="m_name" value="${mdto.m_name }" /> <input type="text" name="phone" value="${mdto.phone }" /></td>
@@ -208,13 +229,31 @@ input {margin-right:10px !important;}
 				</tr>
 				<tr>
 					<th>입금시 입금자명</th>
-					<td><input type="text" name="account" placeholder="무통장입금 시 반드시 입력하세요." style="width:30%;" /> </td>
+					<td><input type="text" name="owner" placeholder="무통장입금 시 반드시 입력하세요." style="width:30%;" /> </td>
+				</tr>
+				<tr>
+					<th>총 작품 금액</th>
+					<td><b id="tprice3" class="price2">0</b> 원</td>
+				</tr>
+				<tr>
+					<th>포인트 사용</th>
+					<td><input type="text" name="point" id="point" value="0" /> P ( 사용가능 포인트 <b style="color:#AF0000" id="maxPoint">${not empty mdto ? mdto.total_point : "0" }</b> P )</td>
+				</tr>
+				<tr>
+					<th>최종 결제할 금액</th>
+					<td><b id="fprice" class="price2" style="color:blue;">0</b> 원
+					<input type="hidden" name="oprice" id="oprice" />
+					</td>
 				</tr>
 			</table>
 			<div class="m-5">
-			<button class="btn3 account">무통장입금</button>
-			<button class="btn4 kakao" style="background-color:#f7e400; color:black; margin:0 10px;"><img alt="" src="../images/kakaopay.png" style="width:50px;"> 카카오페이 결제</button>
-			<button class="btn4 toss" style="border:1px solid #004df7; background-color:white; color:#004df7;"><img alt="" src="../images/toss.png" style="width:50px;"> 토스페이먼츠 결제</button>
+			<input type="hidden" name="paymethod" />
+			<input type="hidden" name="pidxList" id="pidxList" />
+			<button class="btn3 account" type="button" onclick="submitFm('bank');">무통장입금</button>
+			<button class="btn4 kakao" style="background-color:#f7e400; color:black; margin:0 10px;" type="button" onclick="submitFm('kakao');">
+			<img alt="" src="../images/kakaopay.png" style="width:50px;"> 카카오페이 결제</button>
+			<button class="btn4 toss" style="border:1px solid #004df7; background-color:white; color:#004df7;" 
+			 type="button" onclick="submitFm('toss');"><img alt="" src="../images/toss.png" style="width:50px;"> 토스페이먼츠 결제</button>
 			</div>
 			</form>
         </div>

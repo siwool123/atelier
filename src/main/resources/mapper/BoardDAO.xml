@@ -167,4 +167,21 @@
 		INSERT INTO cart VALUES (seq_cart.nextval, #{pidx}, #{midx})
 	</insert>
 	<delete id="delCart">DELETE FROM cart WHERE pidx=#{param1}</delete>
+	
+	<insert id="payorder" parameterType="com.edu.springboot.restboard.OrderDTO">
+		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message})
+	</insert>
+	
+	<insert id="bankorder" parameterType="com.edu.springboot.restboard.OrderDTO">
+		INSERT INTO order1 (oidx, midx, paymethod, price, receiver, r_phone, r_address, message, owner) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{owner})
+	</insert>
+	
+	<insert id="insertorder2" parameterType="com.edu.springboot.restboard.Order2DTO">
+		INSERT INTO order2 VALUES (seq_order2.nextval, #{oidx}, #{pidx}, #{aidx}, #{price}, #{midx})
+	</insert>
+	
+	<update id="setsold">UPDATE product SET sold=1 where pidx=#{param1}</update>
+	
 </mapper> 

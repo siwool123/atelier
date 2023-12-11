@@ -6,8 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Atelier</title>
-<link href="./css/atelier.css" rel="stylesheet" type="text/css" />
-<script src="./js/atelier.js"></script>
+<link href="/css/atelier.css" rel="stylesheet" type="text/css" />
+<script src="/js/atelier.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -54,7 +54,7 @@ onload = function(){
     document.querySelector('#navbarNavAltMarkup div a:last').classList.add('active');
     
     <c:choose>
-		<c:when test="${regSuc == '1'}">alert("회원가입에 성공했습니다. 로그인 해주세요.");</c:when> <%--회원가입 성공--%>
+		<c:when test="${result == 1}">alert("회원가입에 성공했습니다. 로그인 해주세요.");</c:when> <%--회원가입 성공--%>
 		<c:otherwise>alert("회원가입에 실패했습니다. 다시 시도해 주세요.");</c:otherwise> <%--회원가입 실패--%>
 	</c:choose>
 }
@@ -95,7 +95,7 @@ white-space: pre-wrap; font-size:14px; font-weight:400;}
 	<div class="col-sm-2"><%@ include file="../include/loginSidebar.jsp" %></div>
 	<div class="col-sm-10">
 	
-	<form name="myMotherform" action="guest/regist" method="post" onsubmit="return formValidate(this);" novalidate>
+	<form name="myMotherform" action="/guest/regist" method="post" onsubmit="return formValidate(this);" novalidate>
 	<h3 class="mx-auto pb-5 fw-bolder">아뜰리에 회원가입</h3>
 		<table class="table table-borderless mx-auto">
 		<colgroup><col width=80%><col width=20%></colgroup>
@@ -139,7 +139,8 @@ white-space: pre-wrap; font-size:14px; font-weight:400;}
 				<td colspan="2"></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="checkbox" class="form-check-input" id="agreeCheck" style="width: 20px; height: 20px;"></input>
+				<td colspan="2"><input type="checkbox" class="form-check-input" id="agreeCheck" style="width: 20px; height: 20px;
+				border: 1px solid black; border-radius: 0;" />
 				<span class="ruleSpan" data-bs-toggle="modal" data-bs-target="#usingRule" style=""><b><u>이용약관</u></b></span>과 
 				<span class="ruleSpan" data-bs-toggle="modal" data-bs-target="#infoRule"><b><u>개인정보취급방침</u></b></span>에 동의합니다.
 				</td>
@@ -333,7 +334,7 @@ white-space: pre-wrap; font-size:14px; font-weight:400;}
 ⑤ “회사”는 회원이 게시하거나 등록하는 서비스 내의 내용물, 게시 내용에 대해 제22조 각 호에 해당된다고 판단되는 경우 사전통지 없이 삭제하거나 이동 또는 등록 거부할 수 있습니다.
 
 제24조(유지 보수 및 지원)
-① ARTISTY는 재화에 대한 유지 보수 또는 지원을 제공하지만, 이러한 유지 보수 또는 지원을 제공할 법적 의무를 가지지는 않습니다.
+① ATELIER는 재화에 대한 유지 보수 또는 지원을 제공하지만, 이러한 유지 보수 또는 지원을 제공할 법적 의무를 가지지는 않습니다.
 
 제25조(분쟁해결)
 ① “몰”은 이용자가 제기하는 정당한 의견이나 불만을 반영하고 그 피해를 보상처리하기 위하여 피해보상처리기구를 설치.운영합니다.
@@ -421,9 +422,9 @@ white-space: pre-wrap; font-size:14px; font-weight:400;}
 
 ■ 개인정보에 관한 민원서비스
 회사는 고객의 개인정보를 보호하고 개인정보와 관련한 불만을 처리하기 위하여 아래와 같이 관련 부서 및 개인정보관리책임자를 지정하고 있습니다.
-개인정보관리책임자 성명 : 정훈 이사
+개인정보관리책임자 성명 : 강이화 이사
 전화번호 : 070-4250-7700
-이메일 : info@artisty.co.kr
+이메일 : info@atelier.co.kr
 귀하께서는 회사의 서비스를 이용하시며 발생하는 모든 개인정보보호 관련 민원을 개인정보관리책임자 혹은 담당부서로 신고하실 수 있습니다. 회사는 이용자들의 신고사항에 대해 신속하게 충분한 답변을 드릴 것입니다.
 기타 개인정보침해에 대한 신고나 상담이 필요하신 경우에는 아래 기관에 문의하시기 바랍니다.
 1.개인분쟁조정위원회 (www.1336.or.kr/1336)

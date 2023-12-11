@@ -148,18 +148,21 @@ public class EmailController {
 	//회원가입
 	@PostMapping("/guest/regist")
 	public String Regist(MemberDTO memberDTO, Model model) {
-		String regSuc = "";
-		System.out.println("id : "+memberDTO.getId()+"+ pass : "+memberDTO.getPass()+"+ m_name : "+memberDTO.getM_name()+"+ phone : "+memberDTO.getPhone()+"+ zip : "+memberDTO.getZip()+"+ addr1 : "+memberDTO.getAddr1()+"+ addr2 : "+memberDTO.getAddr2()+"+ midx : "+memberDTO.getMidx()+"+ regidate : "+memberDTO.getRegidate());
+		int result = 0;
+		System.out.println("id : "+memberDTO.getId()+"+ pass : "+memberDTO.getPass()+"+ m_name : "+memberDTO.getM_name()+"+ phone : "
+		+memberDTO.getPhone()+"+ zip : "+memberDTO.getZip()+"+ addr1 : "+memberDTO.getAddr1()+"+ addr2 : "+memberDTO.getAddr2());
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String securePw = encoder.encode(memberDTO.getPass());
-		memberDTO.setPass(securePw);
-		int result = dao.minsert(memberDTO);
-		if (result == 1 ) {regSuc = "1";
-		} else { regSuc = "0"; }
-		model.addAttribute("regSuc", regSuc);
-		model.addAttribute("loginPage","1");
-		return "auth/login";
+		System.out.println(securePw);
+		memberDTO.setPass(securePw); //암호화하여 저장
+		
+		result = dao.minsert(memberDTO);
+		
+		if (result != 1 ) {System.out.println("회원가입실패");}
+		
+		model.addAttribute("result", result);
+		return "member/signup";
 	}
 	
 	//임시비번받기
