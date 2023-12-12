@@ -62,11 +62,71 @@ $( document ).ready( function() {
 	    }
 	    
 	    var ffprice = parseInt($('#tprice3').text().replace(/,/g, ''))-$(this).val();
-	    console.log(ffprice);
+	    console.log("포인트합산결과", ffprice, $('#tprice3').text());
 	    $('#fprice').html(numberWithCommas(ffprice));
 	    $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
 	    $('input[name=oprice]').val(ffprice);
 	});
+    
+	/* $("#kakao").click(function(){
+		
+		if($('input[name="m_name"]').val()=='') {
+			alert('수령인 이름을 입력해 주세요');
+			$('input[name="m_name"]').focus(); return;
+		}
+		if ($('input[name="phone"]').val()=='') {
+			alert('수령인 휴대폰 번호를 입력해 주세요');
+			$('input[name="phone"]').focus(); return;
+		}
+		if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
+			alert('수령하실 주소를 입력해 주세요'); return;
+		}
+		if ($('input[name="msg2"]').val() == '') {
+			alert('배송메세지를 입력해 주세요'); 
+			$('input[name="msg2"]').focus(); return;
+		}
+		$('input[name="paymethod"]').val('kakao');
+		
+		// 필수입력값을 확인.
+		var name = $("#orderFm input[name='mName']").val();
+		var tel = $("#orderFm input[name='mPhone']").val();
+		var email = $("#orderFm input[name='mId']").val();
+		
+		// 결제 정보를 form에 저장한다.
+		let totalPayPrice = parseInt($("#fprice").text().replace(/,/g,''));
+		let totalPrice = parseInt($("#tprice3").text().replace(/,/g,''));
+		let discountPrice = totalPrice - totalPayPrice; 
+		let usePoint = $("#point").val();
+		let useUserCouponNo = 0;
+		
+		// 카카오페이 결제전송
+		$.ajax({
+			type:'post'
+			,url:'/pay/ready'
+			,data:{
+				total_amount: totalPayPrice
+				,payUserName: name
+				,sumPrice:totalPrice
+				,discountPrice:discountPrice
+				,totalPrice:totalPayPrice
+				,tel:tel
+				,email:email
+				,usePoint:usePoint
+				,useCouponNo:useUserCouponNo	
+			},
+			success:function(rsp){
+				console.log(rsp);
+				var msg = '결제가 완료되었습니다. 카드 승인번호 : ' + rsp.apply_num;
+				alert(msg);
+				$('#kakao').submit();	
+			},
+			error : function(errD){
+				console.log(errD.status+" : "+errD.statusText);
+				var msg = '결제에 실패하였습니다.' + errD.error_msg;
+				alert(msg);
+			}
+		} 
+	}); */
 });
 function deletepidx(pidx) {
 	if(confirm('정말로 삭제하시겠습니까?')) { 
@@ -202,7 +262,11 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			<table class="table table-borderless order">
 				<tr>
 					<th>수령인 / 연락처</th>
-					<td><input type="text" name="m_name" value="${mdto.m_name }" /> <input type="text" name="phone" value="${mdto.phone }" /></td>
+					<td><input type="text" name="m_name" value="${mdto.m_name }" /> 
+					<input type="text" name="phone" value="${mdto.phone }" />
+					<input type="hidden" name="mName" id="mName" value="${mdto.m_name }" />
+					<input type="hidden" name="mPhone" id="mPhone" value="${mdto.phone }" />
+					<input type="hidden" name="mId" id="mId" value="${mdto.id }" /></td>
 				</tr>
 				<tr>
 					<th style="vertial-align:top;">배송지 주소</th>
@@ -229,7 +293,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 				</tr>
 				<tr>
 					<th>총 작품 금액</th>
-					<td><b id="tprice3" class="price2">0</b> 원</td>
+					<td><b id="tprice3" class="price2">0</b> 원 </td>
 				</tr>
 				<tr>
 					<th>포인트 사용</th>
@@ -237,9 +301,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 				</tr>
 				<tr>
 					<th>최종 결제할 금액</th>
-					<td><b id="fprice" class="price2" style="color:blue;">0</b> 원
-					<input type="hidden" name="oprice" id="oprice" />
-					</td>
+					<td><b id="fprice" class="price2" style="color:blue;">0</b> 원 <input type="hidden" name="oprice" id="oprice" /> </td>
 				</tr>
 				<tr>
 					<th>적립예정 포인트</th>
@@ -250,10 +312,12 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			<input type="hidden" name="paymethod" />
 			<input type="hidden" name="pidxList" id="pidxList" />
 			<button class="btn3 account" type="button" onclick="submitFm('bank');">무통장입금</button>
-			<button class="btn4 kakao" style="background-color:#f7e400; color:black; margin:0 10px;" type="button" onclick="submitFm('kakao');">
-			<img alt="" src="../images/kakaopay.png" style="width:50px;"> 카카오페이 결제</button>
-			<button class="btn4 toss" style="border:1px solid #004df7; background-color:white; color:#004df7;" 
-			 type="button" onclick="submitFm('toss');"><img alt="" src="../images/toss.png" style="width:50px;"> 토스페이먼츠 결제</button>
+			
+			<form method="post" action="/pay/kakaoPay">
+			<button class="btn4" id="kakao" style="background-color:#f7e400; color:black; margin:0 10px;" type="button">
+			<img alt="" src="../images/kakaopay.png" style="width:50px;"> 카카오페이 결제</button></form>
+			<button class="btn4" id="toss" style="border:1px solid #004df7; background-color:white; color:#004df7;" type="button">
+			<img alt="" src="../images/toss.png" style="width:50px;"> 토스페이먼츠 결제</button>
 			</div>
 			</form>
         </div>

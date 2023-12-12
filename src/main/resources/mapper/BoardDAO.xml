@@ -198,4 +198,11 @@
 		(seq_point.nextval, #{midx}, #{minus_point}, #{oidx})
 	</insert>
 	
+	<select id="ordersview" resultType="com.edu.springboot.restboard.Order2DTO">
+		SELECT * FROM order2 WHERE oidx=#{param1}
+	</select>
+	<select id="oview" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order WHERE oidx=#{param1}
+	</select>
+	
 </mapper> 

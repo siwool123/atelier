@@ -24,4 +24,6 @@ public interface IMemberService {
 	
 	//비번변경
 	public int mpedit(MemberDTO memberDTO);
+	
+	
 }
