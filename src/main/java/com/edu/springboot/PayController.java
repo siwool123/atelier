@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import com.edu.springboot.pay.KakaoPayService;
 import com.edu.springboot.pay.PayService;
 import com.edu.springboot.restboard.CartDTO;
 import com.edu.springboot.restboard.IBoardService;
+import com.edu.springboot.restboard.IMemberService;
 import com.edu.springboot.restboard.MemberDTO;
 import com.edu.springboot.restboard.OrderDTO;
 import com.edu.springboot.restboard.PointDTO;
@@ -26,7 +28,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.Setter;
 
 @Controller
-public class MemberController {
+public class PayController {
 
 	@Autowired
 	PayService payService;
@@ -181,4 +183,6 @@ public class MemberController {
     	model.addAttribute("pg_token", pg_token);
         return "kakaoPaySuccess";
     }
+
+
 }
