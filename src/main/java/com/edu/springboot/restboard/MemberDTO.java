@@ -20,5 +20,4 @@ public class MemberDTO {
 	private String token;
 	private int enabled;
 	private String authority;
-	
 }

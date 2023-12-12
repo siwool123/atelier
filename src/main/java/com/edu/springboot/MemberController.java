@@ -1,5 +1,6 @@
 package com.edu.springboot;
 
+import java.io.File;
 import java.security.Principal;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import com.edu.springboot.restboard.ProductDTO;
 import com.edu.springboot.restboard.ReviewDTO;
 import com.edu.springboot.restboard.ParameterDTO;
 import com.edu.springboot.restboard.PointDTO;
+import com.edu.springboot.restboard.ApplyDTO;
 import com.edu.springboot.restboard.ArtistDTO;
 import com.edu.springboot.restboard.CartDTO;
 import com.edu.springboot.restboard.IBoardService;
@@ -192,7 +194,7 @@ public class MemberController {
 	IMemberService mdao;
 	
 	@PostMapping("member/edit.do")
-	String editProcess(Principal principal, MemberDTO memberDTO, Model model) {
+	String editProcess(Principal principal, MemberDTO memberDTO, Model model, HttpServletRequest req) {
 		memberDTO.setId(principal.getName());
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String securePw = encoder.encode(memberDTO.getPass());
@@ -204,7 +206,20 @@ public class MemberController {
 		} else {
 			System.out.println("회원정보수정 실패");
 		}
-		return "member/editMember";
+		return "redirect:/member/edit";
 	}
+	
+	@RequestMapping("member/leave.do")
+	String leaveProcess(Principal principal) {
+		int leaveResult = mdao.leave(principal.getName());
+		if (leaveResult == 1) {
+			System.out.println("회원탈퇴 성공(비활성화)");
+		} else {
+			System.out.println("회원탈퇴 실패");
+		}
+		return "redirect:../logout";
+	}
+	
+	
 	
 }
