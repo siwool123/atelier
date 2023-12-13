@@ -42,10 +42,27 @@ public class MemberController {
 	@Autowired
 	IMemberService dao;
 	
-	@RequestMapping("member/editWindow")
-	public String editWinddow() {
-		return "member/editWindow";
-	}
+	@RequestMapping("member/edit")
+	   public String edit(Principal principal, Model model, MemberDTO memberDTO) {
+	      try {
+	         String user_id = principal.getName(); //로그인아이디 얻어온다.
+	         memberDTO = dao.mview(user_id);
+	         model.addAttribute("mdto", memberDTO);
+	         System.out.println(memberDTO);
+	      }catch (Exception e){
+	         System.out.println("정보수정 페이지 접속 실패");
+	      }
+	      return "member/editMember";
+	   }
+	   
+   @RequestMapping("member/editWindow")
+   public String editWinddow(Principal principal,Model model, MemberDTO memberDTO) {
+      String user_id = principal.getName(); //로그인아이디 얻어온다.
+      memberDTO = dao.mview(user_id);
+      model.addAttribute("mdto", memberDTO);
+      System.out.println(memberDTO);
+      return "member/editWindow";
+   }
 	
 	@PostMapping("member/edit.do")
 	String editProcess(Principal principal, MemberDTO memberDTO, Model model) {

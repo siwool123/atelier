@@ -72,6 +72,7 @@ onload = function(){
 <style>
 @media (max-width: 600px) {
   .loginbox {width:100% !important;}
+  h3 {margin-top:50px !important;}
 }	
 .leftmenu li:nth-child(1) {background-color: black;}
 .leftmenu li:nth-child(1) a, .leftmenu li:nth-child(1) a i {color:white}
@@ -82,6 +83,7 @@ button {padding:10px !important;}
 .btn-outline-danger {padding:10px; width:45% }
 #user_id, #user_pwd {height:50px !important;}
 #navbarNavAltMarkup div.navbar-nav a.nav-link:last {padding-bottom:17px !important; border-bottom: 3px solid black !important; }
+
 </style>
 </head>
 <body>
@@ -99,7 +101,7 @@ button {padding:10px !important;}
 		</c:if>
 		<!-- 시큐리티 설정파일에 지정된 요청명으로 action 속성값기술 -->
 		<form action="/loginAction" method="post">
-		<h3 class="mx-auto pb-5 fw-bolder">로그인</h3>
+		<h3 class="mx-auto pb-5 fw-bolder">아뜰리에 로그인</h3>
 			<div class="form-floating mb-3 mt-3">
 				<input type="text" class="form-control" id="user_id" placeholder="Enter email" name="my_id">
 				<label for="user_id">아이디</label>

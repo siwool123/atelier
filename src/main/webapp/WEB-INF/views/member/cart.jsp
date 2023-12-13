@@ -9,6 +9,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script src="https://js.tosspayments.com/v1/payment-widget"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script> -->
 <!-- 다음 주소 찾기 api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -17,7 +18,86 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
+<script>
+    const clientKey = 'test_ck_26DlbXAaV0dX9X9NJ2d5VqY50Q9R' // 테스트용 클라이언트 키
+    const customerKey = `${not empty mdto ? mdto.id : ""}` // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
 
+    // 2. 결제위젯 SDK 초기화
+    const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
+    // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
+    
+    let currentURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1];
+    
+    const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
+	  '#payment-method',
+	  {
+	    value: 10000,
+	    currency: 'KRW',
+	    country: 'KR',
+	  },
+	  { variantKey: 'widgetA' }
+	)
+	const paymentMethodsWidget = paymentWidget.renderPaymentMethods()
+	paymentMethodsWidget.updateAmount(50000)
+
+	const paymentMethodsWidget = paymentWidget.renderPaymentMethods()
+	const selectedPaymentMethod = paymentMethodsWidget.getSelectedPaymentMethod()
+
+	paymentWidget.requestPayment({
+	  amount: 15000,
+	  orderId: 'AD8aZDpbzXs4EQa-UkIX6',
+	  orderName: '토스 티셔츠 외 2건',
+	// 테스트에서는 성공, 실패 페이지가 없어도 URL에서 쿼리 파라미터를 확인할 수 있어요.
+	  successUrl: 'http://localhost:8586/success', // 성공 리다이렉트 URL
+	  failUrl: 'http://localhost:8586/fail', // 실패 리다이렉트 URL
+	  customerEmail: 'customer123@gmail.com',
+	  customerName: '김토스',
+	})
+	.then(function (data) {
+    // 성공 처리: 결제 승인 API를 호출하세요
+  })
+  .catch(function (error) {
+    // 에러 처리: 에러 목록을 확인하세요
+    // https://docs.tosspayments.com/reference/error-codes#failurl로-전달되는-에러
+    if (error.code === 'USER_CANCEL') {
+      // 결제 고객이 결제창을 닫았을 때 에러 처리
+    } else if (error.code === 'INVALID_CARD_COMPANY') {
+      // 유효하지 않은 카드 코드에 대한 에러 처리
+    }
+  })
+    
+ // @docs https://docs.tosspayments.com/reference/widget-sdk#requestpayment결제-정보
+   function tossPay() {
+   	
+   	if($('input[name="m_name"]').val()=='') {
+   		alert('수령인 이름을 입력해 주세요');
+   		$('input[name="m_name"]').focus(); return;
+   	}
+   	if ($('input[name="phone"]').val()=='') {
+   		alert('수령인 휴대폰 번호를 입력해 주세요');
+   		$('input[name="phone"]').focus(); return;
+   	}
+   	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
+   		alert('수령하실 주소를 입력해 주세요'); return;
+   	}
+   	if ($('input[name="msg2"]').val() == '') {
+   		alert('배송메세지를 입력해 주세요'); 
+   		$('input[name="msg2"]').focus(); return;
+   	}
+   	$('input[name="paymethod"]').val('tosspayments');
+
+   	paymentWidget.requestPayment({
+   		amount: $('input[name="oprice"]').val(),
+        orderId: $('#pidxList').val(),
+        orderName: $('#titleList').val(),
+        successUrl: currentURL + "/success",
+        failUrl: currentURL + "/fail",
+        customerEmail: $('input[name="user_id"]').val(),
+        customerName: $('input[name="m_name"]').val(),
+        customerMobilePhone: $('input[name="phone"]').val(),
+      });
+   }
+  </script>
 <script type="text/javascript">
 /*$( document ).ready( function() {
  	
@@ -271,6 +351,7 @@ function requestPay(paymethod){
 input {margin-right:10px !important;}
 table.order tr th {background-color:#ededed;}
 table.order tr th, table.order tr td {padding-left:20px;}
+.img1 {max-width:100px; max-height:100px;}
 </style>
 </head>
 <body>
@@ -311,9 +392,9 @@ table.order tr th, table.order tr td {padding-left:20px;}
 						       	<c:otherwise><input type="checkbox" name="chk" /></c:otherwise>
 						       </c:choose>
 					       </td>
-					       <td align="right" width="10%"><a href="/view?pidx=${ row.pidx }">
+					       <td align="center" width="10%"><a href="/view?pidx=${ row.pidx }">
 					       <c:set var="imgsrc" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
-   				 			<img src="${imgsrc}" alt="작품이미지" style="width:100px" />
+   				 			<img src="${imgsrc}" alt="작품이미지" class="img1" />
 					       	</a></td>
 					       	<td><a href="view?pidx=${ row.pidx }"><b > ${ row.title }</b><br/>  ${row.m_name }<br/> ${row.size1 } x ${row.size2 } cm</a></td>
 					       <td width="20%" align="right" >
@@ -401,11 +482,12 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			<input type="hidden" name="pidxList" id="pidxList" />
 			<input type="hidden" name="titleList" id="titleList" />
 			<input type="hidden" name="imp_uid" id="imp_uid" />
+			<input type="hidden" name="user_id" id="user_id" value="${ not empty mdo ? mdto.id : '' }" />
 			<button class="btn3 account" type="button" onclick="submitFm('bank');">무통장입금</button>
 			
 			<button class="btn4" id="kakao" style="background-color:#f7e400; color:black; margin:0 10px;" type="button" onclick="requestPay2('kakaopay');">
 			<img alt="" src="../images/kakaopay.png" style="width:50px;"> 카카오페이</button>
-			<button class="btn4" id="toss" style="border:1px solid #004df7; background-color:white; color:#004df7;" type="button" onclick="requestPay2('tosspayments');">
+			<button class="btn4" id="toss" style="border:1px solid #004df7; background-color:white; color:#004df7;" type="button" onclick="tossPay();">
 			<img alt="" src="../images/toss.png" style="width:50px;"> 토스페이먼츠</button>
 			
 			<button class="btn1 px-5 mx-3" id="card" type="button" onclick="requestPay2('html5_inicis');"><i class="bi bi-credit-card-2-back"></i> 카드 결제</button>

@@ -257,6 +257,7 @@ $(function () {
 		$("#registBtn").attr("class", "btn btn-outline-danger active")
 	}) */
 	
+	
 });
 
 $(document).on('change', '#chkAll', function() {
@@ -594,7 +595,6 @@ $( document ).ready( function() {
 	
 	var title = $('#titleList').val();
 	if(title==''){title="test";}
-	if(paymethod1=='tosspayments') {paymethod1+='.tosstest';}
 	
   //IMP.request_pay(param, callback) 결제창 호출
   IMP.request_pay({ // param
@@ -604,7 +604,7 @@ $( document ).ready( function() {
       item_name : title,
       name : title,
       amount: $('input[name="oprice"]').val(),
-      buyer_email: "siwool12321@gmail.com",
+      buyer_email: $('input[name="user_id"]').val(),
       buyer_name: $('input[name="m_name"]').val(),
       buyer_tel: $('input[name="phone"]').val(),
       buyer_addr: $('input[name="zip"]').val()+$('input[name="addr1"]').val()+$('input[name="addr2"]').val(),
@@ -637,3 +637,45 @@ $( document ).ready( function() {
       } else { alert('결제에 실패하였습니다. 에러내용 : ' + rsp.error_msg);  }
   });
 }
+
+const clientKey = 'test_ck_26DlbXAaV0dX9X9NJ2d5VqY50Q9R' // 테스트용 클라이언트 키
+const customerKey = $('input[name="user_id"]').val(); // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
+
+// 2. 결제위젯 SDK 초기화
+const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
+// const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
+
+let currentURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1];
+
+// @docs https://docs.tosspayments.com/reference/widget-sdk#requestpayment결제-정보
+   function tossPay() {
+   	
+   	if($('input[name="m_name"]').val()=='') {
+   		alert('수령인 이름을 입력해 주세요');
+   		$('input[name="m_name"]').focus(); return;
+   	}
+   	if ($('input[name="phone"]').val()=='') {
+   		alert('수령인 휴대폰 번호를 입력해 주세요');
+   		$('input[name="phone"]').focus(); return;
+   	}
+   	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
+   		alert('수령하실 주소를 입력해 주세요'); return;
+   	}
+   	if ($('input[name="msg2"]').val() == '') {
+   		alert('배송메세지를 입력해 주세요'); 
+   		$('input[name="msg2"]').focus(); return;
+   	}
+   	$('input[name="paymethod"]').val('tosspayments');
+
+   	paymentWidget.requestPayment({
+   		amount: $('input[name="oprice"]').val(),
+        orderId: $('#pidxList').val(),
+        orderName: $('#titleList').val(),
+        successUrl: currentURL + "/success",
+        failUrl: currentURL + "/fail",
+        customerEmail: $('input[name="user_id"]').val(),
+        customerName: $('input[name="m_name"]').val(),
+        customerMobilePhone: $('input[name="phone"]').val(),
+      });
+   }
+

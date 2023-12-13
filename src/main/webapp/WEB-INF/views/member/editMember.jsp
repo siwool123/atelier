@@ -164,11 +164,11 @@ $(function () {
 				<table class="table table-borderless">
 				<c:choose>
 				<c:when test="${mdto.profiles != null }">
-					<tr><td rowspan="3"><img src="/uploads/${mdto.profiles }" id="mypageProfileImage" class="me-4" style="border-radius: 50%; -moz-border-radius: 50%; -khtml-border-radius: 50%; -webkit-border-radius: 50%; width:100%; vertical-align: top; "/>
+					<tr><td rowspan="3"><img src="/uploads/${mdto.profiles }" id="mypageProfileImage" class="img1" />
 				</c:when>
-				<c:when test="${mdto.profiles == null }">
-					<tr><td rowspan="3"><img src="/images/noprofile.png" id="mypageProfileImage" class="me-4" style="border-radius: 50%; -moz-border-radius: 50%; -khtml-border-radius: 50%; -webkit-border-radius: 50%; width:100%; vertical-align: top; "/>
-				</c:when>
+				<c:otherwise>
+					<tr><td rowspan="3"><img src="/images/noprofile.png" id="mypageProfileImage" class="img1" style="width:60%; "/>
+				</c:otherwise>
 				</c:choose>
 					<td>id: ${mdto.id}</td></tr>
 					<tr><td>

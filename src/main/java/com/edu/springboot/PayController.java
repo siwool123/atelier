@@ -83,7 +83,7 @@ public class PayController {
 			model.addAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
 			session.setAttribute("odto", orderDTO);
 			session.setAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
-			return "redirect:/member/orderResult";
+			return "redirect:/member/orderResult?oidx="+orderDTO.getOidx();
 		}catch (Exception e){ 
 			e.printStackTrace();
 			System.out.println("주문 처리 실패"); 

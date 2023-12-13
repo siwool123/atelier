@@ -12,29 +12,9 @@
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script> -->
 <!-- 다음 주소 찾기 api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<link href="../css/atelier.css" rel="stylesheet" type="text/css" />
-<script src="../js/atelier.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
-
+<link href="/css/atelier.css" rel="stylesheet" type="text/css" />
+<script src="/js/atelier.js"></script>
 <script type="text/javascript">
-
-function postOpen2() {
-	new daum.Postcode({
-		oncomplete : function(data) {
-			console.log(data);
-			console.log(data.zonecode);
-			console.log(data.address);
-
-			let frm = document.orderFm;
-			frm.zip.value = data.zonecode;
-			frm.addr1.value = data.address;
-			frm.addr2.focus();
-		}
-	}).open();
-}
-
 function inputMsg(frm) {
 	 var choiceMsg = frm.msg.value;
     if (choiceMsg == '직접입력') {
@@ -48,76 +28,27 @@ function inputMsg(frm) {
 </script> 
 <style>
 @media (max-width: 600px) {
+	.btn3, .btn4, .btn1 {display:inline !important; float:left !important;}
+	
 }
-.btn3, .btn4 {padding:0 6% !important;}
+.btn3, .btn4, .btn1 {width:200px; padding:0 !important;}
+.btn1 {padding:5px !important; }
 .border li {line-height:40px;}
 input {margin-right:10px !important;}
 table.order tr th {background-color:#ededed;}
 table.order tr th, table.order tr td {padding-left:20px;}
+.ptotile div {display:inline; float:left; padding:10px;}
+.img1 {max-width:100px; max-height:100px;}
+
 </style>
 </head>
 <body>
-<form name="delFrm" id="delFrm" ><input type="hidden" name="pidx" /></form>
-<%@ include file="index.jsp" %>
 <%-- <c:set var="user_id" value="
 <sec:authorize access="isAuthenticated()"><sec:authentication property="name"/></sec:authorize>
 "></c:set>  <div>${user_id } 님 로그인을 환영합니다.</div> --%>
-    <div class="container">
-    <div class="row my-5">
-        <div class="col-sm-2"><%@ include file="../include/memberSidebar.jsp" %></div>
-        
-        <div class="col-sm-10" style="padding-left:50px;">
-			<div class="headerL2 mb-5" style="margin-top:10px;">장바구니 ${not empty plist ? plist.size() : "0" }</div>
-			<table class="table table-hover">
-			   <thead class="table-secondary">
-			     <tr align="center" style="height:40px">
-			       <th width="10%">${not empty plist ? plist.size() : "0" }</th>
-			       <th><input type="checkbox" id="chkAll" /></th>
-			       <th colspan="2">ARTWORK TITLE</th>
-			       <th>PRICE (원)</th>
-			       <th>삭제</th>
-			       <th>배송비</th>
-			     </tr>
-			   </thead>
-			   <tbody>
-			<c:choose> 
-				<c:when test="${ empty plist }">
-				<tr><td colspan="6" align="center">등록된 작품이 없습니다.</td></tr>
-				</c:when>
-				<c:otherwise> <!-- 출력할 게시물이 있을때 -->
-					<c:forEach items="${ plist }" var="row" varStatus="loop">
-					     <tr id="cartItem_${row.pidx}">
-					       <td align="center" width="10%">${ loop.index + 1 }</td>
-					       <td align="center" width="10%">
-						       <c:choose>
-						       	<c:when test="${ row.sold==1 }">  </c:when>
-						       	<c:otherwise><input type="checkbox" name="chk" /></c:otherwise>
-						       </c:choose>
-					       </td>
-					       <td align="right" width="10%"><a href="/view?pidx=${ row.pidx }">
-					       <c:set var="imgsrc" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
-   				 			<img src="${imgsrc}" alt="작품이미지" style="width:100px" />
-					       	</a></td>
-					       	<td><a href="view?pidx=${ row.pidx }"><b > ${ row.title }</b><br/>  ${row.m_name }<br/> ${row.size1 } x ${row.size2 } cm</a></td>
-					       <td width="20%" align="right" >
-					       	 <c:choose>
-						       	<c:when test="${ row.sold==1 }"><div class="fw-bolder" style="color:grey;">● SOLD</div></c:when>
-						       	<c:otherwise><div class="fw-bolder price2">${row.price }</div></c:otherwise>
-						       </c:choose>
-					       </td>
-					       <td align="center" width="10%"><a class="btn1" href="javascript:deletepidx(${ row.pidx });">삭제</a></td>
-					       <td align="center" width="10%">무료배송</td>
-					     </tr>
-					</c:forEach>
-				</c:otherwise>
-			</c:choose>
-				<tr style="height:50px;">
-					<td colspan="3" align="right">선택한 작품 <span id="tnum">0</span> 개 <i class="bi bi-chevron-right"></i></td>
-					<td colspan="2" align="center">작품합계  <span class="price2" id="tprice">0</span> +  배송비 0 <i class="bi bi-chevron-right"></i></td>
-					<td colspan="2" >총 결제 금액 :  <b id="tprice2" class="price2" style="color:#AF0000">0</b> 원</td>
-				</tr>
-			   </tbody>
-			</table>
+<%@ include file="../include/header.jsp" %>
+    <div class="container mx-auto" style="width:600px;">
+			<div class="headerL2 mb-5" style="margin-top:80px;">바로결제</div>
 			
 			<ul class="border my-5" style="padding:20px 40px;">
 				<li>● 아래의 내용을 정확하게 작성 후 구매하기 버튼을 눌러 주세요.</li>
@@ -127,7 +58,22 @@ table.order tr th, table.order tr td {padding-left:20px;}
 				<li>● 결제완료 후 작품 포장 및 배송이 이루어집니다. (최대 5 영업일 소요)</li>
 			</ul>
 			
-			<div style="height:50px;"></div>
+			<c:if test="${not empty pdto }">
+			<a href="/view?pidx=${ pdto.pidx }" class="ptotile" style="clear:both;"><div style="width:580px;" class="border"> 
+		       <div style="width:25%">
+		       <c:choose>
+                   	<c:when test="${pdto.sfile.length()>40 }"><img class="img1" src="${pdto.sfile }" alt="작품이미지" /></c:when>
+                   	<c:otherwise><img src="./uploads/${pdto.sfile }" alt="작품이미지" /></c:otherwise>
+               </c:choose>
+				 </div>
+				 <div style="width:50%"><b> ${ pdto.title }</b><br/>  ${pdto.m_name }<br/> ${pdto.size1 } x ${pdto.size2 } cm</div>
+			     <div style="width:25%"><b class="price2">${pdto.price }</b> 원<br/>무료배송</div> </div></a><br />
+			
+			<div class="text-center my-5 py-5" style="clear:both">총 결제 금액 <i class="bi bi-chevron-right"></i>  
+			작품합계  <span class="price2" id="tprice">${ pdto.price }</span> +  배송비 0 <i class="bi bi-chevron-right"></i>
+			<b id="tprice2" class="price2" style="color:#AF0000">${pdto.price }</b> 원</div>
+			</c:if>
+				
 			<div class="headerL2 my-5">배송 및 결제 정보 </div>
 		<form action="/member/orderProc" name="orderFm" id="orderFm" method="post">
 			<table class="table table-borderless order">
@@ -148,7 +94,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 				<tr>
 					<th style="vertial-align:top;">배송메세지</th>
 					<td>
-						<select name="msg" onchange="inputMsg(this.form);" style="width:40%">
+						<select name="msg" onchange="inputMsg(this.form);" >
                             <option value="" selected>배송 메세지를 선택해주세요.</option>
                             <option value="직접입력">배송 메세지를 직접 입력할게요.</option>
                             <option value="경비실에 맡기고 문자주세요.">경비실에 맡기고 문자주세요.</option>
@@ -160,11 +106,11 @@ table.order tr th, table.order tr td {padding-left:20px;}
 				</tr>
 				<tr>
 					<th>입금시 입금자명</th>
-					<td><input type="text" name="owner" placeholder="무통장입금 시 반드시 입력하세요." style="width:30%;" /> </td>
+					<td><input type="text" name="owner" placeholder="무통장입금 시 반드시 입력하세요." style="width:60%;" /> </td>
 				</tr>
 				<tr>
 					<th>총 작품 금액</th>
-					<td><b id="tprice3" class="price2">0</b> 원 </td>
+					<td><b id="tprice3" class="price2">${not empty pdto ? pdto.price : "0" }</b> 원 </td>
 				</tr>
 				<tr>
 					<th>포인트 사용</th>
@@ -172,7 +118,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 				</tr>
 				<tr>
 					<th>최종 결제할 금액</th>
-					<td><b id="fprice" class="price2" style="color:blue;">0</b> 원 <input type="hidden" name="oprice" id="oprice" /> </td>
+					<td><b id="fprice" class="price2" style="color:blue;">${not empty pdto ? pdto.price : "0" }</b> 원 <input type="hidden" name="oprice" id="oprice" /> </td>
 				</tr>
 				<tr>
 					<th>적립예정 포인트</th>
@@ -186,16 +132,14 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			<input type="hidden" name="imp_uid" id="imp_uid" />
 			<button class="btn3 account" type="button" onclick="submitFm('bank');">무통장입금</button>
 			
-			<button class="btn4" id="kakao" style="background-color:#f7e400; color:black; margin:0 10px;" type="button" onclick="requestPay2('kakaopay');">
-			<img alt="" src="../images/kakaopay.png" style="width:50px;"> 카카오페이</button>
-			<button class="btn4" id="toss" style="border:1px solid #004df7; background-color:white; color:#004df7;" type="button" onclick="requestPay2('tosspayments');">
-			<img alt="" src="../images/toss.png" style="width:50px;"> 토스페이먼츠</button>
+			<button class="btn4 mx-3" id="kakao" style="background-color:#f7e400; color:black;" type="button" onclick="requestPay2('kakaopay');">
+			<img alt="" src="../images/kakaopay.png" style="width:40px;"> 카카오페이</button>
+			<button class="btn4 mt-3" id="toss" style="border:1px solid #004df7; background-color:white; color:#004df7;" type="button" onclick="tossPay();">
+			<img alt="" src="../images/toss.png" style="width:40px;"> 토스페이먼츠</button>
 			
-			<button class="btn1 px-5 mx-3" id="card" type="button" onclick="requestPay2('html5_inicis');"><i class="bi bi-credit-card-2-back"></i> 카드 결제</button>
+			<button class="btn1 m-3" id="card" type="button" onclick="requestPay2('html5_inicis');"><i class="bi bi-credit-card-2-back"></i> 카드 결제</button>
 			</div>
 			</form>
-        </div>
-    </div>
     </div>
 <%@ include file="../include/footer.jsp" %>
 </body>
