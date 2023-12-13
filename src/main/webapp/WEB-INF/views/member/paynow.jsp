@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Atelier</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script> -->
@@ -19,137 +19,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
 
 <script type="text/javascript">
-/*$( document ).ready( function() {
- 	
-  	var sum = 0;
- 	var totalChecked = 0;
-    
- // 장바구니 전부 선택
-    $("#chkAll").click(function () {
-        if ($("#chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
-        else $("input[name=chk]").prop("checked", false);
-    }); 
-    
-    $('input[name=chk]').click(function () {
-        var total = $('input[name=chk]').length;
-        totalChecked = $('input[name=chk]:checked').length;
-        var sum = 0;
 
-        $('input[name=chk]:checked').each(function() {
-            // 체크된 제품의 가격을 가져와서 총합에 더함
-            sum += parseInt($(this).closest('tr').find('.price2').text().replace(/,/g, ''));
-        });
-        
-        $('#tnum').html(totalChecked);
-        $('#tprice').html(numberWithCommas(sum));
-        if (total != totalChecked) $("#chkAll").prop("checked", false);
-        else $("#chkAll").prop("checked", true);
-    });  
-    
-    $('#point').focus(function () {
-        if ($(this).val() === '0') { $(this).val(''); }
-    });
-
-    // #point 인풋에서 포커스가 빠져나갔을 때, 값이 비어 있다면 0으로 설정
-    $('#point').blur(function () { if ($(this).val() === '') { $(this).val('0'); }
-    });
-    
-    // 장바구니에서 결제시 포인트 검증
-	$('#point').keyup(function() {
-		var enteredPoint = parseInt($(this).val());
-	    var maxPoint = parseInt($('#maxPoint').text());
-	
-	    if (enteredPoint > maxPoint) {
-	        alert('보유하신 포인트를 초과하였습니다.');
-	        $(this).val(0);
-	    }
-	    
-	    var ffprice = parseInt($('#tprice3').text().replace(/,/g, ''))-$(this).val();
-	    console.log("포인트합산결과", ffprice, $('#tprice3').text());
-	    $('#fprice').html(numberWithCommas(ffprice));
-	    $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
-	    $('input[name=oprice]').val(ffprice);
-	}); */
-    
-	/* $("#kakao").click(function(){
-		
-		if($('input[name="m_name"]').val()=='') {
-			alert('수령인 이름을 입력해 주세요');
-			$('input[name="m_name"]').focus(); return;
-		}
-		if ($('input[name="phone"]').val()=='') {
-			alert('수령인 휴대폰 번호를 입력해 주세요');
-			$('input[name="phone"]').focus(); return;
-		}
-		if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
-			alert('수령하실 주소를 입력해 주세요'); return;
-		}
-		if ($('input[name="msg2"]').val() == '') {
-			alert('배송메세지를 입력해 주세요'); 
-			$('input[name="msg2"]').focus(); return;
-		}
-		$('input[name="paymethod"]').val('kakao');
-		
-		// 필수입력값을 확인.
-		var name = $("#orderFm input[name='mName']").val();
-		var tel = $("#orderFm input[name='mPhone']").val();
-		var email = $("#orderFm input[name='mId']").val();
-		
-		// 결제 정보를 form에 저장한다.
-		let totalPayPrice = parseInt($("#fprice").text().replace(/,/g,''));
-		let totalPrice = parseInt($("#tprice3").text().replace(/,/g,''));
-		let discountPrice = totalPrice - totalPayPrice; 
-		let usePoint = $("#point").val();
-		let useUserCouponNo = 0;
-		
-		// 카카오페이 결제전송
-		$.ajax({
-			type:'post'
-			,url:'/pay/ready'
-			,data:{
-				total_amount: totalPayPrice
-				,payUserName: name
-				,sumPrice:totalPrice
-				,discountPrice:discountPrice
-				,totalPrice:totalPayPrice
-				,tel:tel
-				,email:email
-				,usePoint:usePoint
-				,useCouponNo:useUserCouponNo	
-			},
-			success:function(rsp){
-				console.log(rsp);
-				var msg = '결제가 완료되었습니다. 카드 승인번호 : ' + rsp.apply_num;
-				alert(msg);
-				$('#kakao').submit();	
-			},
-			error : function(errD){
-				console.log(errD.status+" : "+errD.statusText);
-				var msg = '결제에 실패하였습니다.' + errD.error_msg;
-				alert(msg);
-			}
-		} 
-	}); 
-	
-});*/
-function deletepidx(pidx) {
-	if(confirm('정말로 삭제하시겠습니까?')) { 
- 	
-   $.ajax({
-        type: 'POST',
-        url: '/member/delCart',  // 실제 서버 엔드포인트로 수정
-        data: { pidx: pidx },
-        success: function (response) {
-            if (response==1) { 
-            	$(`#cartItem_${pidx}`).remove();
-            	alert('장바구니에서 삭제되었습니다.');
-            	location.reload();
-            } else { alert('장바구니에서 삭제 실패');}
-        },
-        error: function () { alert('장바구니 삭제 중 오류가 발생했습니다.'); }
-    });
-	} 
-}
 function postOpen2() {
 	new daum.Postcode({
 		oncomplete : function(data) {
@@ -175,97 +45,10 @@ function inputMsg(frm) {
         frm.msg2.readOnly = true;
     }
 }
-
-function requestPay(paymethod){
-	$('input[name="paymethod"]').val(paymethod);
-	$.ajax({  
-	 url : '/pay/proceed',
-	 type : 'POST',
-	 async : true,
-	 dataType : 'Json', 
-	 data : $('#orderFm').serialize(),
-	 success : function(data){
-		 if(data.cnt > 0){
-			 requestPay2(data)
-		 }else{
-			 alert(data.msg)
-		 }
-	 }, 
-	 error : function (e){
-		 alert("에러")
-	 }
-	}); 
-	
-}
-/* function requestPay2(paymethod) {
-	
-	if($('input[name="m_name"]').val()=='') {
-		alert('수령인 이름을 입력해 주세요');
-		$('input[name="m_name"]').focus(); return;
-	}
-	if ($('input[name="phone"]').val()=='') {
-		alert('수령인 휴대폰 번호를 입력해 주세요');
-		$('input[name="phone"]').focus(); return;
-	}
-	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
-		alert('수령하실 주소를 입력해 주세요'); return;
-	}
-	if ($('input[name="msg2"]').val() == '') {
-		alert('배송메세지를 입력해 주세요'); 
-		$('input[name="msg2"]').focus(); return;
-	}
-	$('input[name="paymethod"]').val(paymethod);
-	
-	var IMP = window.IMP; // 생략 가능
-	IMP.init("imp76555372"); // 예: imp00000000
-	
-	console.log($('#titleList').val(), $('#titleList').val());
-	var pg1 = '', pg2 = '';
-  //IMP.request_pay(param, callback) 결제창 호출
-  if(paymethod=='kakao'){var pg1 = 'kakaopay', pg2 = 'TC0ONETIME'; }
-  if(paymethod=='toss'){var pg1 = 'tosspayments', pg2 = 'tosstest'; }
-  if(paymethod=='card'){var pg1 = 'html5_inicis', pg2 = 'INIBillTst'; }
-  IMP.request_pay({ // param
-      pg: pg1, //결제대행사 설정에 따라 다르며 공식문서 참고
-      pay_method: "card", //결제방법 설정에 따라 다르며 공식문서 참고
-      merchant_uid: "0001", //주문(db에서 불러옴) 고유번호
-      item_name : "test",
-      name : "test",
-      amount: $('input[name="oprice"]').val(),
-      buyer_email: "",
-      buyer_name: $('input[name="m_name"]').val(),
-      buyer_tel: $('input[name="phone"]').val(),
-      buyer_addr: $('input[name="zip"]').val()+$('input[name="addr1"]').val()+$('input[name="addr2"]').val(),
-      //buyer_postcode: "01181"
-  }, function (rsp) { // callback
-      if (rsp.success) {
-    	  console.log(rsp.imp_uid);
-    	// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우 // jQuery로 HTTP 요청
-          jQuery.ajax({
-            url: "/payment/proceed", 
-            method: "POST",
-	    	data : $('#orderFm').serialize() + "&imp_uid=" + rsp.imp_uid,
-    		 success : function(data){
-    			 if(data.cnt > 0){ 
-    				 console.log(data);
-    				 alert('주문 및 결제가 성공적으로 처리되었습니다.');
-    			 }else{  alert(data.msg)  }
-    		 }, 
-    		 error : function (e){  alert("에러")  }
-          })
-      } else {
-    	  var msg = '결제에 실패하였습니다. 에러내용 : ' + rsp.error_msg;
-          alert(msg);
-      }
-  });
-}  */
 </script> 
 <style>
 @media (max-width: 600px) {
 }
-.leftmenu li:nth-child(1) {background-color: black;}
-.leftmenu li:nth-child(1) a, .leftmenu li:nth-child(1) a i {color:white}
-.leftmenu li a {line-height:30px !important;}
 .btn3, .btn4 {padding:0 6% !important;}
 .border li {line-height:40px;}
 input {margin-right:10px !important;}

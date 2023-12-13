@@ -34,7 +34,7 @@ $( document ).ready( function() {
 					data.p_type+", <span class='year'>"+data.regidate+"</span> <br/>"+data.size1+" x "+data.size2+" cm </div><div class='price mt-1'>￦ <span class='price2'>"+data.price+"</span></div></div></div>";
 				});
 				$('#onsale2').html(tileData0); 
-			}, //성공시호출할콜백함수
+			}, //성공시호출할 콜백함수
 			error : function(errD){console.log(errD.status+" : "+errD.statusText);}
 		});	
 	}); 

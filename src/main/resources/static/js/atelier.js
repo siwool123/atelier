@@ -275,15 +275,19 @@ function updateTotal() {
 
     var sum = 0;
     var selectedPidxList = [];
+    var selectedTitleList = [];
     $('input[name=chk]:checked').each(function() {
-        sum += parseInt($(this).closest('tr').find('.price2').text().replace(/,/g, ''), 10);
-    	selectedPidxList.push($(this).closest('tr').attr('id').replace('cartItem_', ''));
+		var row = $(this).closest('tr');
+        sum += parseInt(row.find('.price2').text().replace(/,/g, ''), 10);
+    	selectedPidxList.push(row.attr('id').replace('cartItem_', ''));
+    	selectedTitleList.push(row.find('b').text());
     });
     
     // 배열을 문자열로 변환하여 hidden input에 할당
     $('#pidxList').val(selectedPidxList.join(','));
+    $('#titleList').val(selectedTitleList.join(','));
     
-	console.log(sum, selectedPidxList.join(','));
+	console.log($('#titleList').val(), sum, selectedPidxList.join(','));
     $('#tnum').text(totalChecked);
     $('#tprice, #tprice2, #tprice3, #fprice').html(numberWithCommas(sum));
 }
@@ -475,29 +479,33 @@ $( document ).ready( function() {
     
     // 장바구니에서 결제시 포인트 검증
 	$('#point').keyup(function() {
-		var enteredPoint = parseInt($(this).val());
+		// 입력된 값에서 숫자가 아닌 문자를 제거
+	    if(isNaN($(this).val())) {$(this).val($(this).val().replace(/[^0-9]/g, ''));}
+		//var sanitizedValue = $(this).val().replace(/[^0-9]/g, '');
+	    // 숫자로 변환
+	    var enteredPoint = parseInt($(this).val());
 	    var maxPoint = parseInt($('#maxPoint').text());
 	
 	    if (enteredPoint > maxPoint) {
-	        alert('보유하신 적립금을 초과하였습니다.');
+	        alert('보유하신 포인트를 초과하였습니다.');
 	        $(this).val(0);
 	    }
-	    var ffprice = parseInt($('#tprice3').text().replace(/,/g, ''))-$(this).val();
-	    console.log("포인트합산결과", ffprice, $('#tprice3').text());
+	   var ffprice = parseInt($('#tprice3').text().replace(/,/g, ''))-parseInt($(this).val());
+	    
 	    $('#fprice').html(numberWithCommas(ffprice));
 	    $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
 	    $('input[name=oprice]').val(ffprice);
+	    console.log("최종가격", ffprice);
 	});
 	
 	//포인트 뺀 최종가격표시
-	var originalPrice = parseInt($('#tprice3').text().replace(/,/g, '')); // , 제거 후 숫자로 변환
-	var usedPoint = parseInt($('#point').val());
-	var finalPrice = originalPrice - usedPoint;
+	/*var finalPrice = parseInt($('#tprice3').text().replace(/,/g, '')) - parseInt($('#point').val()); // , 제거 후 숫자로 변환
 	
+	 $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
 	$('#fprice').html(numberWithCommas(finalPrice));
-	$('input[name=oprice]').val(finalPrice);
-	
-	$("#kakao").click(function(){
+	$('input[name=oprice]').val(finalPrice);*/
+	 
+	/*$("#kakao").click(function(){
 		
 		if($('input[name="m_name"]').val()=='') {
 			alert('수령인 이름을 입력해 주세요');
@@ -516,12 +524,12 @@ $( document ).ready( function() {
 		}
 		$('input[name="paymethod"]').val('kakao');
 		
-		// 필수입력값을 확인.
+		// 필수입력값을 확인
 		var name = $("#orderFm input[name='mName']").val();
 		var tel = $("#orderFm input[name='mPhone']").val();
 		var email = $("#orderFm input[name='mId']").val();
 		
-		// 결제 정보를 form에 저장한다.
+		// 결제 정보를 form에 저장한다
 		let totalPayPrice = parseInt($("#fprice").text().replace(/,/g,''));
 		let totalPrice = parseInt($("#tprice3").text().replace(/,/g,''));
 		let discountPrice = totalPrice - totalPayPrice; 
@@ -530,7 +538,7 @@ $( document ).ready( function() {
 		
 		// 카카오페이 결제전송
 		$.ajax({
-			type:'get'
+			type:'post'
 			,url:'/pay/ready'
 			,data:{
 				total_amount: totalPayPrice
@@ -556,6 +564,76 @@ $( document ).ready( function() {
 				alert(msg);
 			}
 		}); 
-	});
+	});*/
 
+	
  });
+ 
+ 
+ function requestPay2(paymethod1) {
+	
+	if($('input[name="m_name"]').val()=='') {
+		alert('수령인 이름을 입력해 주세요');
+		$('input[name="m_name"]').focus(); return;
+	}
+	if ($('input[name="phone"]').val()=='') {
+		alert('수령인 휴대폰 번호를 입력해 주세요');
+		$('input[name="phone"]').focus(); return;
+	}
+	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
+		alert('수령하실 주소를 입력해 주세요'); return;
+	}
+	if ($('input[name="msg2"]').val() == '') {
+		alert('배송메세지를 입력해 주세요'); 
+		$('input[name="msg2"]').focus(); return;
+	}
+	$('input[name="paymethod"]').val(paymethod1);
+	
+	var IMP = window.IMP; // 생략 가능
+	IMP.init("imp76555372"); // 예: imp00000000
+	
+	var title = $('#titleList').val();
+	if(title==''){title="test";}
+	if(paymethod1=='tosspayments') {paymethod1+='.tosstest';}
+	
+  //IMP.request_pay(param, callback) 결제창 호출
+  IMP.request_pay({ // param
+      pg: paymethod1, //결제대행사 설정에 따라 다르며 공식문서 참고
+      pay_method: "card", //결제방법 설정에 따라 다르며 공식문서 참고
+      merchant_uid: $('#pidxList').val(), //주문(db에서 불러옴) 고유번호
+      item_name : title,
+      name : title,
+      amount: $('input[name="oprice"]').val(),
+      buyer_email: "siwool12321@gmail.com",
+      buyer_name: $('input[name="m_name"]').val(),
+      buyer_tel: $('input[name="phone"]').val(),
+      buyer_addr: $('input[name="zip"]').val()+$('input[name="addr1"]').val()+$('input[name="addr2"]').val(),
+      notice_url: "http://localhost:8586/member/orderResult",
+      confirm_url: "http://localhost:8586/member/orderResult",
+      //buyer_postcode: "01181"
+  }, function (rsp) { // callback
+		console.log(rsp);  
+      if (rsp.success) {
+    	// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우 // jQuery로 HTTP 요청
+    	alert("1차결제성공");
+    	$('input[name="imp_uid"]').val(rsp.imp_uid);
+    	$('#orderFm').submit();
+          /*jQuery.ajax({
+            url: "/pay/proceed", 
+            method: "POST",
+	    	data : $('#orderFm').serialize() + "&imp_uid=" + rsp.imp_uid,
+    		 success : function(data){
+    			 if(data.cnt == 1){ 
+    				 console.log(data);
+    				 alert('주문 및 결제가 성공적으로 처리되었습니다.');
+    				 // 성공적으로 처리된 경우, 특정 주소로 이동하면서 데이터를 전달
+		            var successUrl = "/member/orderResult?" + encodeURIComponent(JSON.stringify(data));
+		            window.location.href = successUrl;
+    			 }else{  alert(data.msg)  }
+    		 }, 
+    		 error : function (e){  alert("에러"+e.status+" : "+e.statusText) 
+    		 console.log(e.status+" : "+e.statusText); }
+          })*/
+      } else { alert('결제에 실패하였습니다. 에러내용 : ' + rsp.error_msg);  }
+  });
+}

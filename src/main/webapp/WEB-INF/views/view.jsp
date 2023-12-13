@@ -45,7 +45,7 @@ $( document ).ready( function() {
 	$('.pay').click(function(){
  		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
  		var pidx = getParameterByName('pidx');
- 		window.location.href = '/member/order?pidx='+pidx;
+ 		window.location.href = '/member/paynow?pidx='+pidx;
 	}); 
 });
 function sucFunc(resD){
