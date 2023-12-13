@@ -21,6 +21,9 @@ $( document ).ready( function() {
 	$('#price').html(numberWithCommas($('#price').text()));
 });
 </script>
+<style>
+table tr th, table tr td {padding:30px;}
+</style>
 </head>
 <body>
 <%@ include file="../include/header.jsp" %>
@@ -40,15 +43,10 @@ $( document ).ready( function() {
 			<td>
 			
 			<c:choose>
-			<c:when test="${not empty odto and not empty odto.paymethod and odto.paymethod.equals('bank') }">
-			무통장입금
-			</c:when>
-			<c:when test="${not empty odto and not empty odto.paymethod and odto.paymethod.equals('kakao') }">
-			카카오페이
-			</c:when>
-			<c:when test="${not empty odto and not empty odto.paymethod and odto.paymethod.equals('toss') }">
-			토스페이먼츠
-			</c:when>
+			<c:when test="${not empty odto.paymethod and odto.paymethod.equals('bank') }">무통장입금</c:when>
+			<c:when test="${not empty odto.paymethod and odto.paymethod.equals('kakaopay') }">카카오페이</c:when>
+			<c:when test="${not empty odto.paymethod and odto.paymethod.equals('tosspayments') }">토스페이먼츠</c:when>
+			<c:when test="${not empty odto.paymethod and odto.paymethod.equals('html5_inicis') }">카드결제</c:when>
 			<c:otherwise>정보없음</c:otherwise>
 			</c:choose>
 			

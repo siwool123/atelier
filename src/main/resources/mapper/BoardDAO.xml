@@ -169,8 +169,8 @@
 	<delete id="delCart">DELETE FROM cart WHERE pidx=#{param1}</delete>
 	
 	<insert id="payorder" parameterType="com.edu.springboot.restboard.OrderDTO">
-		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message) VALUES 
-		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message})
+		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message, apinum) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{apinum})
 	</insert>
 	
 	<insert id="bankorder" parameterType="com.edu.springboot.restboard.OrderDTO">

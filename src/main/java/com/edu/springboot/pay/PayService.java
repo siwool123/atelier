@@ -43,7 +43,8 @@ public class PayService {
 		orderDTO.setR_address(address);
 		orderDTO.setMessage(req.getParameter("msg2"));
 		
-		if(paymethod.equals("kakao") || paymethod.equals("toss")) {
+		if(paymethod.equals("kakaopay") || paymethod.equals("tosspayments") || paymethod.equals("html5_inicis")) {
+			orderDTO.setApinum(req.getParameter("imp_uid"));
 			 resulto1 = dao.payorder(orderDTO);
 		}else {
 			orderDTO.setOwner(req.getParameter("owner"));

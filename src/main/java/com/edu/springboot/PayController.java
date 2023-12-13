@@ -2,21 +2,23 @@ package com.edu.springboot;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.edu.springboot.pay.PayService;
 import com.edu.springboot.restboard.CartDTO;
 import com.edu.springboot.restboard.IBoardService;
-import com.edu.springboot.restboard.IMemberService;
 import com.edu.springboot.restboard.MemberDTO;
 import com.edu.springboot.restboard.OrderDTO;
 import com.edu.springboot.restboard.PointDTO;
@@ -24,7 +26,6 @@ import com.edu.springboot.restboard.ProductDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import lombok.Setter;
 
 @Controller
 public class PayController {
@@ -45,6 +46,7 @@ public class PayController {
 		try {
 			String user_id = principal.getName(); //로그인아이디 얻어온다.
 			memberDTO = dao.mview(user_id);
+			
 			List<CartDTO> clist = dao.cartsview(memberDTO.getMidx());
 			
 			List<ProductDTO> plist = new ArrayList<>();
@@ -81,7 +83,7 @@ public class PayController {
 			model.addAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
 			session.setAttribute("odto", orderDTO);
 			session.setAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
-			return "redirect:/member/orderResult";
+			return "redirect:/member/orderResult?oidx="+orderDTO.getOidx();
 		}catch (Exception e){ 
 			e.printStackTrace();
 			System.out.println("주문 처리 실패"); 
@@ -177,7 +179,19 @@ public class PayController {
 //    	}
 //	}
 	
-   
 
-
+	@RequestMapping("/member/paynow")
+	public String cart(Principal principal, Model model, @RequestParam int pidx) {
+		try {
+			String user_id = principal.getName(); //로그인아이디 얻어온다.
+			MemberDTO memberDTO = dao.mview(user_id);
+			ProductDTO productDTO = dao.pview(pidx);
+			
+			model.addAttribute("pdto", productDTO);
+			model.addAttribute("mdto", memberDTO);
+		}catch (Exception e){
+			System.out.println("주문페이지에서 작품및유저정보 조회 실패");
+		}
+		return "member/paynow";
+	}
 }

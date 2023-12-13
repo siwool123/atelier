@@ -23,4 +23,5 @@ public class OrderDTO {
 	private String courier;
 	private String t_num;
 	private String owner;
+	private String apinum;
 }
