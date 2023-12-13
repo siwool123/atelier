@@ -72,10 +72,15 @@ public interface IBoardService {
 	
 	//동일주문번호가진 작품들조회
 	public List<Order2DTO> ordersview(String oidx);
-	//주문조회
+	//주문조회1
 	public OrderDTO oview(String oidx);
+	//주문리스트 조회
+	public List<OrderDTO> olist(int midx);
 	
-	 
+	//입금전 건수 조회
+	public List<OrderDTO> notPaid(int midx); 
+	//배송전 건수 조회
+	public List<OrderDTO> notShipped(int midx); 
 }
 
 

@@ -6,11 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Atelier</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 <script src="https://js.tosspayments.com/v1/payment-widget"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <!-- 다음 주소 찾기 api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <link href="../css/atelier.css" rel="stylesheet" type="text/css" />
@@ -352,6 +351,7 @@ input {margin-right:10px !important;}
 table.order tr th {background-color:#ededed;}
 table.order tr th, table.order tr td {padding-left:20px;}
 .img1 {max-width:100px; max-height:100px;}
+.bpc1 {position:relative !important; top:-20px !important;}
 </style>
 </head>
 <body>
@@ -365,11 +365,11 @@ table.order tr th, table.order tr td {padding-left:20px;}
         <div class="col-sm-2"><%@ include file="../include/memberSidebar.jsp" %></div>
         
         <div class="col-sm-10" style="padding-left:50px;">
-			<div class="headerL2 mb-5" style="margin-top:10px;">장바구니 ${not empty plist ? plist.size() : "0" }</div>
+			<div class="headerL2 mb-5" style="margin-top:10px;">주문내역 ${not empty map.olist ? map.olist.size() : "0" }</div>
 			<table class="table table-hover">
 			   <thead class="table-secondary">
 			     <tr align="center" style="height:40px">
-			       <th width="10%">${not empty plist ? plist.size() : "0" }</th>
+			       <th width="10%">${not empty map.olist ? map.olist.size() : "0" }</th>
 			       <th><input type="checkbox" id="chkAll" /></th>
 			       <th colspan="2">ARTWORK TITLE</th>
 			       <th>PRICE (원)</th>
@@ -379,11 +379,11 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			   </thead>
 			   <tbody>
 			<c:choose> 
-				<c:when test="${ empty plist }">
+				<c:when test="${ empty map.olist }">
 				<tr><td colspan="6" align="center">등록된 작품이 없습니다.</td></tr>
 				</c:when>
 				<c:otherwise> <!-- 출력할 게시물이 있을때 -->
-					<c:forEach items="${ plist }" var="row" varStatus="loop">
+					<c:forEach items="${ map.olist }" var="row" varStatus="loop">
 					     <tr id="cartItem_${row.pidx}">
 					       <td align="center" width="10%">${ loop.index + 1 }</td>
 					       <td align="center" width="10%">
@@ -431,17 +431,18 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			<table class="table table-borderless order">
 				<tr>
 					<th>수령인 / 연락처</th>
-					<td><input type="text" name="m_name" value="${mdto.m_name }" /> 
-					<input type="text" name="phone" value="${mdto.phone }" />
-					<input type="hidden" name="mName" id="mName" value="${mdto.m_name }" />
-					<input type="hidden" name="mPhone" id="mPhone" value="${mdto.phone }" />
-					<input type="hidden" name="mId" id="mId" value="${mdto.id }" /></td>
+					<td><input type="text" name="m_name" value="${map.mdto.m_name }" /> 
+					<input type="text" name="phone" value="${map.mdto.phone }" />
+					<input type="hidden" name="mName" id="mName" value="${map.mdto.m_name }" />
+					<input type="hidden" name="mPhone" id="mPhone" value="${map.mdto.phone }" />
+					<input type="hidden" name="mId" id="mId" value="${map.mdto.id }" /></td>
 				</tr>
 				<tr>
 					<th style="vertial-align:top;">배송지 주소</th>
-					<td><input type="text" name="zip" id="zip" value="${mdto.zip }" readonly />
+					<td><input type="text" name="zip" id="zip" value="${map.mdto.zip }" readonly />
 					<button type="button" onClick="postOpen2();" class="btn btn-outline-secondary">주소찾기</button>
-					 <div class="my-3"><input type="text" name="addr1" value="${mdto.addr1 }" /> <input type="text" name="addr2" value="${mdto.addr2 }" /></div></td>
+					 <div class="my-3"><input type="text" name="addr1" value="${map.mdto.addr1 }" /> 
+					 <input type="text" name="addr2" value="${map.mdto.addr2 }" /></div></td>
 				</tr>
 				<tr>
 					<th style="vertial-align:top;">배송메세지</th>
@@ -466,7 +467,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 				</tr>
 				<tr>
 					<th>포인트 사용</th>
-					<td><input type="text" name="point" id="point" value="0" /> P ( 사용가능 포인트 <b style="color:#AF0000" id="maxPoint">${not empty mdto ? mdto.total_point : "0" }</b> P )</td>
+					<td><input type="text" name="point" id="point" value="0" /> P ( 사용가능 포인트 <b style="color:#AF0000" id="maxPoint">${not empty map.mdto ? map.mdto.total_point : "0" }</b> P )</td>
 				</tr>
 				<tr>
 					<th>최종 결제할 금액</th>
@@ -482,7 +483,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			<input type="hidden" name="pidxList" id="pidxList" />
 			<input type="hidden" name="titleList" id="titleList" />
 			<input type="hidden" name="imp_uid" id="imp_uid" />
-			<input type="hidden" name="user_id" id="user_id" value="${ not empty mdo ? mdto.id : '' }" />
+			<input type="hidden" name="user_id" id="user_id" value="${ not empty map.mdo ? map.mdto.id : '' }" />
 			<button class="btn3 account" type="button" onclick="submitFm('bank');">무통장입금</button>
 			
 			<button class="btn4" id="kakao" style="background-color:#f7e400; color:black; margin:0 10px;" type="button" onclick="requestPay2('kakaopay');">
@@ -490,7 +491,8 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			<button class="btn4" id="toss" style="border:1px solid #004df7; background-color:white; color:#004df7;" type="button" onclick="tossPay();">
 			<img alt="" src="../images/toss.png" style="width:50px;"> 토스페이먼츠</button>
 			
-			<button class="btn1 px-5 mx-3" id="card" type="button" onclick="requestPay2('html5_inicis');"><i class="bi bi-credit-card-2-back"></i> 카드 결제</button>
+			<button class="btn1 px-5 mx-3" id="card" type="button" onclick="requestPay2('html5_inicis');">
+			<i class="bi bi-credit-card-2-back" style="margin-right:10px;"></i> 카드 결제</button>
 			</div>
 			</form>
         </div>

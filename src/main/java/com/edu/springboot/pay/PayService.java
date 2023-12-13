@@ -1,9 +1,12 @@
 package com.edu.springboot.pay;
 
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,19 +30,19 @@ public class PayService {
     @Autowired
 	IBoardService dao;
     
-    public OrderDTO orderProc(String user_id, HttpServletRequest req, OrderDTO orderDTO, PointDTO pointDTO) {
+    public OrderDTO orderProc(Principal principal, HttpServletRequest req, OrderDTO orderDTO, PointDTO pointDTO) {
     	int resulto1 = 0, resPoint1 = 0, piresult = 0, setsold = 0;
     	List<Integer> resListo2 = new ArrayList<>();
     	List<Integer> resDelCartList = new ArrayList<>();
     	
-		MemberDTO memberDTO = dao.mview(user_id);
+		MemberDTO memberDTO = dao.mview(principal.getName());
 		String paymethod = req.getParameter("paymethod");
 		orderDTO.setMidx(memberDTO.getMidx());
 		orderDTO.setPaymethod(paymethod);
 		orderDTO.setPrice(Integer.parseInt(req.getParameter("oprice")));
 		orderDTO.setReceiver(req.getParameter("m_name"));
 		orderDTO.setR_phone(req.getParameter("phone"));
-		String address = req.getParameter("zip") +" | "+ req.getParameter("addr1") +" _ "+ req.getParameter("addr2");
+		String address = req.getParameter("zip") +" | "+ req.getParameter("addr1") +" | "+ req.getParameter("addr2");
 		orderDTO.setR_address(address);
 		orderDTO.setMessage(req.getParameter("msg2"));
 		
@@ -98,5 +101,31 @@ public class PayService {
 		return orderDTO;
 			
 	}
+    
+    public Map<Object, Object> memberIndex (Principal principal) {
+
+    	Map<Object, Object> map = new HashMap<>();
+    	
+    	MemberDTO memberDTO = dao.mview(principal.getName());
+        
+        List<OrderDTO> olist = dao.olist(memberDTO.getMidx());
+        int sum = 0;
+        for(OrderDTO odto : olist) { sum += odto.getPrice();}
+        System.out.println("주문건수 : " + olist.size() + ", 주문합계 : "+sum);
+        
+        List<OrderDTO> nplist = dao.notPaid(memberDTO.getMidx());
+        List<OrderDTO> nslist = dao.notShipped(memberDTO.getMidx());
+       System.out.println("입금전 건수 : "+nplist.size() + ", 배송전건수 : "+nslist.size());
+        
+       map.put("nplist", nslist);
+       map.put("mdto", memberDTO);
+       map.put("olist", olist);
+       map.put("olistSize", olist.size());
+       map.put("orderSum", sum);
+       map.put("nplistSize", nplist.size());
+       map.put("nslistSize", nslist.size());
+       
+       return map;
+    }
     
 }

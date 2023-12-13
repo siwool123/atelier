@@ -36,24 +36,22 @@ public class PayController {
 	IBoardService dao;
 
 	@RequestMapping("/member/cart")
-	public String cart(Principal principal, Model model, MemberDTO memberDTO) {
-		try {
-			String user_id = principal.getName(); //로그인아이디 얻어온다.
-			memberDTO = dao.mview(user_id);
-			
-			List<CartDTO> clist = dao.cartsview(memberDTO.getMidx());
-			
-			List<ProductDTO> plist = new ArrayList<>();
-			for(CartDTO cartDTO : clist) {
-				ProductDTO productDTO = dao.pview(cartDTO.getPidx());
-				plist.add(productDTO);
-			}
-			model.addAttribute("plist", plist);
-			model.addAttribute("mdto", memberDTO);
-			model.addAttribute("user_id", user_id);
-		}catch (Exception e){
-			System.out.println("장바구니 목록 조회 실패");
+	public String cart(Principal principal, Model model) {
+
+		Map<Object, Object> map = payService.memberIndex(principal);
+        model.addAttribute("map", map);
+		MemberDTO memberDTO = dao.mview(principal.getName());
+		
+		//장바구니에 담은 목록표시
+		List<CartDTO> clist = dao.cartsview(memberDTO.getMidx());
+		
+		List<ProductDTO> plist = new ArrayList<>();
+		for(CartDTO cartDTO : clist) {
+			ProductDTO productDTO = dao.pview(cartDTO.getPidx());
+			plist.add(productDTO);
 		}
+		model.addAttribute("plist", plist);
+			
 		return "member/cart";
 	}
 	
@@ -70,8 +68,7 @@ public class PayController {
 	@PostMapping("/member/orderProc")
 	public String orderProc(Principal principal, Model model, HttpSession session, HttpServletRequest req, OrderDTO orderDTO, PointDTO pointDTO) {
 		try {
-			String user_id = principal.getName(); //로그인아이디 얻어온다.
-			orderDTO = payService.orderProc(user_id, req, orderDTO, pointDTO);
+			orderDTO = payService.orderProc(principal, req, orderDTO, pointDTO);
 			
 			model.addAttribute("odto", orderDTO);
 			model.addAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");

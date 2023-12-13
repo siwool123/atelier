@@ -166,16 +166,8 @@ public class BoardRestController {
 	public Map<Object, Object> orderProc(Principal principal, Model model, HttpSession session, HttpServletRequest req, OrderDTO orderDTO, PointDTO pointDTO) {
 		
 		System.out.println("페이주문처리rest호출됨");
-		String user_id = "";
-		try {
-			user_id = principal.getName(); //로그인아이디 얻어온다.
-			
-		}catch (Exception e){ 
-			e.printStackTrace();
-			System.out.println("주문 처리 실패"); 
-    	}	
-		MemberDTO mdto = dao.mview(user_id);
-		orderDTO = payService.orderProc(user_id, req, orderDTO, pointDTO);
+		MemberDTO mdto = dao.mview(principal.getName());
+		orderDTO = payService.orderProc(principal, req, orderDTO, pointDTO);
 		
 		Map<Object, Object> map = new HashMap<>();
 		if (orderDTO != null) {
@@ -191,7 +183,7 @@ public class BoardRestController {
 			map.put("price", orderDTO.getPrice());
 			map.put("addr", orderDTO.getR_address());
 			map.put("paymethod", orderDTO.getPaymethod());
-			map.put("user_id", user_id);
+			map.put("user_id", principal.getName());
 			
 			session.setAttribute("odto", orderDTO);
 			session.setAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
