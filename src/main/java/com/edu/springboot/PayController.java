@@ -35,12 +35,6 @@ public class PayController {
 	@Autowired
 	IBoardService dao;
 
-	@RequestMapping("/member/index")
-	public String mindex (Principal principal, Model model, MemberDTO memberDTO) {
-		
-		return "member/index";
-	}
-	
 	@RequestMapping("/member/cart")
 	public String cart(Principal principal, Model model, MemberDTO memberDTO) {
 		try {

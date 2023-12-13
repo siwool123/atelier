@@ -42,6 +42,19 @@ public class MemberController {
 	@Autowired
 	IMemberService dao;
 	
+	@RequestMapping("/member/index")
+	public String mindex (Principal principal, Model model) {
+		 try {
+	         String user_id = principal.getName(); //로그인아이디 얻어온다.
+	         MemberDTO memberDTO = dao.mview(user_id);
+	         model.addAttribute("mdto", memberDTO);
+	         System.out.println(memberDTO);
+	      }catch (Exception e){
+	         System.out.println("정보수정 페이지 접속 실패");
+	      }
+		return "member/index";
+	}
+	
 	@RequestMapping("member/edit")
 	   public String edit(Principal principal, Model model, MemberDTO memberDTO) {
 	      try {
