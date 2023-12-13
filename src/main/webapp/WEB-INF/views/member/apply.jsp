@@ -24,32 +24,81 @@
 input {margin-right:10px !important;}
 table.order tr th {background-color:#ededed;}
 table.order tr th, table.order tr td {padding-left:20px;}
-#artistTd {border: 1px dotted black;}
 </style>
 
 <script>
 	//이미지 선택시 바로 이미지 띄우기
 	function loadApplyImage(img) {
-	    var file = img.files[0];	//선택된 파일 가져오기
-	    //폼태그 변수 선언
-	    var applyImageForm = document.getElementById("applyImageForm");
+		//선택된 파일 가져오기
+	    var file = img.files[0];
+		/*이미지 태그 name 값 마지막 부분(숫자로 되어있음)을 잘라 num이라는 변수로 선언한다.
+		이하 div태그 들에도 num을 붙여 뷰에서 foreach로 생성한 엘리먼트들에 각각 대응한다.*/ 
+		let num;
+		if(img.name.slice(-1) != 0) {
+			num = img.name.slice(-1);
+		} else if (img.name.slice(-1) == 0) {
+			num = img.name.slice(-2);
+		}
 	    //기존 showImageDiv div태그를 삭제후 다시 만든다(이미지 두번 선택 방지)
-	   	document.getElementById("showImageDiv").remove();
+	   	document.getElementById("showImageDiv"+num).remove();
 	    //img태그가 담길 div 태그 새로 만들기
 	    var showImageDiv = document.createElement("div");
 	    //새로 만든 div 태그에 id 부여
-	    showImageDiv.id='showImageDiv';
-	    //form 태그에 div태그 추가(prepend)
-	    document.getElementById('forDiv').prepend(showImageDiv);
-	    //새로운 img 태그 만들기
+	    showImageDiv.id='showImageDiv'+num;
+	    //div(fordiv) 태그에 div(showImageDiv) 태그 추가(prepend)
+	    document.getElementById('forDiv'+num).prepend(showImageDiv);
+	    
+	    //새로운 img 태그 만들기(img태그는 뷰에서 foreach로 만들어지지 않기 때문에 num을 붙일 필요없다.)
 		var selectedApplyImage = document.createElement("img");
 	    //이미지 source 가져오기
 		selectedApplyImage.src = URL.createObjectURL(file);
 	    //이미지 크기 조정
-		selectedApplyImage.style.width = "30%";
-	    //이미지를 showImageDiv div에 추가
+		selectedApplyImage.setAttribute('style', 'max-width: 100px');
+		selectedApplyImage.setAttribute('style', 'max-height: 100px');
+	    //이미지를 showImageDiv에 추가
 		showImageDiv.appendChild(selectedApplyImage);
 	}
+	
+	function applyValidate(form) {
+		/* //작가 소개 글자수 검증
+		if(form.a_intro.value.length<80 || form.a_intro.value.length>800) {
+			alert('작가 소개는 80자 이상, 800자 이내로 작성해주세요.');
+			return false;
+		}
+		//작가 약력 글자수 검증
+		if(form.a_history.value.length<80 || form.a_intro.value.length>800) {
+			alert('작가 약력은 80자 이상, 800자 이내로 작성해주세요.');
+			return false;
+		} */
+		// 이미지 10개 검증
+		/* for(var i=1; i<=10; i++) {
+			if(form['apply'+i].value == '') {
+				alert('작품 이미지는 10개를 첨부해야 합니다.');
+				return false;
+			}
+		} */
+	}
+	
+$(function(){
+	$('textarea[name=a_intro]').keyup(function(){
+		$('#ta_count').html($(this).val().length);
+		if($(this).val().length>800){
+			alert("작가 소개는 800자 이내로 입력해주세요.");
+			$(this).val($(this).val().substring(0,80));
+			$('#ta_count').html("80");
+			$(this).focus(); 
+		}
+	});
+	$('textarea[name=a_history]').keyup(function(){
+		$('#ta_count_2').html($(this).val().length);
+		if($(this).val().length>800){
+			alert("작가 약력은 800자 이내로 입력해주세요.");
+			$(this).val($(this).val().substring(0,800));
+			$('#ta_count_2').html("800");
+			$(this).focus(); 
+		}
+	});
+});
 </script>
 
 <%@ include file="index.jsp" %>
@@ -61,27 +110,29 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			<div class="headerL2 mb-5" style="margin-top:10px;">작가신청</div>
 			<p>심사용 포트폴리오 작품 이미지를 10개를 첨부하고 작가소개 및 약력을 작성하셔야 작가신청이 가능합니다.</p>
 			<p>작가소개 및 약력은 작가의 작품을 판매용으로 등록시 적용되오니 신중하게 작성하시기 바랍니다.</p>
-			<p>작가 신청 후 심사결과는 <spna style="color: red;">마이페이지 > 작가신청</spna> 에서 확인할 수 있습니다.</p>
 			
-			<form name="applyImageForm" id="applyImageForm" action="/apllyImage.do" method="post">
-				<p class="mt-5">작가소개</p>
-				<textarea class="form-control" rows="10" id="artistIntro"
+			<form name="applyForm" id="applyForm" action="/member/apply.do" enctype="multipart/form-data" method="post">
+				<p class="mt-5"><b>작가소개</b>&nbsp;&nbsp;&nbsp;<span id="ta_count">0</span><span class="count"> / 800 (80자 이상 800자 이내)</span></p>
+				<textarea class="form-control" rows="10" id="a_intro" name="a_intro"
 					placeholder="작가성향이나 작품성향과 작품의 주된 주제 등에 대해 80자 이상 800자 이내로 작성해주세요."></textarea>
-				<p class="mt-5">작가약력</p>
-				<textarea class="form-control" rows="10" id="artistIntro"
+				<p class="mt-5"><b>작가약력</b>&nbsp;&nbsp;&nbsp;<span id="ta_count_2">0</span><span class="count"> / 800 (80자 이상 800자 이내)</span></p>
+				<textarea class="form-control" rows="10" id="a_history" name="a_history"
 					placeholder="학력, 개인전, 단체전, 공모전 관련 약력을 80자 이상 800자 이내로 작성해주세요."></textarea>
 				<div class="row mt-5">
 					<div class="col-9">
-						<div class="d-grid gap-2 mx-auto col-1" id="forDiv">
-							<c:forEach begin="0" end="9" step="1">
-								<button type="button" class="btn btn-outline-secondary">+</button>
-								<input class="form-control" type="file" name="applyImage"
+						<div class="d-grid gap-2 mx-auto col-2">
+							<c:forEach begin="0" end="9" step="1" varStatus="loop">
+								<button type="button" class="btn btn-outline-secondary" style="display: hidden;">+</button>
+								<input class="form-control col-1" type="file" name="inputApply${loop.index+1}"
 									onChange="loadApplyImage(this);" />
+								<div class="col-1" id="forDiv${loop.index+1}">
+									<div class="col-1" id="showImageDiv${loop.index+1}"></div>
+								</div>
 							</c:forEach>
 						</div>
 					</div>
 					<div class="col-3 text-end">
-						<button type="button" class="btn btn-dark">작가신청</button>
+						<input type="submit" class="btn btn-dark">작가신청</input>
 					</div>
 				</div>
 			</form>

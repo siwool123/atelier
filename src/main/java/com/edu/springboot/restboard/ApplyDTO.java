@@ -19,4 +19,6 @@ public class ApplyDTO {
 	private String apply8;
 	private String apply9;
 	private String apply10;
+	private String a_intro;
+	private String a_history;
 }

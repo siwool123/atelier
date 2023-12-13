@@ -50,7 +50,7 @@ public class MainController {
 		return "auth/login";
 	}
 	
-	//로그인시도중에러발생한경우
+	//로그인시도중에러발생한경우 
 //	@RequestMapping("/error")
 //	public String login2() {
 //		return "auth/error";

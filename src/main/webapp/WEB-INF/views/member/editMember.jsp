@@ -30,20 +30,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 
 <script>
 //다음 주소 찾기 api
-function postOpen() {
-	new daum.Postcode({
-		oncomplete : function(data) {
-			console.log(data);
-			console.log(data.zonecode);
-			console.log(data.address);
 
-			let frm = document.updateForm;
-			frm.zip.value = data.zonecode;
-			frm.addr1.value = data.address;
-			frm.addr2.focus();
-		}
-	}).open();
-}
 
 function uploadProfile() {
 	var popupWidth = 600;
@@ -345,6 +332,22 @@ $(function () {
 		
 	})
 });
+
+
+function postOpen() {
+	new daum.Postcode({
+		oncomplete : function(data) {
+			console.log(data);
+			console.log(data.zonecode);
+			console.log(data.address);
+
+			let frm = document.updateForm;
+			frm.zip.value = data.zonecode;
+			frm.addr1.value = data.address;
+			frm.addr2.focus();
+		}
+	}).open();
+}
 </script>
 
 

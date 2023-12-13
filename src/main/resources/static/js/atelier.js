@@ -300,72 +300,28 @@ function inputMsg(frm) {
 function submitFm(payMethod) {
         var fm = document.getElementById('orderFm');
 
-        // 무통장 입금 선택 시
-        if (payMethod === 'bank') {
-            
-            fm.paymethod.value = 'bank';
-			if (fm.m_name.value == '') {
+		if (fm.m_name.value == '') {
 				alert('수령인 이름을 입력해 주세요');
 				fm.m_name.focus(); return;
-			}
-			if (fm.phone.value == '') {
-				alert('수령인 휴대폰 번호를 입력해 주세요');
-				fm.phone.focus(); return;
-			}
-			if (fm.zip.value == ''||fm.addr1.value == ''||fm.addr2.value == '') {
-				alert('수령하실 주소를 입력해 주세요'); return;
-			}
-			if (fm.msg2.value == '') {
-				alert('배송메세지를 입력해 주세요'); 
-				fm.msg2.focus(); return;
-			}
-            // 입금자명이 입력되었는지 확인
-            if (fm.owner.value.trim() === '') {
-                alert('무통장 입금 시 입금자명을 입력해야 합니다.'); 
-                fm.owner.focus(); return;
-            }
-        }
-        
-        // 카카오페이 선택 시
-        if (payMethod === 'kakao') {
-            
-            fm.paymethod.value = 'kakao';
-			if (fm.m_name.value == '') {
-				alert('수령인 이름을 입력해 주세요');
-				fm.m_name.focus(); return;
-			}
-			if (fm.phone.value == '') {
-				alert('수령인 휴대폰 번호를 입력해 주세요');
-				fm.phone.focus(); return;
-			}
-			if (fm.zip.value == ''||fm.addr1.value == ''||fm.addr2.value == '') {
-				alert('수령하실 주소를 입력해 주세요'); return;
-			}
-			if (fm.msg2.value == '') {
-				alert('배송메세지를 입력해 주세요'); 
-				fm.msg2.focus(); return;
-			}
-        }
-        
-         // 토스페이먼츠 선택 시
-        if (payMethod === 'toss') {
-            
-            fm.paymethod.value = 'toss';
-			if (fm.m_name.value == '') {
-				alert('수령인 이름을 입력해 주세요');
-				fm.m_name.focus(); return;
-			}
-			if (fm.phone.value == '') {
-				alert('수령인 휴대폰 번호를 입력해 주세요');
-				fm.phone.focus(); return;
-			}
-			if (fm.zip.value == ''||fm.addr1.value == ''||fm.addr2.value == '') {
-				alert('수령하실 주소를 입력해 주세요'); return;
-			}
-			if (fm.msg2.value == '') {
-				alert('배송메세지를 입력해 주세요'); 
-				fm.msg2.focus(); return;
-			}
+		}
+		if (fm.phone.value == '') {
+			alert('수령인 휴대폰 번호를 입력해 주세요');
+			fm.phone.focus(); return;
+		}
+		if (fm.zip.value == ''||fm.addr1.value == ''||fm.addr2.value == '') {
+			alert('수령하실 주소를 입력해 주세요'); return;
+		}
+		if (fm.msg2.value == '') {
+			alert('배송메세지를 입력해 주세요'); 
+			fm.msg2.focus(); return;
+		}
+			
+        fm.paymethod.value = 'bank';
+		
+        // 입금자명이 입력되었는지 확인
+        if (fm.owner.value.trim() === '') {
+            alert('무통장 입금 시 입금자명을 입력해야 합니다.'); 
+            fm.owner.focus(); return;
         }
         
         fm.submit(); // 서버로 전송
@@ -526,6 +482,11 @@ $( document ).ready( function() {
 	        alert('보유하신 적립금을 초과하였습니다.');
 	        $(this).val(0);
 	    }
+	    var ffprice = parseInt($('#tprice3').text().replace(/,/g, ''))-$(this).val();
+	    console.log("포인트합산결과", ffprice, $('#tprice3').text());
+	    $('#fprice').html(numberWithCommas(ffprice));
+	    $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
+	    $('input[name=oprice]').val(ffprice);
 	});
 	
 	//포인트 뺀 최종가격표시
@@ -535,5 +496,66 @@ $( document ).ready( function() {
 	
 	$('#fprice').html(numberWithCommas(finalPrice));
 	$('input[name=oprice]').val(finalPrice);
+	
+	$("#kakao").click(function(){
+		
+		if($('input[name="m_name"]').val()=='') {
+			alert('수령인 이름을 입력해 주세요');
+			$('input[name="m_name"]').focus(); return;
+		}
+		if ($('input[name="phone"]').val()=='') {
+			alert('수령인 휴대폰 번호를 입력해 주세요');
+			$('input[name="phone"]').focus(); return;
+		}
+		if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
+			alert('수령하실 주소를 입력해 주세요'); return;
+		}
+		if ($('input[name="msg2"]').val() == '') {
+			alert('배송메세지를 입력해 주세요'); 
+			$('input[name="msg2"]').focus(); return;
+		}
+		$('input[name="paymethod"]').val('kakao');
+		
+		// 필수입력값을 확인.
+		var name = $("#orderFm input[name='mName']").val();
+		var tel = $("#orderFm input[name='mPhone']").val();
+		var email = $("#orderFm input[name='mId']").val();
+		
+		// 결제 정보를 form에 저장한다.
+		let totalPayPrice = parseInt($("#fprice").text().replace(/,/g,''));
+		let totalPrice = parseInt($("#tprice3").text().replace(/,/g,''));
+		let discountPrice = totalPrice - totalPayPrice; 
+		let usePoint = $("#point").val();
+		let useUserCouponNo = 0;
+		
+		// 카카오페이 결제전송
+		$.ajax({
+			type:'get'
+			,url:'/pay/ready'
+			,data:{
+				total_amount: totalPayPrice
+				,payUserName: name
+				,sumPrice:totalPrice
+				,discountPrice:discountPrice
+				,totalPrice:totalPayPrice
+				,tel:tel
+				,email:email
+				,usePoint:usePoint
+				,useCouponNo:useUserCouponNo	
+				
+			},
+			success:function(rsp){
+				console.log(rsp);
+				var msg = '결제가 완료되었습니다. 카드 승인번호 : ' + rsp.apply_num;
+				alert(msg);
+				$('#kakao').submit();	
+			},
+			error : function(errD){
+				console.log(errD.status+" : "+errD.statusText);
+				var msg = '결제에 실패하였습니다.' + errD.error_msg;
+				alert(msg);
+			}
+		}); 
+	});
 
  });

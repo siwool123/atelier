@@ -117,9 +117,6 @@ public class EmailRestController {
 		}
 	}
 	
-	@Autowired
-	IMemberService mdao;
-	
 	@PostMapping("member/profileUpload.do")
 	public String profileUpload(Principal principal, HttpServletRequest req, MemberDTO memberDTO) {
 		String savedFileName;
@@ -127,25 +124,28 @@ public class EmailRestController {
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
 			System.out.println("물리적 경로 : "+uploadDir);
 			
-		    File file = new File( uploadDir + File.separator + memberDTO.getProfiles() );
-		    if(file.exists()) file.delete();
+			if (dao.mview(principal.getName()) != null) {
+				memberDTO = dao.mview(principal.getName());
+				File file = new File( uploadDir + File.separator + memberDTO.getProfiles() );
+				if(file.exists()) file.delete();
+			}
 			
-			Part part = req.getPart("profileImage");
+			Part part = req.getPart("profileIappamage");
 			String partHeader = part.getHeader("content-disposition");
 			System.out.println("partHeader="+partHeader);
 			String[] phArr = partHeader.split("filename=");
-			String originalFileName = phArr[1].trim().replace("\"","");
-			if(!originalFileName.isEmpty()) {
-				part.write(uploadDir+File.separator+originalFileName);
+			savedFileName = phArr[1].trim().replace("\"","");
+			savedFileName = MyFunctions.renameFile(uploadDir, savedFileName);
+			if(!savedFileName.isEmpty()) {
+				part.write(uploadDir+File.separator+savedFileName);
 			}
 
-			savedFileName = MyFunctions.renameFile(uploadDir, originalFileName);
 			System.out.println("파일 업로드 성공 / 저장된 파일 이름 : "+savedFileName);
 			
 			memberDTO.setId(principal.getName());
 			memberDTO.setProfiles(savedFileName);
 			System.out.println(memberDTO);
-			if(mdao.mpupdate(memberDTO) == 1) {
+			if(dao.mpupdate(memberDTO) == 1) {
 				System.out.println("회원정보-profiles 수정 성공");
 			} else {
 				System.out.println("회원정보-profiles 수정 실패");
@@ -178,7 +178,7 @@ public class EmailRestController {
 			memberDTO.setId(principal.getName());
 			memberDTO.setProfiles("");
 		    
-			if(mdao.mpupdate(memberDTO) == 1) {
+			if(dao.mpupdate(memberDTO) == 1) {
 				System.out.println("회원정보-profiles 삭제 성공");
 				deleteSuc = "1";
 			} else {
