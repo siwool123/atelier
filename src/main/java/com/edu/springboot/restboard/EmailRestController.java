@@ -130,7 +130,7 @@ public class EmailRestController {
 				if(file.exists()) file.delete();
 			}
 			
-			Part part = req.getPart("profileIappamage");
+			Part part = req.getPart("profileImage");
 			String partHeader = part.getHeader("content-disposition");
 			System.out.println("partHeader="+partHeader);
 			String[] phArr = partHeader.split("filename=");

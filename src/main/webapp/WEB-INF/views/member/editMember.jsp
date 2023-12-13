@@ -30,8 +30,6 @@ table.order tr th, table.order tr td {padding-left:20px;}
 
 <script>
 //다음 주소 찾기 api
-
-
 function uploadProfile() {
 	var popupWidth = 600;
 	var popupHeight = 320;

@@ -7,5 +7,5 @@ public interface IApplyService {
 	//작가신청 사진 업로드
 	public int ainsert(ApplyDTO applyDTO);
 	//작가신청 테이블 조회
-	public ApplyDTO aview(ApplyDTO applyDTO);
+	public ApplyDTO aview(int midx);
 }
