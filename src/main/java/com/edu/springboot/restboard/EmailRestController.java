@@ -118,30 +118,39 @@ public class EmailRestController {
 	}
 	
 	@PostMapping("member/profileUpload.do")
-	public String profileUpload(HttpServletRequest req, Model model, MemberDTO memberDTO) {
-		System.out.println("1");
+	public String profileUpload(Principal principal, HttpServletRequest req, MemberDTO memberDTO) {
 		String savedFileName;
-		System.out.println("2");
 		try {
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			System.out.println("3");
 			System.out.println("물리적 경로 : "+uploadDir);
-			System.out.println("4");
-			Part part = req.getPart("profileImage");
-			System.out.println("5");
+			
+			if (dao.mview(principal.getName()) != null) {
+				memberDTO = dao.mview(principal.getName());
+				File file = new File( uploadDir + File.separator + memberDTO.getProfiles() );
+				if(file.exists()) file.delete();
+			}
+			
+			Part part = req.getPart("profileIappamage");
 			String partHeader = part.getHeader("content-disposition");
-			System.out.println("6");
 			System.out.println("partHeader="+partHeader);
 			String[] phArr = partHeader.split("filename=");
-			System.out.println("7");
-			String originalFileName = phArr[1].trim().replace("\"","");
-			System.out.println("8");
-			if(!originalFileName.isEmpty()) {
-				part.write(uploadDir+File.separator+originalFileName);
-				System.out.println("9");
+			savedFileName = phArr[1].trim().replace("\"","");
+			savedFileName = MyFunctions.renameFile(uploadDir, savedFileName);
+			if(!savedFileName.isEmpty()) {
+				part.write(uploadDir+File.separator+savedFileName);
 			}
-			savedFileName = MyFunctions.renameFile(uploadDir, originalFileName);
+
 			System.out.println("파일 업로드 성공 / 저장된 파일 이름 : "+savedFileName);
+			
+			memberDTO.setId(principal.getName());
+			memberDTO.setProfiles(savedFileName);
+			System.out.println(memberDTO);
+			if(dao.mpupdate(memberDTO) == 1) {
+				System.out.println("회원정보-profiles 수정 성공");
+			} else {
+				System.out.println("회원정보-profiles 수정 실패");
+			}
+			
 			return savedFileName;
 		}
 		catch (Exception e) {
@@ -152,4 +161,37 @@ public class EmailRestController {
 		}
 	}
 	
+	@PostMapping("/member/profileDelete.do")
+	public String profileDelete(Principal principal, HttpServletRequest req, Model model, MemberDTO memberDTO) {
+		String deleteSuc;
+		try {
+			System.out.println("data src : "+req.getParameter("src"));
+			String[] src = req.getParameter("src").split("uploads/");
+			String profiles = src[1].trim().replace(".jpg'","");
+			
+			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
+			System.out.println("물리적 경로 : "+uploadDir);
+			
+		    File file = new File( uploadDir + File.separator + profiles);
+		    if(file.exists()) file.delete();
+		    
+			memberDTO.setId(principal.getName());
+			memberDTO.setProfiles("");
+		    
+			if(dao.mpupdate(memberDTO) == 1) {
+				System.out.println("회원정보-profiles 삭제 성공");
+				deleteSuc = "1";
+			} else {
+				System.out.println("회원정보-profiles 삭제 실패");
+				deleteSuc = "0";
+			}
+			return deleteSuc;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("pofiles 삭제실패");
+			deleteSuc = "0";
+			return deleteSuc;
+		}
+	}
 }

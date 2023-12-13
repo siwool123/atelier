@@ -1,0 +1,149 @@
+package com.edu.springboot;
+
+import java.io.File;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.edu.springboot.restboard.ApplyDTO;
+import com.edu.springboot.restboard.ArtistDTO;
+import com.edu.springboot.restboard.IApplyService;
+import com.edu.springboot.restboard.IMemberService;
+import com.edu.springboot.restboard.MemberDTO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Part;
+import utils.MyFunctions;
+
+@Controller
+public class ApplyController {
+
+	@Autowired
+	IMemberService dao;
+	
+	@RequestMapping("member/apply")
+	String apply(Principal principal, Model model, MemberDTO memberDTO, ApplyDTO applyDTO) {
+		try {
+			String user_id = principal.getName(); //로그인아이디 얻어온다.
+			memberDTO = dao.mview(user_id);
+			model.addAttribute("mdto", memberDTO);
+			System.out.println(memberDTO);
+		}catch (Exception e){
+			System.out.println("작가신청 페이지 접속 실패");
+		}
+		return "member/apply";
+	}
+	
+	@Autowired
+	IApplyService adao;
+	
+	@PostMapping("member/apply.do")
+	String applyProcess(Principal principal, HttpServletRequest req, MemberDTO memberDTO, ArtistDTO artistDTO, ApplyDTO applyDTO) {
+		try {
+		//물리적 경로 얻어오기 
+		String uploadDir = ResourceUtils
+			.getFile("classpath:static/uploads/").toPath().toString();
+		System.out.println("물리적경로:"+uploadDir);
+		
+		List<String> savedFileNames = new ArrayList();
+		
+		int n = 1;
+		Collection<Part> parts = req.getParts();
+		for(Part part : parts) {
+			System.out.println(part.getSubmittedFileName());
+			System.out.println(part.getSize());
+			if (part.getSubmittedFileName()!=null) {
+				continue;
+			}
+			//전송된 첨부파일을 Part객체를 통해 얻어온다. 
+			part = req.getPart("inputApply"+n);	
+			//파일명 확인을 위해 헤더값을 얻어온다. 
+			String partHeader = part.getHeader("content-disposition");
+			System.out.println("partHeader="+ partHeader);
+			//헤더값에서 파일명 추출을 위해 문자열을 split()한다. 
+			String[] phArr = partHeader.split("filename=");
+			//따옴표를 제거한 후 원본파일명을 추출한다. 
+			String originalFileName = phArr[1].trim().replace("\"", "");
+			//파일명을 중복되지 않는 이름으로 변경한다. 
+			String savedFileName = MyFunctions.renameFile(uploadDir, originalFileName);
+			//전송된 파일이 있다면 서버에 저장한다. 
+			if (!savedFileName.isEmpty()) {				
+				part.write(uploadDir+ File.separator +savedFileName);
+			}
+			System.out.println("파일 업로드 성공 / 저장된 파일 이름 : "+savedFileName);
+			// 파일명을 리스트에 추가
+            savedFileNames.add(savedFileName);
+            n++;
+		}
+		
+		// applyDTO 객체에 파일명 할당
+        for (int i = 0; i < savedFileNames.size(); i++) {
+            switch (i + 1) {
+                case 1:
+                    applyDTO.setApply1(savedFileNames.get(i));
+                    break;
+                case 2:
+                    applyDTO.setApply2(savedFileNames.get(i));
+                    break;
+                case 3:
+                    applyDTO.setApply2(savedFileNames.get(i));
+                    break;
+                case 4:
+                    applyDTO.setApply2(savedFileNames.get(i));
+                    break;
+                case 5:
+                    applyDTO.setApply2(savedFileNames.get(i));
+                    break;
+                case 6:
+                    applyDTO.setApply2(savedFileNames.get(i));
+                    break;
+                case 7:
+                    applyDTO.setApply2(savedFileNames.get(i));
+                    break;
+                case 8:
+                    applyDTO.setApply2(savedFileNames.get(i));
+                    break;
+                case 9:
+                    applyDTO.setApply2(savedFileNames.get(i));
+                    break;
+                case 10:
+                    applyDTO.setApply10(savedFileNames.get(i));
+                    break;
+                default:
+                    // 예외 처리 혹은 다른 로직 추가 가능
+                    break;
+            }
+        }
+		
+        System.out.println("파일 업로드 성공 / 저장된 파일 이름(list) : " + savedFileNames);
+        
+        applyDTO.setMidx(dao.mview(principal.getName()).getMidx());
+        
+		//JDBC연동
+        int result = adao.ainsert(applyDTO);
+        System.out.println(result);
+		if(result != 0) {
+			System.out.println("jdbc연동 성공 (applyDTO) : "+adao.aview(applyDTO));
+		} else {
+			System.out.println("실패");
+		}
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("업로드 실패");
+		}
+		return "member/apply";
+	}
+	
+}
