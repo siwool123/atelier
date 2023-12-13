@@ -202,7 +202,18 @@
 		SELECT * FROM order2 WHERE oidx=#{param1}
 	</select>
 	<select id="oview" resultType="com.edu.springboot.restboard.OrderDTO">
-		SELECT * FROM order WHERE oidx=#{param1}
+		SELECT * FROM order1 WHERE oidx=#{param1}
 	</select>
 	
+	<select id="olist" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order1 WHERE midx=#{midx}
+	</select>
+	
+	<select id="notPaid" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order1 WHERE midx=#{param1} and paydate is null
+	</select>
+	
+	<select id="notShipped" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order1 WHERE midx=#{param1} and shipdate is null
+	</select>
 </mapper> 

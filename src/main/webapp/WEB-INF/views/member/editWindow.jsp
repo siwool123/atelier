@@ -42,12 +42,15 @@
 </script>
 </head>
 <body>
+
+	<div class="m-5 p-5">
 	<form name="fileForm" id="profileImageForm">
 		<div id="showImageDiv"></div>
 		<input class="form-control" type="file" name="profileImage"
 			onChange="loadImage(this);"/>
 		<button class="btn" type="button" id="useImage" value="이미지 사용하기" >이미지 사용하기</button>
 	</form>
+	</div>
 </body>
 
 <script>
