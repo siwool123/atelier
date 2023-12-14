@@ -117,7 +117,7 @@ public class EmailRestController {
 		}
 	}
 	
-	@PostMapping("/rest/profileUpload.do")
+	@PostMapping("/member/profileUpload.do")
 	public String profileUpload(Principal principal, HttpServletRequest req, MemberDTO memberDTO) {
 		String savedFileName;
 		try {
