@@ -1,69 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
-    var swiper = new Swiper('.swiper-container', {
-        slidesPerView: 1, // 한 번에 보여지는 슬라이드 개수
-        spaceBetween: 0, // 슬라이드 사이의 간격 (픽셀)*/
-        pagination: {
-        el: ".swiper-pagination",
-        //type: "progressbar",
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-        	prevEl: ".swiper-button-prev",
-        },
-        /*autoplay: {
-        delay: 3000,
-        disableOnInteraction: false, // 사용자와의 상호작용이 있을 때 자동 이동 중지하지 않음
-    	},
-    	speed:5000,*/
-    	loop: true, // 무한 루프 활성화
-    	loopAdditionalSlides: 1,
-    });
-    var swiper2 = new Swiper('.sc2', {
-        slidesPerView: 4, // 한 번에 보여지는 슬라이드 개수
-        spaceBetween: 20, // 슬라이드 사이의 간격 (픽셀)*/
-        navigation: {
-            nextEl: ".bi-chevron-right",
-        	prevEl: ".bi-chevron-left",
-        },
-    	loop: true, // 무한 루프 활성화
-    	loopAdditionalSlides: 1,
-    	/*breakpoints: {
-            '@0.75': {
-            slidesPerView: 1,
-            width:380,
-            }}*/
-    });
-});
-/*function handleActiveClass(selector, attributeName) {
-    $(selector).each(function () {
-        var hrefValue = $(this).attr('href').slice(-2);
-        var isActive = getParameterByName(attributeName) === hrefValue;
-        console.log(hrefValue);
-        $(this).toggleClass('active', isActive);
-        $(this).parent('li').toggleClass('active', isActive);
-    });
-}*/
-/*document.addEventListener("DOMContentLoaded", function() {
-    var titleElements = document.querySelectorAll(".title");
-    var yearElements = document.querySelectorAll(".year");
-    var price2Elements = document.querySelectorAll(".price2");
-
-    // 각 title 요소에 대해 작업
-    titleElements.forEach(function(element) {
-      element.textContent = element.textContent.slice(0, 10);
-    });
-
-    // 각 year 요소에 대해 작업
-    yearElements.forEach(function(element) {
-      element.textContent = element.textContent.slice(0, 4);
-    });
-
-    // 각 price2 요소에 대해 작업
-    price2Elements.forEach(function(element) {
-      element.textContent = numberWithCommas(element.textContent);
-    });
-  });*/
-  
 // 3자리마다 컴마를 찍는 함수
 function numberWithCommas(x) {return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 //주소창에서 파라미터 가져오는 함수
@@ -257,6 +191,7 @@ $(function () {
 		$("#registBtn").attr("class", "btn btn-outline-danger active")
 	}) */
 	
+	
 });
 
 $(document).on('change', '#chkAll', function() {
@@ -275,15 +210,19 @@ function updateTotal() {
 
     var sum = 0;
     var selectedPidxList = [];
+    var selectedTitleList = [];
     $('input[name=chk]:checked').each(function() {
-        sum += parseInt($(this).closest('tr').find('.price2').text().replace(/,/g, ''), 10);
-    	selectedPidxList.push($(this).closest('tr').attr('id').replace('cartItem_', ''));
+		var row = $(this).closest('tr');
+        sum += parseInt(row.find('.price2').text().replace(/,/g, ''), 10);
+    	selectedPidxList.push(row.attr('id').replace('cartItem_', ''));
+    	selectedTitleList.push(row.find('b').text());
     });
     
     // 배열을 문자열로 변환하여 hidden input에 할당
     $('#pidxList').val(selectedPidxList.join(','));
+    $('#titleList').val(selectedTitleList.join(','));
     
-	console.log(sum, selectedPidxList.join(','));
+	console.log($('#titleList').val(), sum, selectedPidxList.join(','));
     $('#tnum').text(totalChecked);
     $('#tprice, #tprice2, #tprice3, #fprice').html(numberWithCommas(sum));
 }
@@ -300,72 +239,28 @@ function inputMsg(frm) {
 function submitFm(payMethod) {
         var fm = document.getElementById('orderFm');
 
-        // 무통장 입금 선택 시
-        if (payMethod === 'bank') {
-            
-            fm.paymethod.value = 'bank';
-			if (fm.m_name.value == '') {
+		if (fm.m_name.value == '') {
 				alert('수령인 이름을 입력해 주세요');
 				fm.m_name.focus(); return;
-			}
-			if (fm.phone.value == '') {
-				alert('수령인 휴대폰 번호를 입력해 주세요');
-				fm.phone.focus(); return;
-			}
-			if (fm.zip.value == ''||fm.addr1.value == ''||fm.addr2.value == '') {
-				alert('수령하실 주소를 입력해 주세요'); return;
-			}
-			if (fm.msg2.value == '') {
-				alert('배송메세지를 입력해 주세요'); 
-				fm.msg2.focus(); return;
-			}
-            // 입금자명이 입력되었는지 확인
-            if (fm.owner.value.trim() === '') {
-                alert('무통장 입금 시 입금자명을 입력해야 합니다.'); 
-                fm.owner.focus(); return;
-            }
-        }
-        
-        // 카카오페이 선택 시
-        if (payMethod === 'kakao') {
-            
-            fm.paymethod.value = 'kakao';
-			if (fm.m_name.value == '') {
-				alert('수령인 이름을 입력해 주세요');
-				fm.m_name.focus(); return;
-			}
-			if (fm.phone.value == '') {
-				alert('수령인 휴대폰 번호를 입력해 주세요');
-				fm.phone.focus(); return;
-			}
-			if (fm.zip.value == ''||fm.addr1.value == ''||fm.addr2.value == '') {
-				alert('수령하실 주소를 입력해 주세요'); return;
-			}
-			if (fm.msg2.value == '') {
-				alert('배송메세지를 입력해 주세요'); 
-				fm.msg2.focus(); return;
-			}
-        }
-        
-         // 토스페이먼츠 선택 시
-        if (payMethod === 'toss') {
-            
-            fm.paymethod.value = 'toss';
-			if (fm.m_name.value == '') {
-				alert('수령인 이름을 입력해 주세요');
-				fm.m_name.focus(); return;
-			}
-			if (fm.phone.value == '') {
-				alert('수령인 휴대폰 번호를 입력해 주세요');
-				fm.phone.focus(); return;
-			}
-			if (fm.zip.value == ''||fm.addr1.value == ''||fm.addr2.value == '') {
-				alert('수령하실 주소를 입력해 주세요'); return;
-			}
-			if (fm.msg2.value == '') {
-				alert('배송메세지를 입력해 주세요'); 
-				fm.msg2.focus(); return;
-			}
+		}
+		if (fm.phone.value == '') {
+			alert('수령인 휴대폰 번호를 입력해 주세요');
+			fm.phone.focus(); return;
+		}
+		if (fm.zip.value == ''||fm.addr1.value == ''||fm.addr2.value == '') {
+			alert('수령하실 주소를 입력해 주세요'); return;
+		}
+		if (fm.msg2.value == '') {
+			alert('배송메세지를 입력해 주세요'); 
+			fm.msg2.focus(); return;
+		}
+			
+        fm.paymethod.value = 'bank';
+		
+        // 입금자명이 입력되었는지 확인
+        if (fm.owner.value.trim() === '') {
+            alert('무통장 입금 시 입금자명을 입력해야 합니다.'); 
+            fm.owner.focus(); return;
         }
         
         fm.submit(); // 서버로 전송
@@ -426,7 +321,9 @@ $( document ).ready( function() {
         $('.btn2').removeClass('active'); $('.btn2').parent('li').removeClass('active');
         $('#date').addClass('active'); $('#date').parent('li').addClass('active');
     }
-    
+    activeByParam('sell', 'on', '#onsale');
+	activeByParam('sell', 'so', '#sold');
+	
     activeByParam('ori', 'sq', '#square');
 	activeByParam('ori', 'la', '#landscape');
 	activeByParam('ori', 'po', '#portrait');
@@ -517,21 +414,198 @@ $( document ).ready( function() {
     
     // 장바구니에서 결제시 포인트 검증
 	$('#point').keyup(function() {
-		var enteredPoint = parseInt($(this).val());
+		// 입력된 값에서 숫자가 아닌 문자를 제거
+	    if(isNaN($(this).val())) {$(this).val($(this).val().replace(/[^0-9]/g, ''));}
+		//var sanitizedValue = $(this).val().replace(/[^0-9]/g, '');
+	    // 숫자로 변환
+	    var enteredPoint = parseInt($(this).val());
 	    var maxPoint = parseInt($('#maxPoint').text());
 	
 	    if (enteredPoint > maxPoint) {
-	        alert('보유하신 적립금을 초과하였습니다.');
+	        alert('보유하신 포인트를 초과하였습니다.');
 	        $(this).val(0);
 	    }
+	   var ffprice = parseInt($('#tprice3').text().replace(/,/g, ''))-parseInt($(this).val());
+	    
+	    $('#fprice').html(numberWithCommas(ffprice));
+	    $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
+	    $('input[name=oprice]').val(ffprice);
+	    console.log("최종가격", ffprice);
 	});
 	
 	//포인트 뺀 최종가격표시
-	var originalPrice = parseInt($('#tprice3').text().replace(/,/g, '')); // , 제거 후 숫자로 변환
-	var usedPoint = parseInt($('#point').val());
-	var finalPrice = originalPrice - usedPoint;
+	var finalPrice = parseInt($('#tprice3').text().replace(/,/g, '')) - parseInt($('#point').val()); // , 제거 후 숫자로 변환
 	
+	 $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
 	$('#fprice').html(numberWithCommas(finalPrice));
 	$('input[name=oprice]').val(finalPrice);
+	 
+	/*$("#kakao").click(function(){
+		
+		if($('input[name="m_name"]').val()=='') {
+			alert('수령인 이름을 입력해 주세요');
+			$('input[name="m_name"]').focus(); return;
+		}
+		if ($('input[name="phone"]').val()=='') {
+			alert('수령인 휴대폰 번호를 입력해 주세요');
+			$('input[name="phone"]').focus(); return;
+		}
+		if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
+			alert('수령하실 주소를 입력해 주세요'); return;
+		}
+		if ($('input[name="msg2"]').val() == '') {
+			alert('배송메세지를 입력해 주세요'); 
+			$('input[name="msg2"]').focus(); return;
+		}
+		$('input[name="paymethod"]').val('kakao');
+		
+		// 필수입력값을 확인
+		var name = $("#orderFm input[name='mName']").val();
+		var tel = $("#orderFm input[name='mPhone']").val();
+		var email = $("#orderFm input[name='mId']").val();
+		
+		// 결제 정보를 form에 저장한다
+		let totalPayPrice = parseInt($("#fprice").text().replace(/,/g,''));
+		let totalPrice = parseInt($("#tprice3").text().replace(/,/g,''));
+		let discountPrice = totalPrice - totalPayPrice; 
+		let usePoint = $("#point").val();
+		let useUserCouponNo = 0;
+		
+		// 카카오페이 결제전송
+		$.ajax({
+			type:'post'
+			,url:'/pay/ready'
+			,data:{
+				total_amount: totalPayPrice
+				,payUserName: name
+				,sumPrice:totalPrice
+				,discountPrice:discountPrice
+				,totalPrice:totalPayPrice
+				,tel:tel
+				,email:email
+				,usePoint:usePoint
+				,useCouponNo:useUserCouponNo	
+				
+			},
+			success:function(rsp){
+				console.log(rsp);
+				var msg = '결제가 완료되었습니다. 카드 승인번호 : ' + rsp.apply_num;
+				alert(msg);
+				$('#kakao').submit();	
+			},
+			error : function(errD){
+				console.log(errD.status+" : "+errD.statusText);
+				var msg = '결제에 실패하였습니다.' + errD.error_msg;
+				alert(msg);
+			}
+		}); 
+	});*/
 
+	
  });
+ 
+ 
+ function requestPay2(paymethod1) {
+	
+	if($('input[name="m_name"]').val()=='') {
+		alert('수령인 이름을 입력해 주세요');
+		$('input[name="m_name"]').focus(); return;
+	}
+	if ($('input[name="phone"]').val()=='') {
+		alert('수령인 휴대폰 번호를 입력해 주세요');
+		$('input[name="phone"]').focus(); return;
+	}
+	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
+		alert('수령하실 주소를 입력해 주세요'); return;
+	}
+	if ($('input[name="msg2"]').val() == '') {
+		alert('배송메세지를 입력해 주세요'); 
+		$('input[name="msg2"]').focus(); return;
+	}
+	$('input[name="paymethod"]').val(paymethod1);
+	
+	var IMP = window.IMP; // 생략 가능
+	IMP.init("imp76555372"); // 예: imp00000000
+	
+	var title = $('#titleList').val();
+	if(title==''){title="test";}
+	var amount = parseInt($('#fprice').text().replace(/,/g, ''));
+	
+  //IMP.request_pay(param, callback) 결제창 호출
+  IMP.request_pay({ // param
+      pg: paymethod1, //결제대행사 설정에 따라 다르며 공식문서 참고
+      pay_method: "card", //결제방법 설정에 따라 다르며 공식문서 참고
+      merchant_uid: $('#pidxList').val(), //주문(db에서 불러옴) 고유번호
+      item_name : title,
+      name : title,
+      amount: amount,
+      buyer_email: $('input[name="user_id"]').val(),
+      buyer_name: $('input[name="m_name"]').val(),
+      buyer_tel: $('input[name="phone"]').val(),
+      buyer_addr: $('input[name="zip"]').val()+$('input[name="addr1"]').val()+$('input[name="addr2"]').val(),
+      notice_url: "http://localhost:8586/member/orderResult",
+      confirm_url: "http://localhost:8586/member/orderResult",
+      //buyer_postcode: "01181"
+  }, function (rsp) { // callback
+		console.log(rsp);  
+      if (rsp.success) {
+    	// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우 // jQuery로 HTTP 요청
+    	alert("1차결제성공");
+    	$('input[name="imp_uid"]').val(rsp.imp_uid);
+    	$('#orderFm').submit();
+          /*jQuery.ajax({
+            url: "/pay/proceed", 
+            method: "POST",
+	    	data : $('#orderFm').serialize() + "&imp_uid=" + rsp.imp_uid,
+    		 success : function(data){
+    			 if(data.cnt == 1){ 
+    				 console.log(data);
+    				 alert('주문 및 결제가 성공적으로 처리되었습니다.');
+    				 // 성공적으로 처리된 경우, 특정 주소로 이동하면서 데이터를 전달
+		            var successUrl = "/member/orderResult?" + encodeURIComponent(JSON.stringify(data));
+		            window.location.href = successUrl;
+    			 }else{  alert(data.msg)  }
+    		 }, 
+    		 error : function (e){  alert("에러"+e.status+" : "+e.statusText) 
+    		 console.log(e.status+" : "+e.statusText); }
+          })*/
+      } else { alert('결제에 실패하였습니다. 에러내용 : ' + rsp.error_msg);  }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 1, // 한 번에 보여지는 슬라이드 개수
+        spaceBetween: 0, // 슬라이드 사이의 간격 (픽셀)*/
+        pagination: {
+        el: ".swiper-pagination",
+        //type: "progressbar",
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+        	prevEl: ".swiper-button-prev",
+        },
+        /*autoplay: {
+        delay: 3000,
+        disableOnInteraction: false, // 사용자와의 상호작용이 있을 때 자동 이동 중지하지 않음
+    	},
+    	speed:5000,*/
+    	loop: true, // 무한 루프 활성화
+    	loopAdditionalSlides: 1,
+    });
+    var swiper2 = new Swiper('.sc2', {
+        slidesPerView: 4, // 한 번에 보여지는 슬라이드 개수
+        spaceBetween: 20, // 슬라이드 사이의 간격 (픽셀)*/
+        navigation: {
+            nextEl: ".bi-chevron-right",
+        	prevEl: ".bi-chevron-left",
+        },
+    	loop: true, // 무한 루프 활성화
+    	loopAdditionalSlides: 1,
+    	/*breakpoints: {
+            '@0.75': {
+            slidesPerView: 1,
+            width:380,
+            }}*/
+    });
+});

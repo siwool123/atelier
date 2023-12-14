@@ -1,6 +1,5 @@
 package com.edu.springboot.restboard;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
@@ -21,5 +20,4 @@ public class MemberDTO {
 	private String token;
 	private int enabled;
 	private String authority;
-	
 }

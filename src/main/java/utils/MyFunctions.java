@@ -3,8 +3,15 @@ package utils;
 import java.io.File;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.edu.springboot.restboard.IBoardService;
+
 public class MyFunctions {
 
+	@Autowired
+	IBoardService ddao;
+	
 	/* UUID (universally unique idenfier) : 범용고유식별자. jdk에서 기본적으로 제공되는 클래스로, 32글자의 영문,숫자 포함한 고유문자열반환 */
 	public static String getUuid() {
 		String uuid = UUID.randomUUID().toString(); //randomUUID : static 함수

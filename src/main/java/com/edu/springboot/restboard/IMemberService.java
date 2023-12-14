@@ -20,8 +20,9 @@ public interface IMemberService {
 	//회원영구삭제
 	public int mdelete(MemberDTO memberDTO);
 	//프로필 사진 업로드
-	public int uploadProfile(MemberDTO memberDTO);
-	
+	public int mpupdate(MemberDTO memberDTO);
+	//프로필 사진 삭제
+	public int mpdelete(MemberDTO memberDTO);
 	//비번변경
 	public int mpedit(MemberDTO memberDTO);
 }

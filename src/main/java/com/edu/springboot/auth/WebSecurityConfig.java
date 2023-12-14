@@ -43,7 +43,7 @@ public class WebSecurityConfig {
 				.dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD).permitAll()
 				.requestMatchers("/", "/css/**", "/js/**", "/images/**", "/rest/**", "/shop/**", "/shop", "/view/**", "/view", "/uploads/**", "/error").permitAll()
 				.requestMatchers("/vartist", "/guest", "/guest/**").permitAll()
-				.requestMatchers("/member/**").hasAnyRole("USER", "ARTIST", "ADMIN")
+				.requestMatchers("/member/**", "/pay/**").hasAnyRole("USER", "ARTIST", "ADMIN")
 				.requestMatchers("/artist/**", "/artist").hasAnyRole("ARTIST", "ADMIN")
 				.requestMatchers("/admin/**", "/admin").hasRole("ADMIN")
 				/* .anyRequest().authenticated() */ //어떠한 요청이라도 인증필요

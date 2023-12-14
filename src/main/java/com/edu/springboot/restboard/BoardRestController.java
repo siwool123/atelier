@@ -1,23 +1,24 @@
 package com.edu.springboot.restboard;
 
+import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.edu.springboot.pay.PayService;
+
 import jakarta.servlet.http.HttpServletRequest;
-import utils.BoardPage;
+import jakarta.servlet.http.HttpSession;
 
 //메서드에서 보든 반환값은 웹브라우저에 즉시 출력된다.
 @RestController
@@ -156,6 +157,42 @@ public class BoardRestController {
 		result = dao.delCart(pidx);
 		System.out.println("장바구니에서 작품 삭제결과:"+result);
 		return result;
+	}
+	
+	@Autowired
+	PayService payService;
+	
+	@PostMapping("/pay/proceed")
+	public Map<Object, Object> orderProc(Principal principal, Model model, HttpSession session, HttpServletRequest req, OrderDTO orderDTO, PointDTO pointDTO) {
+		
+		System.out.println("페이주문처리rest호출됨");
+		MemberDTO mdto = dao.mview(principal.getName());
+		orderDTO = payService.orderProc(principal, req, orderDTO, pointDTO);
+		
+		Map<Object, Object> map = new HashMap<>();
+		if (orderDTO != null) {
+			map.put("cnt", 1); // orderDTO의 고유 no값 가져오기
+			String order_no = dao.orderNum(mdto.getMidx());
+			System.out.println(order_no);
+			
+			// oderDTO 내용을 ajax로 넘기기
+			map.put("no", order_no);
+			map.put("products", req.getParameter("pidxList"));
+			map.put("name", mdto.getM_name());
+			map.put("phone", mdto.getPhone());
+			map.put("price", orderDTO.getPrice());
+			map.put("addr", orderDTO.getR_address());
+			map.put("paymethod", orderDTO.getPaymethod());
+			map.put("user_id", principal.getName());
+			
+			session.setAttribute("odto", orderDTO);
+			session.setAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
+		} else {
+			map.put("cnt", 0);
+			map.put("msg", "주문을 실패했습니다. 다시 시도해주세요.");
+		}
+		
+		return map;
 	}
 	
 }

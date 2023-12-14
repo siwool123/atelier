@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.edu.springboot.pay.PaymentDTO;
+
 @Mapper
 public interface IBoardService {
 	
@@ -61,6 +63,27 @@ public interface IBoardService {
 	
 	//주문시 해당작품 판매완료로 변경
 	public int setsold(int pidx);
+	//주문번호구하기
+	public String orderNum(int midx);
+	
+	//멤버테이블에 포인트 사용 및 적립 반영
+	public int memberPoint(int point, int midx);
+	
+	//포인트테이블에 포인트사용 삽입
+	public int pinsert(PointDTO pointDTO);
+	
+	//동일주문번호가진 작품들조회
+
+
+	//주문조회1
+	public List<OPjoinDTO> opjoin(int midx);
+	//주문리스트 조회
+	public List<OrderDTO> olist(int midx);
+	
+	//입금전 건수 조회
+	public List<OrderDTO> notPaid(int midx); 
+	//배송전 건수 조회
+	public List<OrderDTO> notShipped(int midx); 
 }
 
 

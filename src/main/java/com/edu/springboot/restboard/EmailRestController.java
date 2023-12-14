@@ -9,7 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -115,31 +117,80 @@ public class EmailRestController {
 		}
 	}
 	
-	@PostMapping("/member/uploadProfile")
-	public int uploadProfileProcess(HttpServletRequest req, Model model, Principal principal) {
-		int result = 0;
+	@PostMapping("/member/profileUpload.do")
+	public String profileUpload(Principal principal, HttpServletRequest req, MemberDTO memberDTO) {
+		String savedFileName;
 		try {
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
 			System.out.println("물리적 경로 : "+uploadDir);
 			
-			Part part = req.getPart("profileo");
+			if (dao.mview(principal.getName()) != null) {
+				memberDTO = dao.mview(principal.getName());
+				File file = new File( uploadDir + File.separator + memberDTO.getProfiles() );
+				if(file.exists()) file.delete();
+			}
+			
+			Part part = req.getPart("profileImage");
 			String partHeader = part.getHeader("content-disposition");
 			System.out.println("partHeader="+partHeader);
 			String[] phArr = partHeader.split("filename=");
-			String oFileName = phArr[1].trim().replace("\"","");
+			savedFileName = phArr[1].trim().replace("\"","");
+			savedFileName = MyFunctions.renameFile(uploadDir, savedFileName);
+			if(!savedFileName.isEmpty()) {
+				part.write(uploadDir+File.separator+savedFileName);
+			}
+
+			System.out.println("파일 업로드 성공 / 저장된 파일 이름 : "+savedFileName);
 			
-			if(!oFileName.isEmpty()) { part.write(uploadDir+File.separator+oFileName); }
-			String sFileName = MyFunctions.renameFile(uploadDir, oFileName);
-			
-			String user_id = principal.getName(); 
-			MemberDTO memberDTO = dao.mview(user_id);
-			memberDTO.setProfiles(sFileName);
-			memberDTO.setId(user_id);
-			result = dao.uploadProfile(memberDTO);
+			memberDTO.setId(principal.getName());
+			memberDTO.setProfiles(savedFileName);
+			System.out.println(memberDTO);
+			if(dao.mpupdate(memberDTO) == 1) {
+				System.out.println("회원정보-profiles 수정 성공");
+			} else {
+				System.out.println("회원정보-profiles 수정 실패");
+			}
 			
 		}
-		catch (Exception e) { System.out.println("업로드 실패"); }
-		
-		return result;
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("업로드 실패");
+			savedFileName = "fail";
+		}
+		return savedFileName;
+	}
+	
+	@PostMapping("/member/profileDelete.do")
+	public String profileDelete(Principal principal, HttpServletRequest req, Model model, MemberDTO memberDTO) {
+		String deleteSuc;
+		try {
+			System.out.println("data src : "+req.getParameter("src"));
+			String[] src = req.getParameter("src").split("uploads/");
+			String profiles = src[1].trim().replace(".jpg'","");
+			
+			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
+			System.out.println("물리적 경로 : "+uploadDir);
+			
+		    File file = new File( uploadDir + File.separator + profiles);
+		    if(file.exists()) file.delete();
+		    
+			memberDTO.setId(principal.getName());
+			memberDTO.setProfiles("");
+		    
+			if(dao.mpupdate(memberDTO) == 1) {
+				System.out.println("회원정보-profiles 삭제 성공");
+				deleteSuc = "1";
+			} else {
+				System.out.println("회원정보-profiles 삭제 실패");
+				deleteSuc = "0";
+			}
+			return deleteSuc;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("pofiles 삭제실패");
+			deleteSuc = "0";
+			return deleteSuc;
+		}
 	}
 }

@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  파일이 생성됨 - 월요일-12월-11-2023   
+--  파일이 생성됨 - 수요일-12월-13-2023   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Sequence SEQ_APPLY
@@ -25,7 +25,7 @@
 --  DDL for Sequence SEQ_CART
 --------------------------------------------------------
 
-   CREATE SEQUENCE  "ATELIER"."SEQ_CART"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 14 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+   CREATE SEQUENCE  "ATELIER"."SEQ_CART"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 43 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
 --------------------------------------------------------
 --  DDL for Sequence SEQ_FAQ
 --------------------------------------------------------
@@ -50,7 +50,12 @@
 --  DDL for Sequence SEQ_ORDER2
 --------------------------------------------------------
 
-   CREATE SEQUENCE  "ATELIER"."SEQ_ORDER2"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+   CREATE SEQUENCE  "ATELIER"."SEQ_ORDER2"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 21 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence SEQ_POINT
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "ATELIER"."SEQ_POINT"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 18 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
 --------------------------------------------------------
 --  DDL for Sequence SEQ_PRODUCT
 --------------------------------------------------------
@@ -60,7 +65,7 @@
 --  DDL for Sequence SEQ_P_LIKE
 --------------------------------------------------------
 
-   CREATE SEQUENCE  "ATELIER"."SEQ_P_LIKE"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 16 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+   CREATE SEQUENCE  "ATELIER"."SEQ_P_LIKE"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 19 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
 --------------------------------------------------------
 --  DDL for Sequence SEQ_REVIEW
 --------------------------------------------------------
@@ -94,7 +99,9 @@
 	"APPLY7" VARCHAR2(100 BYTE), 
 	"APPLY8" VARCHAR2(100 BYTE), 
 	"APPLY9" VARCHAR2(100 BYTE), 
-	"APPLY10" VARCHAR2(100 BYTE)
+	"APPLY10" VARCHAR2(100 BYTE), 
+	"A_INTRO" VARCHAR2(2000 BYTE), 
+	"A_HISTORY" VARCHAR2(2000 BYTE)
    ) SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
  NOCOMPRESS LOGGING
@@ -189,7 +196,7 @@
 	"M_NAME" VARCHAR2(20 BYTE), 
 	"PHONE" VARCHAR2(20 BYTE), 
 	"ZIP" VARCHAR2(10 BYTE), 
-	"ADDR1" VARCHAR2(50 BYTE), 
+	"ADDR1" VARCHAR2(100 BYTE), 
 	"ADDR2" VARCHAR2(50 BYTE), 
 	"MIDX" NUMBER(6,0), 
 	"REGIDATE" DATE DEFAULT sysdate, 
@@ -217,15 +224,19 @@
   CREATE TABLE "ATELIER"."M_POINT" 
    (	"POINT_IDX" NUMBER(6,0), 
 	"MIDX" NUMBER(6,0), 
-	"ADD_USE" VARCHAR2(30 BYTE), 
+	"ADD_POINT" NUMBER, 
 	"POINT_DATE" DATE DEFAULT sysdate, 
-	"TOTAL_POINT" NUMBER(6,0) DEFAULT 0
-   ) SEGMENT CREATION DEFERRED 
+	"OIDX" VARCHAR2(20 BYTE), 
+	"MINUS_POINT" NUMBER
+   ) SEGMENT CREATION IMMEDIATE 
   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
  NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "USERS" ;
 
-   COMMENT ON COLUMN "ATELIER"."M_POINT"."ADD_USE" IS '+100 -100 처럼 사용/적립구분하도록';
+   COMMENT ON COLUMN "ATELIER"."M_POINT"."ADD_POINT" IS '+100 -100 처럼 사용/적립구분하도록';
 --------------------------------------------------------
 --  DDL for Table NOTICE
 --------------------------------------------------------
@@ -278,14 +289,20 @@
 	"RECEIVER" VARCHAR2(30 BYTE), 
 	"R_PHONE" VARCHAR2(30 BYTE), 
 	"R_ADDRESS" VARCHAR2(100 BYTE), 
-	"MESSAGE" VARCHAR2(40 BYTE), 
+	"MESSAGE" VARCHAR2(100 BYTE), 
 	"SHIPDATE" DATE, 
 	"COURIER" VARCHAR2(20 BYTE), 
 	"T_NUM" VARCHAR2(20 BYTE), 
-	"OWNER" VARCHAR2(20 BYTE)
-   ) SEGMENT CREATION DEFERRED 
+	"OWNER" VARCHAR2(20 BYTE), 
+	"APINUM" VARCHAR2(50 BYTE), 
+	"AUCTION" NUMBER(1,0) DEFAULT 0, 
+	"PIDX" VARCHAR2(100 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
  NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "USERS" ;
 
    COMMENT ON COLUMN "ATELIER"."ORDER1"."PAYMETHOD" IS '(무통장입금:''bank'', 카카오페이:''kakao'', 토스페이먼트:''toss'')';
@@ -293,6 +310,11 @@
    COMMENT ON COLUMN "ATELIER"."ORDER1"."COURIER" IS '택배사';
    COMMENT ON COLUMN "ATELIER"."ORDER1"."T_NUM" IS '운송장번호';
    COMMENT ON COLUMN "ATELIER"."ORDER1"."OWNER" IS '입금시예금주명';
+   COMMENT ON COLUMN "ATELIER"."ORDER1"."APINUM" IS 'api결제승인번호
+';
+   COMMENT ON COLUMN "ATELIER"."ORDER1"."AUCTION" IS '경매결제건은 1, 일반은 0';
+   COMMENT ON COLUMN "ATELIER"."ORDER1"."PIDX" IS '주문에포함된작품(,로연결)
+';
 --------------------------------------------------------
 --  DDL for Table ORDER2
 --------------------------------------------------------
@@ -304,6 +326,28 @@
 	"AIDX" NUMBER(6,0), 
 	"PRICE" NUMBER(20,0), 
 	"MIDX" NUMBER(6,0)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table PAYMENT
+--------------------------------------------------------
+
+  CREATE TABLE "ATELIER"."PAYMENT" 
+   (	"PAYMENTCODE" VARCHAR2(100 BYTE), 
+	"PAYMENTGROUPCODE" VARCHAR2(100 BYTE), 
+	"MEMBEREMAIL" VARCHAR2(100 BYTE), 
+	"PAYMENTMETHODCODE" VARCHAR2(100 BYTE), 
+	"PAYMENTMETHODNAME" VARCHAR2(100 BYTE), 
+	"PAYMENTTOTALORDERPRICE" NUMBER, 
+	"PAYMENTUSEPOINT" NUMBER, 
+	"PAYMENTTOTALPAYPRICE" NUMBER, 
+	"PAYMENTSTATE" VARCHAR2(100 BYTE), 
+	"PAYMENTREGDATE" DATE DEFAULT sysdate
    ) SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
  NOCOMPRESS LOGGING
@@ -640,13 +684,22 @@ SET DEFINE OFF;
 REM INSERTING into ATELIER.CART
 SET DEFINE OFF;
 Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (1,6470,8);
-Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (11,6596,8);
-Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (13,6442,8);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (34,6774,9);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (27,6504,8);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (31,6518,9);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (38,6657,8);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (39,6655,8);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (35,6657,9);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (30,6572,7);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (33,6715,9);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (42,6772,8);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (40,6512,8);
+Insert into ATELIER.CART (CIDX,PIDX,MIDX) values (41,6809,8);
 REM INSERTING into ATELIER.FAQ
 SET DEFINE OFF;
 REM INSERTING into ATELIER.MEMBER
 SET DEFINE OFF;
-Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('test123@naver.com','$2a$10$iFIhwnt6RdOPpwfHrS1j1eMIXtDiQxCPWthEQkfETMg6k1cO0mUKG','홍길동','01044449898','01026','서울 강북구 4.19로 1','1',8,to_date('23/12/04','RR/MM/DD'),null,null,null,10000,null,1,'ROLE_USER');
+Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('test123@naver.com','$2a$10$iFIhwnt6RdOPpwfHrS1j1eMIXtDiQxCPWthEQkfETMg6k1cO0mUKG','홍길동','01044449898','01026','서울 강북구 4.19로 1','1',8,to_date('23/12/04','RR/MM/DD'),null,null,null,77000,null,1,'ROLE_USER');
 Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('siwool@gmail.com','$2a$10$iFIhwnt6RdOPpwfHrS1j1eMIXtDiQxCPWthEQkfETMg6k1cO0mUKG','강이화','01056371055','03189','서울 종로구 우정국로2길 21','906호',1,to_date('23/11/24','RR/MM/DD'),null,null,null,0,null,0,'ROLE_ARTIST');
 Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('siwool12333@gmail.com','$2a$10$v7jaYp.eRLNelwtRgh6p/eeyx9lXP7wT.tJgGMV3UlXFa6qYL45Ye','김현아','01099998888','03189','서울 종로구 우정국로2길 21','906호',2,to_date('23/11/24','RR/MM/DD'),null,null,null,0,null,1,'ROLE_ARTIST');
 Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('kimjiwon9803@naver.com','$2a$10$iFIhwnt6RdOPpwfHrS1j1eMIXtDiQxCPWthEQkfETMg6k1cO0mUKG','김지원','01088887777','03189','서울 종로구 우정국로2길 21','906호',3,to_date('23/11/24','RR/MM/DD'),null,null,null,0,null,1,'ROLE_ARTIST');
@@ -654,16 +707,73 @@ Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,L
 Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('98aha@naver.com','$2a$10$iFIhwnt6RdOPpwfHrS1j1eMIXtDiQxCPWthEQkfETMg6k1cO0mUKG','김진웅','01088887777','03189','서울 종로구 우정국로2길 21','906호',5,to_date('23/11/24','RR/MM/DD'),null,null,null,0,null,1,'ROLE_ARTIST');
 Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('9898.jw@gmail.com','$2a$10$iFIhwnt6RdOPpwfHrS1j1eMIXtDiQxCPWthEQkfETMg6k1cO0mUKG','박진웅','01077776666','03189','서울 종로구 우정국로2길 21','906호',6,to_date('23/11/24','RR/MM/DD'),null,null,null,0,null,1,'ROLE_ARTIST');
 Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('siwool123@naver.com','$2a$10$iFIhwnt6RdOPpwfHrS1j1eMIXtDiQxCPWthEQkfETMg6k1cO0mUKG','관리자','01044445555',null,null,null,7,to_date('23/12/04','RR/MM/DD'),null,null,null,0,null,1,'ROLE_ADMIN');
-Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('siwool12321@gmail.com','$2a$10$e8FmMnQ9VruRbEXdAjdbrOzLTnogiWEOs/s/tDR6O2mCULEhJGgNu','깡이화','01056371055','01026','서울 강북구 4.19로 1','1',9,to_date('23/12/11','RR/MM/DD'),null,null,null,0,null,1,'ROLE_USER');
+Insert into ATELIER.MEMBER (ID,PASS,M_NAME,PHONE,ZIP,ADDR1,ADDR2,MIDX,REGIDATE,LEAVEDATE,PROFILES,PLACES,TOTAL_POINT,TOKEN,ENABLED,AUTHORITY) values ('siwool12321@gmail.com','$2a$10$e8FmMnQ9VruRbEXdAjdbrOzLTnogiWEOs/s/tDR6O2mCULEhJGgNu','깡이화','01056371055','01026','서울 강북구 4.19로 1','1',9,to_date('23/12/11','RR/MM/DD'),null,null,null,87912,null,1,'ROLE_USER');
 REM INSERTING into ATELIER.M_POINT
 SET DEFINE OFF;
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (2,8,null,to_date('23/12/11','RR/MM/DD'),'20231211003',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (4,8,null,to_date('23/12/11','RR/MM/DD'),'20231211005',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (16,9,null,to_date('23/12/13','RR/MM/DD'),'20231213003',88);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (1,8,null,to_date('23/12/11','RR/MM/DD'),'20231211002',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (3,8,null,to_date('23/12/11','RR/MM/DD'),'20231211004',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (5,8,null,to_date('23/12/11','RR/MM/DD'),'20231211006',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (6,8,null,to_date('23/12/11','RR/MM/DD'),'20231211007',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (7,8,null,to_date('23/12/11','RR/MM/DD'),'20231211008',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (8,8,null,to_date('23/12/11','RR/MM/DD'),'20231211009',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (9,8,null,to_date('23/12/11','RR/MM/DD'),'20231211010',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (10,8,null,to_date('23/12/11','RR/MM/DD'),'20231211011',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (11,8,null,to_date('23/12/11','RR/MM/DD'),'20231211012',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (12,8,null,to_date('23/12/11','RR/MM/DD'),'20231211013',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (13,8,null,to_date('23/12/12','RR/MM/DD'),'20231212001',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (14,9,null,to_date('23/12/13','RR/MM/DD'),'20231213001',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (15,9,null,to_date('23/12/13','RR/MM/DD'),'20231213002',1000);
+Insert into ATELIER.M_POINT (POINT_IDX,MIDX,ADD_POINT,POINT_DATE,OIDX,MINUS_POINT) values (17,8,null,to_date('23/12/13','RR/MM/DD'),'20231213004',0);
 REM INSERTING into ATELIER.NOTICE
 SET DEFINE OFF;
 REM INSERTING into ATELIER.N_COMMENT
 SET DEFINE OFF;
 REM INSERTING into ATELIER.ORDER1
 SET DEFINE OFF;
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211001',8,'bank',10000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','0101112222','02452 서울시 동대문구 이문로 34 1호','경비실에맡기고문자주세요',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211003',8,'bank',829000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','현관문앞에 두고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211005',8,'bank',359000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','현관문앞에 두고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231213003',9,'bank',139912,to_date('23/12/13','RR/MM/DD'),null,'깡이화','01056371055','01026 | 서울 강북구 4.19로 1 _ 1','현관문앞에 두고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211002',8,'bank',739000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','경비실에 맡기고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211004',8,'bank',2659000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','경비실에 맡기고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211006',8,'bank',379000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','현관문앞에 두고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211007',8,'bank',359000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','경비실에 맡기고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211008',8,'bank',859000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','무인택배함에 두고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211009',8,'bank',1079000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','현관문앞에 두고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211010',8,'bank',549000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','경비실에 맡기고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211011',8,'bank',859000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','경비실에 맡기고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211012',8,'bank',639000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','경비실에 맡기고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231211013',8,'bank',959000,to_date('23/12/11','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','경비실에 맡기고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231212001',8,'bank',759000,to_date('23/12/12','RR/MM/DD'),null,'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','경비실에 맡기고 문자주세요.',null,null,null,'강이화',null,0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231213001',9,'kakaopay',759000,to_date('23/12/13','RR/MM/DD'),to_date('23/12/13','RR/MM/DD'),'깡이화','01056371055','01026 | 서울 강북구 4.19로 1 _ 1','경비실에 맡기고 문자주세요.',null,null,null,null,'imp_049244613907',0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231213002',9,'kakaopay',309000,to_date('23/12/13','RR/MM/DD'),to_date('23/12/13','RR/MM/DD'),'깡이화','01056371055','01026 | 서울 강북구 4.19로 1 _ 1','현관문앞에 두고 문자주세요.',null,null,null,null,'imp_986049419922',0,null);
+Insert into ATELIER.ORDER1 (OIDX,MIDX,PAYMETHOD,PRICE,ORDERDATE,PAYDATE,RECEIVER,R_PHONE,R_ADDRESS,MESSAGE,SHIPDATE,COURIER,T_NUM,OWNER,APINUM,AUCTION,PIDX) values ('20231213004',8,'html5_inicis',100,to_date('23/12/13','RR/MM/DD'),to_date('23/12/13','RR/MM/DD'),'홍길동','01044449898','01026 | 서울 강북구 4.19로 1 _ 1','현관문앞에 두고 문자주세요.',null,null,null,null,'imp_436055674631',0,null);
 REM INSERTING into ATELIER.ORDER2
+SET DEFINE OFF;
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (3,'20231211003',6444,3,450000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (4,'20231211003',6521,5,380000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (7,'20231211005',6399,2,360000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (19,'20231213003',6725,2,140000,9);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (1,'20231211002',6596,6,310000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (2,'20231211002',6442,3,430000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (5,'20231211004',6453,3,2180000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (6,'20231211004',6455,3,480000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (8,'20231211006',6597,6,380000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (9,'20231211007',6599,6,360000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (10,'20231211008',6554,5,860000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (11,'20231211009',6558,5,1080000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (12,'20231211010',6441,3,550000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (13,'20231211011',6556,5,860000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (14,'20231211012',6446,3,640000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (15,'20231211013',6553,5,960000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (16,'20231212001',6601,6,760000,8);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (17,'20231213001',6737,2,760000,9);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (18,'20231213002',6698,1,310000,9);
+Insert into ATELIER.ORDER2 (O2IDX,OIDX,PIDX,AIDX,PRICE,MIDX) values (20,'20231213004',6439,3,100,8);
+REM INSERTING into ATELIER.PAYMENT
 SET DEFINE OFF;
 REM INSERTING into ATELIER.PRODUCT
 SET DEFINE OFF;
@@ -691,7 +801,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
 종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/a7487b1ba6d6e75611873e82a104e858.JPG',0,4,'박지원','캔버스, 유채');
-Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('고궁',6473,4,0,65,80,'인물','유화',1,670000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
+Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('고궁',6473,4,0,65,80,'인물','유화',2,670000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
 이 작업은 ‘기억의 밀도’ 시리즈 중 하나입니다.  
@@ -762,7 +872,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/0e6924c95459fa246c916cf81af581e7.JPG',0,3,'김지원','Painting on paper');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/0e6924c95459fa246c916cf81af581e7.JPG',1,3,'김지원','Painting on paper');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('무제',6455,3,0,60,60,'자연/풍경','아크릴',0,480000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -774,7 +884,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/39bc88a126eb9f1bc63068056033333c.JPG',0,3,'김지원','수묵담채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/39bc88a126eb9f1bc63068056033333c.JPG',1,3,'김지원','수묵담채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('성산일출봉',6456,3,0,90,180,'자연/풍경','아크릴',0,2160000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -954,7 +1064,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/1fecc1fa27a0d8def8a5ebab26646b4c.JPG',0,2,'김현아','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/1fecc1fa27a0d8def8a5ebab26646b4c.JPG',1,2,'김현아','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('산',6407,3,0,75,100,'자연/풍경','아크릴',0,980000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1339,7 +1449,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
 종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/62b78d21257c412907801fbbb20dd603.JPG',0,6,'박진웅','캔버스, 유채');
-Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('지곡리여름',6607,6,0,100,80,'사물','수묵화',0,1050000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
+Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('지곡리여름',6607,6,0,100,80,'사물','수묵화',1,1050000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
 이 작업은 ‘기억의 밀도’ 시리즈 중 하나입니다.  
@@ -1483,7 +1593,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
 종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/16a5f09d-052d-480b-8a51-36afc2db0006.jpg',0,3,'김지원','판화');
-Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('전시포스터 6',6439,3,0,72,59,'자연/풍경','아크릴',0,550000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
+Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('전시포스터 6',6439,3,0,72,59,'자연/풍경','아크릴',0,310000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
 이 작업은 ‘기억의 밀도’ 시리즈 중 하나입니다.  
@@ -1494,7 +1604,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/d89a5de8-87fa-4b07-a322-8965ba717ddf.jpg',0,3,'김지원','판화');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/d89a5de8-87fa-4b07-a322-8965ba717ddf.jpg',1,3,'김지원','판화');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('해녀',6441,3,0,76,56,'자연/풍경','아크릴',0,550000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1506,7 +1616,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/d584556fba3838145d462c3f590ea9af.JPG',0,3,'김지원','Oil on canvas');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/d584556fba3838145d462c3f590ea9af.JPG',1,3,'김지원','Oil on canvas');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('생명으로',6442,3,0,48,70,'자연/풍경','아크릴',0,430000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1518,7 +1628,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/abe94ea35d5fa7ddb669a630e21865ac.JPG',0,3,'김지원','분청');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/abe94ea35d5fa7ddb669a630e21865ac.JPG',1,3,'김지원','분청');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('귀로',6444,3,0,50,70,'자연/풍경','아크릴',0,450000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1530,7 +1640,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/aee2e3c05a9c5823610b1f8e4bb18dab.JPG',0,3,'김지원','Oil on canvas');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/aee2e3c05a9c5823610b1f8e4bb18dab.JPG',1,3,'김지원','Oil on canvas');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('도덕신선',6446,3,0,60,82,'자연/풍경','아크릴',0,640000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1542,7 +1652,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/d17d34e18ec28972a27d8d23c77aaaa6.JPG',0,3,'김지원','Painting on paper');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/d17d34e18ec28972a27d8d23c77aaaa6.JPG',1,3,'김지원','Painting on paper');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('자연의소리 13',6553,5,0,90,80,'동식물','수채화',0,960000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1554,7 +1664,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/baaf15636eb5fe771ce6cb1c71821488.JPG',0,5,'김진웅','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/baaf15636eb5fe771ce6cb1c71821488.JPG',1,5,'김진웅','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('자연의소리 14',6554,5,0,90,72,'동식물','수채화',0,860000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1566,7 +1676,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/d98a770f2abee18b6c9e27c984312754.JPG',0,5,'김진웅','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/d98a770f2abee18b6c9e27c984312754.JPG',1,5,'김진웅','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('자연의소리 16',6556,5,0,72,91,'동식물','수채화',0,860000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1578,7 +1688,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/dc01aeac91abc05452e19d9eeb25649c.JPG',0,5,'김진웅','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/dc01aeac91abc05452e19d9eeb25649c.JPG',1,5,'김진웅','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('자연의소리 18',6558,5,0,90,90,'동식물','수채화',0,1080000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1590,7 +1700,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/3bda39b8bca79f74b40f9bef969c137b.JPG',0,5,'김진웅','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/3bda39b8bca79f74b40f9bef969c137b.JPG',1,5,'김진웅','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('제주마을',6596,6,0,45,53,'사물','수묵화',1,310000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1602,7 +1712,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/c206a097e1d8fb2a67138bd5b4c61da3.JPG',0,6,'박진웅','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/c206a097e1d8fb2a67138bd5b4c61da3.JPG',1,6,'박진웅','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('제주바람',6597,6,0,50,60,'사물','수묵화',0,380000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1614,7 +1724,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/a74e2cf10e27bd86f988e9b169967628.JPG',0,6,'박진웅','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/a74e2cf10e27bd86f988e9b169967628.JPG',1,6,'박진웅','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('제주윗새오름',6599,6,0,60,45,'사물','수묵화',0,360000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1626,7 +1736,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/ba70f34eb59f8f7eeab508b21deb84fb.JPG',0,6,'박진웅','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/ba70f34eb59f8f7eeab508b21deb84fb.JPG',1,6,'박진웅','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('제주의 봄',6601,6,0,65,90,'사물','수묵화',0,760000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1638,7 +1748,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/29b9ec14ec2775a552a41f725be6c0d3.JPG',0,6,'박진웅','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/29b9ec14ec2775a552a41f725be6c0d3.JPG',1,6,'박진웅','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('불상',6504,4,0,40,31,'인물','유화',0,140000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -1722,7 +1832,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/740f377801c2a341768a9ea24771fb55.JPG',0,5,'김진웅','캔버스, 유채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/740f377801c2a341768a9ea24771fb55.JPG',1,5,'김진웅','캔버스, 유채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('억새2',6523,5,0,52,135,'동식물','수채화',1,930000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -2948,7 +3058,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
 종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/30c39e34bd726b6ac92e0671ed289731.jpg',0,2,'김현아','사진');
-Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('드로잉 001404',6809,2,0,97,162,'기타','혼합/기타',0,2080000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
+Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('드로잉 001404',6809,2,0,97,162,'기타','혼합/기타',0,100,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
 이 작업은 ‘기억의 밀도’ 시리즈 중 하나입니다.  
@@ -4771,7 +4881,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/321087ae3ca39895fcc66f3296a0b5ce.JPG',0,1,'강이화','화선지에 수묵담채');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/321087ae3ca39895fcc66f3296a0b5ce.JPG',1,1,'강이화','화선지에 수묵담채');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('풍경',6700,2,1,30,59,'기타','혼합/기타',0,210000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -4879,7 +4989,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/6e4550ef942ac76ab0bef7294c20b714.JPG',0,2,'김현아','나무 외 혼합재료');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/6e4550ef942ac76ab0bef7294c20b714.JPG',1,2,'김현아','나무 외 혼합재료');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('색색풍경-화산도,제주2',6739,2,0,390,162,'기타','혼합/기타',0,8420000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -5011,7 +5121,7 @@ Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_
 선을 긋는 간격의 차이가 각기 다른 명도로 표현이 되고 이로 인해서 이미지가 만들어집니다. 
 이미지는 제가 경험한 특정 공간들에서 따오지만 이를 그대로 재현하기 보다는 제 개인적인 해석을 덧붙여 구상같기도 추상같기도 한 이미지를 만들어냅니다. 
 이렇게 만들어지는 모호한 이미지가 현재 제가 생각하는 기억의 모습입니다.
-종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/e433dbb7311c7c54630a006c677ee02e.JPG',0,2,'김현아','Mixed Media');
+종이에 펜으로 작업하였고 전면 아크릴에 검정 알루미늄 테두리로 액자가 되어 있으며 액자사이즈는 46x46cm 입니다.',1,to_date('23/11/24','RR/MM/DD'),'http://www.jeju.go.kr/files/collection/e433dbb7311c7c54630a006c677ee02e.JPG',1,2,'김현아','Mixed Media');
 Insert into ATELIER.PRODUCT (TITLE,PIDX,AIDX,AUCTION,SIZE2,SIZE1,THEME,P_TYPE,P_LIKE,PRICE,P_INTRO,FRAMED,REGIDATE,SFILE,SOLD,MIDX,M_NAME,MATERIAL) values ('신-세한도',6719,2,0,120,160,'기타','혼합/기타',0,2540000,'기억 속의 모든 순간들이 모여서 한 사람을 이룬다고 생각합니다. 
 하지만 우리의 기억은 완벽하지 못해서 잊어버리고 왜곡되고 뒤엉켜버리기도 합니다.
 이것을 극복하고 싶은 마음에 순간의 기억을 의미하는 수많은 선을 긋는 작업을 시작했습니다.
@@ -5088,11 +5198,13 @@ REM INSERTING into ATELIER.P_LIKE
 SET DEFINE OFF;
 Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (5,6470,4,7);
 Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (11,6473,4,2);
-Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (6,6470,4,8);
 Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (12,6475,4,2);
 Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (13,6523,5,8);
 Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (14,6485,4,8);
 Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (15,6596,6,8);
+Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (17,6607,6,8);
+Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (18,6470,4,8);
+Insert into ATELIER.P_LIKE (LIDX,PIDX,AIDX,MIDX) values (16,6473,4,8);
 REM INSERTING into ATELIER.REVIEW
 SET DEFINE OFF;
 REM INSERTING into ATELIER.SHIPMENT
@@ -5134,9 +5246,7 @@ begin
      select max(oidx)+1 into v_res from order1 where oidx like to_char(sysdate,'yyyymmdd')||'%';
   end if;
   return v_res;
-end;  
-
-select fn_create_orderno as orderno from dual;
+end; 
 
 /
 --------------------------------------------------------
@@ -5206,6 +5316,9 @@ select fn_create_orderno as orderno from dual;
   ALTER TABLE "ATELIER"."M_POINT" MODIFY ("POINT_IDX" NOT NULL ENABLE);
   ALTER TABLE "ATELIER"."M_POINT" ADD CONSTRAINT "M_POINT_PK" PRIMARY KEY ("POINT_IDX")
   USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "USERS"  ENABLE;
 --------------------------------------------------------
 --  Constraints for Table NOTICE
@@ -5227,12 +5340,25 @@ select fn_create_orderno as orderno from dual;
 
   ALTER TABLE "ATELIER"."ORDER1" ADD PRIMARY KEY ("OIDX")
   USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "USERS"  ENABLE;
 --------------------------------------------------------
 --  Constraints for Table ORDER2
 --------------------------------------------------------
 
   ALTER TABLE "ATELIER"."ORDER2" ADD PRIMARY KEY ("O2IDX")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table PAYMENT
+--------------------------------------------------------
+
+  ALTER TABLE "ATELIER"."PAYMENT" ADD PRIMARY KEY ("PAYMENTCODE")
   USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   TABLESPACE "USERS"  ENABLE;
 --------------------------------------------------------

@@ -41,6 +41,12 @@ $( document ).ready( function() {
 				alert('장바구니 담기 실패');}
 		});
 	}); 
+	
+	$('.pay').click(function(){
+ 		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
+ 		var pidx = getParameterByName('pidx');
+ 		window.location.href = '/member/paynow?pidx='+pidx;
+	}); 
 });
 function sucFunc(resD){
 	console.log('콜백데이터', resD);
@@ -79,8 +85,6 @@ th {color:#c5c5c5 !important;}
 }
 .modal {--bs-modal-width: 96% !important}
 .modal-content {background-color: black; border-radius:0 !important}
-.modal-header * {color:white}
-.modal-header {border-bottom: none !important;}
 </style>
 </head>
 <body>
@@ -152,7 +156,7 @@ let currentUrl = window.document.location.href;
     <div class="container my-5 py-5">
     <%-- <div>${user_id } 님 로그인을 환영합니다.</div> --%>
     <div class="text-center">
-    	<img src="${imageSource}" alt="작품이미지" style="width: 13%; position:relative; left:35%; top:-100px; box-shadow: 2px 2px 4px #636363; z-index: 999;" id="frimg"  />
+    	<img src="${imageSource}" alt="작품이미지" style="width: 10%; position:relative; left:35%; top:-100px; box-shadow: 2px 2px 4px #636363; z-index: 999;" id="frimg"  />
         <img src="https://lh3.googleusercontent.com/fife/AK0iWDyUcU4Bi2hZ2Z6mK2g7E_FOL2q4nU7OoC_CzEMlA8ElOzQ0JiUXs4zzKgTNCmHP4Q3qkfYCku8nxQ3fD1Frqq6HuBvMz1n8vXdb8Bv45JUL58CnkESu3ujWC0Ek3o_-0L7XMmDgVeKD3i9mNgYXT-iAOOx-qcbNsjmGkL-q0_Pr5FV47kt1xWqTGocBuPf3s0jER8z9hs3vrdJTRlcQWechKQhYDbbKj95xcWJaDQmKbtf4o--pd1G5qes7ABuWhwu-dCrsPMw7qQKNjfDmjxPYwdPT6NbohhlZwfzpvfqbuIxwz1aJHdhgbe3W29InyGOMnnJXV0xX9-x2c_k2AwdAeWmVRP1tdP7DJpgV0IaPG4Ug68O8vZ4z9eTtcvhHSp4pyDTEPdzlmfwad5HvSmzGiLV7doVrpfH9pVDYre-AOnofujXwf74QnTprRR8PPmYmsW_EgpsRz9Qh7iAcCZtoa3CpTagAlPDqq1BM_iqnywTGB3r7XZ2QrmfKIpYi3apgrhEqQlCJIzBbCvrTJQf3cIEgmb41Y_Br8v-3IJEHACt1DH8rIAvcGvyieaDJbvChOexh7nmclmZooeHqiI-VewVEzEZbIb29oNyBOXYCWKWL5cpoTZa4NPGWZbdL8HMIKbo1T6PLJaXWq68XQEOabFu92ChIORabxCc6DREWDrL-GbgIIVxGOwtasmy4mwjXo1hu7Vz6rqc_itdWcUyQQZ733qmw2NvqGzOIjmTaIIr7uc8tI5bMzVbGTVruXIceJuhEQCzOxl-eLGWhW-nkR9zQxhK6qKLZSED9rzh-_BNV0M8CU1exJ1y312zIljmSd0lvsMy5NH4TVLgyEatvuVXLt7HqYjHygqKtkZzr7P3p2Tlhz7JXGM-S54tmGcXeM5KJF-ZK9VSk4AUJDsXX5U2I_WNvFGlwnp83YiW96t1GO1_FXBIYNYYupXHPiWsppeJr2H2Z6yG9046FrP4VsL0LCspwoY8f2gvdrT-xEpZ1ZpfpVpcPWsg0fxsjTG1g4R8jJFKv723u00COVR9f5jE57ACkgPByax5v1eAxU_DiFhcMdgWmLpCZe_77Cs2TNNtxw1YMoBrZJ9v_XNQZagNR8wmFwEohkvickjdbqMZcNXxpAWE5TwJBnFRa7m_ClHVoYiJW3yEnQA13lw6rEhPiu5qDAf4-f52Ju-dL33_FWDcSWhoETxwy6aALIeK9Z27t1d5HA1PX177J3hO9lYDhzA1DRD_wag9Ao0UO0jprAiuxSmHCtobGViSVaBD3-guWD-qNi0AVIoz3Ywf1NOVvRcr6c5gHripYRWJBUY0OR4Zs1NIeSla7QEtJqEiX4ebJg8pdPHf6MpiSDV_poA-9cQ5uG5HQyMMgEePuBVJ7CzS5uBgCbxaASd8bqnd4Ndw4y1Y_XW3ByvP79eP6R3bj5TySKoEtq1-NOVMwUZmgMjsu7OGkRFuK-FX5fkLjdRSrgYe_-hQEbWEIoXAp-yziQS_xjU54K7uzVdi0OZGxcP3CPznlCQ" 
         	id="bgimg" style="width: 80%; transform: translate(-9%);" />
         <p class="my-3"><i class="bi bi-info-circle"></i>&nbsp;작품 및 미리보기 이미지를 무단 사용시 저작권 문제가 발생할 수 있습니다.</p>
@@ -274,9 +278,9 @@ let currentUrl = window.document.location.href;
   <div class="modal-dialog">
     <div class="modal-content">
 
-      <div class="modal-header">
+      <div class="modal-header" style="border-radius:0 !important;">
         <h4 class="modal-title fw-bolder">${pdto.title} </h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <c:set var="imgsize" value="${pdto.size1 / pdto.size2 >1.7 ? 'width' : 'height' }" />
       <div class="modal-body text-center" style="height:88vh"> <img src="${imageSource}" style="${imgsize}:100%" /> </div>
