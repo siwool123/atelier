@@ -501,11 +501,11 @@ $( document ).ready( function() {
 	});
 	
 	//포인트 뺀 최종가격표시
-	/*var finalPrice = parseInt($('#tprice3').text().replace(/,/g, '')) - parseInt($('#point').val()); // , 제거 후 숫자로 변환
+	var finalPrice = parseInt($('#tprice3').text().replace(/,/g, '')) - parseInt($('#point').val()); // , 제거 후 숫자로 변환
 	
 	 $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
 	$('#fprice').html(numberWithCommas(finalPrice));
-	$('input[name=oprice]').val(finalPrice);*/
+	$('input[name=oprice]').val(finalPrice);
 	 
 	/*$("#kakao").click(function(){
 		
@@ -596,6 +596,7 @@ $( document ).ready( function() {
 	
 	var title = $('#titleList').val();
 	if(title==''){title="test";}
+	var amount = parseInt($('#fprice').text().replace(/,/g, ''));
 	
   //IMP.request_pay(param, callback) 결제창 호출
   IMP.request_pay({ // param
@@ -604,7 +605,7 @@ $( document ).ready( function() {
       merchant_uid: $('#pidxList').val(), //주문(db에서 불러옴) 고유번호
       item_name : title,
       name : title,
-      amount: $('input[name="oprice"]').val(),
+      amount: amount,
       buyer_email: $('input[name="user_id"]').val(),
       buyer_name: $('input[name="m_name"]').val(),
       buyer_tel: $('input[name="phone"]').val(),
@@ -639,44 +640,39 @@ $( document ).ready( function() {
   });
 }
 
-const clientKey = 'test_ck_26DlbXAaV0dX9X9NJ2d5VqY50Q9R' // 테스트용 클라이언트 키
-const customerKey = $('input[name="user_id"]').val(); // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
-
-// 2. 결제위젯 SDK 초기화
-const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
-// const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
-
-let currentURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1];
-
-// @docs https://docs.tosspayments.com/reference/widget-sdk#requestpayment결제-정보
-   function tossPay() {
-   	
-   	if($('input[name="m_name"]').val()=='') {
-   		alert('수령인 이름을 입력해 주세요');
-   		$('input[name="m_name"]').focus(); return;
-   	}
-   	if ($('input[name="phone"]').val()=='') {
-   		alert('수령인 휴대폰 번호를 입력해 주세요');
-   		$('input[name="phone"]').focus(); return;
-   	}
-   	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
-   		alert('수령하실 주소를 입력해 주세요'); return;
-   	}
-   	if ($('input[name="msg2"]').val() == '') {
-   		alert('배송메세지를 입력해 주세요'); 
-   		$('input[name="msg2"]').focus(); return;
-   	}
-   	$('input[name="paymethod"]').val('tosspayments');
-
-   	paymentWidget.requestPayment({
-   		amount: $('input[name="oprice"]').val(),
-        orderId: $('#pidxList').val(),
-        orderName: $('#titleList').val(),
-        successUrl: currentURL + "/success",
-        failUrl: currentURL + "/fail",
-        customerEmail: $('input[name="user_id"]').val(),
-        customerName: $('input[name="m_name"]').val(),
-        customerMobilePhone: $('input[name="phone"]').val(),
-      });
-   }
-
+document.addEventListener('DOMContentLoaded', function () {
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 1, // 한 번에 보여지는 슬라이드 개수
+        spaceBetween: 0, // 슬라이드 사이의 간격 (픽셀)*/
+        pagination: {
+        el: ".swiper-pagination",
+        //type: "progressbar",
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+        	prevEl: ".swiper-button-prev",
+        },
+        /*autoplay: {
+        delay: 3000,
+        disableOnInteraction: false, // 사용자와의 상호작용이 있을 때 자동 이동 중지하지 않음
+    	},
+    	speed:5000,*/
+    	loop: true, // 무한 루프 활성화
+    	loopAdditionalSlides: 1,
+    });
+    var swiper2 = new Swiper('.sc2', {
+        slidesPerView: 4, // 한 번에 보여지는 슬라이드 개수
+        spaceBetween: 20, // 슬라이드 사이의 간격 (픽셀)*/
+        navigation: {
+            nextEl: ".bi-chevron-right",
+        	prevEl: ".bi-chevron-left",
+        },
+    	loop: true, // 무한 루프 활성화
+    	loopAdditionalSlides: 1,
+    	/*breakpoints: {
+            '@0.75': {
+            slidesPerView: 1,
+            width:380,
+            }}*/
+    });
+});

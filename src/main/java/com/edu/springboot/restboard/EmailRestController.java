@@ -117,7 +117,7 @@ public class EmailRestController {
 		}
 	}
 	
-	@PostMapping("member/profileUpload.do")
+	@PostMapping("/member/profileUpload.do")
 	public String profileUpload(Principal principal, HttpServletRequest req, MemberDTO memberDTO) {
 		String savedFileName;
 		try {
@@ -151,14 +151,13 @@ public class EmailRestController {
 				System.out.println("회원정보-profiles 수정 실패");
 			}
 			
-			return savedFileName;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("업로드 실패");
 			savedFileName = "fail";
-			return savedFileName;
 		}
+		return savedFileName;
 	}
 	
 	@PostMapping("/member/profileDelete.do")

@@ -32,6 +32,7 @@ import com.edu.springboot.restboard.CartDTO;
 import com.edu.springboot.restboard.IBoardService;
 import com.edu.springboot.restboard.IMemberService;
 import com.edu.springboot.restboard.MemberDTO;
+import com.edu.springboot.restboard.OPjoinDTO;
 import com.edu.springboot.restboard.Order2DTO;
 import com.edu.springboot.restboard.OrderDTO;
 
@@ -71,15 +72,12 @@ public class MemberController {
 		return "member/editMember";
 	}
 	
-	@RequestMapping("member/editWindow")
-	public String editWinddow(Principal principal,Model model, MemberDTO memberDTO) {
-		memberDTO = dao.mview(principal.getName());
-		model.addAttribute("mdto", memberDTO);
-		System.out.println(memberDTO);
+	@RequestMapping("/member/editWindow")
+	public String editWinddow() {
 		return "member/editWindow";
 	}
 	
-	@PostMapping("member/edit.do")
+	@PostMapping("/member/edit.do")
 	public String editProcess(Principal principal, MemberDTO memberDTO, Model model, HttpServletRequest req) {
 		memberDTO.setId(principal.getName());
 		
@@ -94,7 +92,7 @@ public class MemberController {
 	}
 	
 
-	@RequestMapping("member/leave.do")
+	@RequestMapping("/member/leave.do")
 	public String leaveProcess(Principal principal) {
 		int leaveResult = dao.leave(principal.getName());
 		if (leaveResult == 1) { System.out.println("회원탈퇴 성공(비활성화)");
@@ -102,13 +100,16 @@ public class MemberController {
 		return "redirect:/logout";
 	}
 	
-	@RequestMapping("member/orderhistory")
-	public String orderhistory (Principal principal, Model model) {
+	@RequestMapping("/member/point")
+	public String point(Principal principal, Model model) {
 		
 		Map<Object, Object> map = payService.memberIndex(principal);
         model.addAttribute("map", map);
-         
-		return "member/orderhistory";
+        
+        int midx = dao.mview(principal.getName()).getMidx();
+        
+        
+		return "member/point";
 	}
 	
 	@RequestMapping("member/like")

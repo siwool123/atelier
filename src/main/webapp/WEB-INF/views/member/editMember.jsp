@@ -131,29 +131,23 @@ function updateValidate(frm) {
 		
 			<div class="headerL2" style="margin-top:10px;">정보수정</div>
 			<div class="col-sm-6" style="padding-top:10px;">
-				<table class="table table-borderless">
+				<table class="table table-borderless"><tr>
 				<c:choose>
 				<c:when test="${map.mdto.profiles != null }">
-					<tr><td rowspan="3" id="imgmaskTd"><p id="imgmask">
-					<img src="/uploads/${map.mdto.profiles }" id="mypageProfileImage" class="me-4"></p>
+					<td id="imgmaskTd"><p id="imgmask">
+					<img src="/uploads/${map.mdto.profiles }" id="mypageProfileImage" class="me-4"></p></td>
 				</c:when>
 				<c:when test="${map.mdto.profiles == null }">
-					<tr><td rowspan="3"><i class="bi bi-person-circle bpc1" style="position: relative; top: -1;"></i>
+					<td><i class="bi bi-person-circle bpc1" style="position: relative; top: -1;"></i></td>
 				</c:when>
 				</c:choose>
-					</td><td>가입아이디 : ${map.mdto.id}</td></tr>
-					<tr><td>
-					<button type="button" class="btn btn-outline-secondary" style="display: inline" onClick="uploadProfile()">이미지 변경</button>
-				<c:choose>	
-				<c:when test="${map.mdto.profiles != null }">
-					<button type="button" class="btn btn-outline-secondary" style="display: inline" id="profileDeleteBtn">삭제</button>
-				</c:when>
-				<c:when test="${map.mdto.profiles == '' }">
-					<button type="button" class="btn btn-outline-secondary" style="display: inline" id="profileDeleteBtn" disabled>삭제</button>
-				</c:when>
-				</c:choose>
+					<td style="line-height:30px;">가입아이디 : ${map.mdto.id} <br />
+					가입일: ${map.mdto.regidate}<br />
+					<button type="button" class="btn btn-outline-secondary mt-2" style="display: inline" onClick="uploadProfile()">이미지 변경</button>
+				<c:if test="${map.mdto.profiles != null }">
+					<button type="button" class="btn btn-outline-secondary" style="position: relative; top: 4px;" id="profileDeleteBtn">삭제</button>
+				</c:if>
 					</td></tr>
-					<tr><td>가입일: ${map.mdto.regidate}</td></tr>
 				</table>
 				
 			</div>
