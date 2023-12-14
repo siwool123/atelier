@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
             width:380,
             }}*/
     });
+    
 });
 /*function handleActiveClass(selector, attributeName) {
     $(selector).each(function () {

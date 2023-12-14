@@ -216,4 +216,17 @@
 	<select id="notShipped" resultType="com.edu.springboot.restboard.OrderDTO">
 		SELECT * FROM order1 WHERE midx=#{param1} and shipdate is null
 	</select>
+	
+	<select id="totalLikeCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT count(*) from p_like where midx=#{param1}
+	</select>
+	
+	<select id="selectLikeProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		<!-- select * from product -->
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM product inner join p_like on product.pidx = p_like.pidx where p_like.midx=#{midx}
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
 </mapper> 

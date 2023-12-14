@@ -81,6 +81,12 @@ public interface IBoardService {
 	public List<OrderDTO> notPaid(int midx); 
 	//배송전 건수 조회
 	public List<OrderDTO> notShipped(int midx); 
+	
+	//Paging 처리를 위해 좋아요 게시물의 갯수를 카운트
+	public int totalLikeCount(int midx);
+	
+	//좋아요 상품 리스트
+	public List<ProductDTO> selectLikeProduct(ParameterDTO parameterDTO);
 }
 
 
