@@ -6,8 +6,12 @@
 <mapper namespace="com.edu.springboot.restboard.IApplyService">
 	
 	<insert id="ainsert" parameterType="com.edu.springboot.restboard.ApplyDTO">
-		insert into apply (apply_idx, midx, apply1, apply2, apply3, apply4, apply5, apply6, apply7, apply8, apply9, apply10) values 
-			(seq_apply.nextval, #{midx}, #{apply1}, #{apply2}, #{apply3}, #{apply4}, #{apply5}, #{apply6}, #{apply7}, #{apply8}, #{apply9}, #{apply10})
+		insert into apply (apply_idx, midx, apply1, apply2, apply3, apply4, apply5, apply6, apply7, apply8, apply9, apply10, a_intro, a_history) values 
+			(seq_apply.nextval, #{midx}, #{apply1}, #{apply2}, #{apply3}, #{apply4}, #{apply5}, #{apply6}, #{apply7}, #{apply8}, #{apply9}, #{apply10}, #{a_intro}, #{a_history})
 	</insert>
+	
+	<select id="aview" resultType="com.edu.springboot.restboard.ApplyDTO">
+		select * from apply where midx=#{param1}
+	</select>
 
 </mapper>
