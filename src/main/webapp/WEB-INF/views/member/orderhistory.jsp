@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
@@ -17,200 +18,8 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
-<script>
-    const clientKey = 'test_ck_26DlbXAaV0dX9X9NJ2d5VqY50Q9R' // 테스트용 클라이언트 키
-    const customerKey = `${not empty mdto ? mdto.id : ""}` // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
-
-    // 2. 결제위젯 SDK 초기화
-    const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
-    // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
-    
-    let currentURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1];
-    
-    const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
-	  '#payment-method',
-	  {
-	    value: 10000,
-	    currency: 'KRW',
-	    country: 'KR',
-	  },
-	  { variantKey: 'widgetA' }
-	)
-	const paymentMethodsWidget = paymentWidget.renderPaymentMethods()
-	paymentMethodsWidget.updateAmount(50000)
-
-	const paymentMethodsWidget = paymentWidget.renderPaymentMethods()
-	const selectedPaymentMethod = paymentMethodsWidget.getSelectedPaymentMethod()
-
-	paymentWidget.requestPayment({
-	  amount: 15000,
-	  orderId: 'AD8aZDpbzXs4EQa-UkIX6',
-	  orderName: '토스 티셔츠 외 2건',
-	// 테스트에서는 성공, 실패 페이지가 없어도 URL에서 쿼리 파라미터를 확인할 수 있어요.
-	  successUrl: 'http://localhost:8586/success', // 성공 리다이렉트 URL
-	  failUrl: 'http://localhost:8586/fail', // 실패 리다이렉트 URL
-	  customerEmail: 'customer123@gmail.com',
-	  customerName: '김토스',
-	})
-	.then(function (data) {
-    // 성공 처리: 결제 승인 API를 호출하세요
-  })
-  .catch(function (error) {
-    // 에러 처리: 에러 목록을 확인하세요
-    // https://docs.tosspayments.com/reference/error-codes#failurl로-전달되는-에러
-    if (error.code === 'USER_CANCEL') {
-      // 결제 고객이 결제창을 닫았을 때 에러 처리
-    } else if (error.code === 'INVALID_CARD_COMPANY') {
-      // 유효하지 않은 카드 코드에 대한 에러 처리
-    }
-  })
-    
- // @docs https://docs.tosspayments.com/reference/widget-sdk#requestpayment결제-정보
-   function tossPay() {
-   	
-   	if($('input[name="m_name"]').val()=='') {
-   		alert('수령인 이름을 입력해 주세요');
-   		$('input[name="m_name"]').focus(); return;
-   	}
-   	if ($('input[name="phone"]').val()=='') {
-   		alert('수령인 휴대폰 번호를 입력해 주세요');
-   		$('input[name="phone"]').focus(); return;
-   	}
-   	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
-   		alert('수령하실 주소를 입력해 주세요'); return;
-   	}
-   	if ($('input[name="msg2"]').val() == '') {
-   		alert('배송메세지를 입력해 주세요'); 
-   		$('input[name="msg2"]').focus(); return;
-   	}
-   	$('input[name="paymethod"]').val('tosspayments');
-
-   	paymentWidget.requestPayment({
-   		amount: $('input[name="oprice"]').val(),
-        orderId: $('#pidxList').val(),
-        orderName: $('#titleList').val(),
-        successUrl: currentURL + "/success",
-        failUrl: currentURL + "/fail",
-        customerEmail: $('input[name="user_id"]').val(),
-        customerName: $('input[name="m_name"]').val(),
-        customerMobilePhone: $('input[name="phone"]').val(),
-      });
-   }
-  </script>
 <script type="text/javascript">
-/*$( document ).ready( function() {
- 	
-  	var sum = 0;
- 	var totalChecked = 0;
-    
- // 장바구니 전부 선택
-    $("#chkAll").click(function () {
-        if ($("#chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
-        else $("input[name=chk]").prop("checked", false);
-    }); 
-    
-    $('input[name=chk]').click(function () {
-        var total = $('input[name=chk]').length;
-        totalChecked = $('input[name=chk]:checked').length;
-        var sum = 0;
 
-        $('input[name=chk]:checked').each(function() {
-            // 체크된 제품의 가격을 가져와서 총합에 더함
-            sum += parseInt($(this).closest('tr').find('.price2').text().replace(/,/g, ''));
-        });
-        
-        $('#tnum').html(totalChecked);
-        $('#tprice').html(numberWithCommas(sum));
-        if (total != totalChecked) $("#chkAll").prop("checked", false);
-        else $("#chkAll").prop("checked", true);
-    });  
-    
-    $('#point').focus(function () {
-        if ($(this).val() === '0') { $(this).val(''); }
-    });
-
-    // #point 인풋에서 포커스가 빠져나갔을 때, 값이 비어 있다면 0으로 설정
-    $('#point').blur(function () { if ($(this).val() === '') { $(this).val('0'); }
-    });
-    
-    // 장바구니에서 결제시 포인트 검증
-	$('#point').keyup(function() {
-		var enteredPoint = parseInt($(this).val());
-	    var maxPoint = parseInt($('#maxPoint').text());
-	
-	    if (enteredPoint > maxPoint) {
-	        alert('보유하신 포인트를 초과하였습니다.');
-	        $(this).val(0);
-	    }
-	    
-	    var ffprice = parseInt($('#tprice3').text().replace(/,/g, ''))-$(this).val();
-	    console.log("포인트합산결과", ffprice, $('#tprice3').text());
-	    $('#fprice').html(numberWithCommas(ffprice));
-	    $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
-	    $('input[name=oprice]').val(ffprice);
-	}); */
-    
-	/* $("#kakao").click(function(){
-		
-		if($('input[name="m_name"]').val()=='') {
-			alert('수령인 이름을 입력해 주세요');
-			$('input[name="m_name"]').focus(); return;
-		}
-		if ($('input[name="phone"]').val()=='') {
-			alert('수령인 휴대폰 번호를 입력해 주세요');
-			$('input[name="phone"]').focus(); return;
-		}
-		if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
-			alert('수령하실 주소를 입력해 주세요'); return;
-		}
-		if ($('input[name="msg2"]').val() == '') {
-			alert('배송메세지를 입력해 주세요'); 
-			$('input[name="msg2"]').focus(); return;
-		}
-		$('input[name="paymethod"]').val('kakao');
-		
-		// 필수입력값을 확인.
-		var name = $("#orderFm input[name='mName']").val();
-		var tel = $("#orderFm input[name='mPhone']").val();
-		var email = $("#orderFm input[name='mId']").val();
-		
-		// 결제 정보를 form에 저장한다.
-		let totalPayPrice = parseInt($("#fprice").text().replace(/,/g,''));
-		let totalPrice = parseInt($("#tprice3").text().replace(/,/g,''));
-		let discountPrice = totalPrice - totalPayPrice; 
-		let usePoint = $("#point").val();
-		let useUserCouponNo = 0;
-		
-		// 카카오페이 결제전송
-		$.ajax({
-			type:'post'
-			,url:'/pay/ready'
-			,data:{
-				total_amount: totalPayPrice
-				,payUserName: name
-				,sumPrice:totalPrice
-				,discountPrice:discountPrice
-				,totalPrice:totalPayPrice
-				,tel:tel
-				,email:email
-				,usePoint:usePoint
-				,useCouponNo:useUserCouponNo	
-			},
-			success:function(rsp){
-				console.log(rsp);
-				var msg = '결제가 완료되었습니다. 카드 승인번호 : ' + rsp.apply_num;
-				alert(msg);
-				$('#kakao').submit();	
-			},
-			error : function(errD){
-				console.log(errD.status+" : "+errD.statusText);
-				var msg = '결제에 실패하였습니다.' + errD.error_msg;
-				alert(msg);
-			}
-		} 
-	}); 
-	
-});*/
 function deletepidx(pidx) {
 	if(confirm('정말로 삭제하시겠습니까?')) { 
  	
@@ -229,121 +38,16 @@ function deletepidx(pidx) {
     });
 	} 
 }
-function postOpen2() {
-	new daum.Postcode({
-		oncomplete : function(data) {
-			console.log(data);
-			console.log(data.zonecode);
-			console.log(data.address);
 
-			let frm = document.orderFm;
-			frm.zip.value = data.zonecode;
-			frm.addr1.value = data.address;
-			frm.addr2.focus();
-		}
-	}).open();
-}
-
-function inputMsg(frm) {
-	 var choiceMsg = frm.msg.value;
-    if (choiceMsg == '직접입력') {
-        frm.msg2.readOnly = false;
-        frm.msg2.focus();
-    }else {
-        frm.msg2.value = choiceMsg;
-        frm.msg2.readOnly = true;
-    }
-}
-
-function requestPay(paymethod){
-	$('input[name="paymethod"]').val(paymethod);
-	$.ajax({  
-	 url : '/pay/proceed',
-	 type : 'POST',
-	 async : true,
-	 dataType : 'Json', 
-	 data : $('#orderFm').serialize(),
-	 success : function(data){
-		 if(data.cnt > 0){
-			 requestPay2(data)
-		 }else{
-			 alert(data.msg)
-		 }
-	 }, 
-	 error : function (e){
-		 alert("에러")
-	 }
-	}); 
-	
-}
-/* function requestPay2(paymethod) {
-	
-	if($('input[name="m_name"]').val()=='') {
-		alert('수령인 이름을 입력해 주세요');
-		$('input[name="m_name"]').focus(); return;
-	}
-	if ($('input[name="phone"]').val()=='') {
-		alert('수령인 휴대폰 번호를 입력해 주세요');
-		$('input[name="phone"]').focus(); return;
-	}
-	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
-		alert('수령하실 주소를 입력해 주세요'); return;
-	}
-	if ($('input[name="msg2"]').val() == '') {
-		alert('배송메세지를 입력해 주세요'); 
-		$('input[name="msg2"]').focus(); return;
-	}
-	$('input[name="paymethod"]').val(paymethod);
-	
-	var IMP = window.IMP; // 생략 가능
-	IMP.init("imp76555372"); // 예: imp00000000
-	
-	console.log($('#titleList').val(), $('#titleList').val());
-	var pg1 = '', pg2 = '';
-  //IMP.request_pay(param, callback) 결제창 호출
-  if(paymethod=='kakao'){var pg1 = 'kakaopay', pg2 = 'TC0ONETIME'; }
-  if(paymethod=='toss'){var pg1 = 'tosspayments', pg2 = 'tosstest'; }
-  if(paymethod=='card'){var pg1 = 'html5_inicis', pg2 = 'INIBillTst'; }
-  IMP.request_pay({ // param
-      pg: pg1, //결제대행사 설정에 따라 다르며 공식문서 참고
-      pay_method: "card", //결제방법 설정에 따라 다르며 공식문서 참고
-      merchant_uid: "0001", //주문(db에서 불러옴) 고유번호
-      item_name : "test",
-      name : "test",
-      amount: $('input[name="oprice"]').val(),
-      buyer_email: "",
-      buyer_name: $('input[name="m_name"]').val(),
-      buyer_tel: $('input[name="phone"]').val(),
-      buyer_addr: $('input[name="zip"]').val()+$('input[name="addr1"]').val()+$('input[name="addr2"]').val(),
-      //buyer_postcode: "01181"
-  }, function (rsp) { // callback
-      if (rsp.success) {
-    	  console.log(rsp.imp_uid);
-    	// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우 // jQuery로 HTTP 요청
-          jQuery.ajax({
-            url: "/payment/proceed", 
-            method: "POST",
-	    	data : $('#orderFm').serialize() + "&imp_uid=" + rsp.imp_uid,
-    		 success : function(data){
-    			 if(data.cnt > 0){ 
-    				 console.log(data);
-    				 alert('주문 및 결제가 성공적으로 처리되었습니다.');
-    			 }else{  alert(data.msg)  }
-    		 }, 
-    		 error : function (e){  alert("에러")  }
-          })
-      } else {
-    	  var msg = '결제에 실패하였습니다. 에러내용 : ' + rsp.error_msg;
-          alert(msg);
-      }
-  });
-}  */
+let key = "${param.key}";
+if(key === "userinfo"){  $("#myreview-tab, #myreview, #userinfo-tab, #userinfo").toggleClass("active");
+}else if(key === "myreview"){ $("#userinfo-tab, #myreview-tab, #userinfo, #myreview").toggleClass("active");  }
 </script> 
 <style>
 @media (max-width: 600px) {
 }
-.leftmenu li:nth-child(1) {background-color: black;}
-.leftmenu li:nth-child(1) a, .leftmenu li:nth-child(1) a i {color:white}
+.leftmenu li:nth-child(2) {background-color: black;}
+.leftmenu li:nth-child(2) a, .leftmenu li:nth-child(2) a i {color:white}
 .leftmenu li a {line-height:30px !important;}
 .btn3, .btn4 {padding:0 6% !important;}
 .border li {line-height:40px;}
@@ -352,59 +56,98 @@ table.order tr th {background-color:#ededed;}
 table.order tr th, table.order tr td {padding-left:20px;}
 .img1 {max-width:100px; max-height:100px;}
 .bpc1 {position:relative !important; top:-20px !important;}
+.circle {font-size:6px; color:grey; margin-right:10px;}
 </style>
 </head>
 <body>
+<c:set var="currentDate" value="<%= LocalDate.now() %>" />
 <form name="delFrm" id="delFrm" ><input type="hidden" name="pidx" /></form>
 <%@ include file="index.jsp" %>
-<%-- <c:set var="user_id" value="
-<sec:authorize access="isAuthenticated()"><sec:authentication property="name"/></sec:authorize>
-"></c:set>  <div>${user_id } 님 로그인을 환영합니다.</div> --%>
     <div class="container">
     <div class="row my-5">
         <div class="col-sm-2"><%@ include file="../include/memberSidebar.jsp" %></div>
         
         <div class="col-sm-10" style="padding-left:50px;">
-			<div class="headerL2 mb-5" style="margin-top:10px;">장바구니 ${not empty plist ? plist.size() : "0" }</div>
+			<div class="headerL2 mb-5" style="margin-top:10px;">주문내역 ${not empty oplist ? oplist.size() : "0" }</div>
+			
+	  <!-- 탭 메뉴 -->
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="userinfo-tab" data-bs-toggle="tab" data-bs-target="#userinfo" type="button" role="tab" 
+          aria-controls="userinfo" aria-selected="true">주문내역 조회 ${not empty oplist ? oplist.size() : "0" }</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="myreview-tab" data-bs-toggle="tab" data-bs-target="#myreview" type="button" role="tab"
+            aria-controls="myreview" aria-selected="false">취소/반품 내역 0</button>
+        </li>
+      </ul>
+      
+      <!-- 내용 -->
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="userinfo" role="tabpanel" aria-labelledby="userinfo-tab">
+
+			<ul class="border my-5" style="padding:20px 40px;">
+				<li><span class="circle">●</span>주문번호를 클릭하시면 해당 주문에 대한 상세내역을 확인하실 수 있습니다. </li>
+				<li><span class="circle">●</span>작품 포장 등으로 인하여 결제완료 후 배송까지 7일 이내가 소요됩니다.</li>
+				<li><span class="circle">●</span>발송 전에만 주문취소가 가능합니다. </li>
+				<li><span class="circle">●</span>아뜰리에에서 판매중인 작품은 모두 실제 원화로, 동일한 재고가 없어 교환이 불가능한 점 양해 부탁드립니다.</li>
+				<li><span class="circle">●</span>실제 상품이 온라인 상의 내용과 다른 경우, 작품에 하자가 있거나 운송중 파손이 발생한 경우, 반품이 가능합니다. </li>
+				<li><span class="circle">●</span>택배를 이용하여 아뜰리에 측으로 반품해 주시면 됩니다. 단순변심에 따른 반품은 불가합니다.</li>
+			</ul>
+			
 			<table class="table table-hover">
 			   <thead class="table-secondary">
 			     <tr align="center" style="height:40px">
-			       <th width="10%">${not empty plist ? plist.size() : "0" }</th>
-			       <th><input type="checkbox" id="chkAll" /></th>
-			       <th colspan="2">ARTWORK TITLE</th>
-			       <th>PRICE (원)</th>
-			       <th>삭제</th>
-			       <th>배송비</th>
+			       <th width="10%">구분</th>
+			       <th>주문일자<br/>주문번호</th>
+			       <th colspan="2">작품정보</th>
+			       <th>주문금액 (원)</th>
+			       <th>주문상태</th>
+			       <th>결제방식</th>
+			       <th>취소/반품</th>
 			     </tr>
 			   </thead>
 			   <tbody>
 			<c:choose> 
-				<c:when test="${ empty plist }">
-				<tr><td colspan="6" align="center">등록된 작품이 없습니다.</td></tr>
+				<c:when test="${ empty oplist }">
+				<tr><td colspan="6" align="center">주문한 작품이 없습니다.</td></tr>
 				</c:when>
 				<c:otherwise> <!-- 출력할 게시물이 있을때 -->
-					<c:forEach items="${ plist }" var="row" varStatus="loop">
-					     <tr id="cartItem_${row.pidx}">
-					       <td align="center" width="10%">${ loop.index + 1 }</td>
+					<c:forEach items="${ oplist }" var="row" varStatus="loop">
+					     <tr id="orderItem_${row.pidx}">
+					       <td align="center" width="10%">${ row.auction==0 ? "구매" : "낙찰" }</td>
 					       <td align="center" width="10%">
-						       <c:choose>
-						       	<c:when test="${ row.sold==1 }">  </c:when>
-						       	<c:otherwise><input type="checkbox" name="chk" /></c:otherwise>
-						       </c:choose>
+					       		${row.orderdate } <br/>
+						      <a href="./oview?oidx=${row.oidx }">${row.oidx }</a> 
 					       </td>
 					       <td align="center" width="10%"><a href="/view?pidx=${ row.pidx }">
 					       <c:set var="imgsrc" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
    				 			<img src="${imgsrc}" alt="작품이미지" class="img1" />
 					       	</a></td>
-					       	<td><a href="view?pidx=${ row.pidx }"><b > ${ row.title }</b><br/>  ${row.m_name }<br/> ${row.size1 } x ${row.size2 } cm</a></td>
+					       	<td><a href="view?pidx=${ row.pidx }"><b > ${ row.title }</b><br/>  ${row.m_name }</a></td>
+					       <td><b class="price2">${row.price }</b></td>
 					       <td width="20%" align="right" >
 					       	 <c:choose>
-						       	<c:when test="${ row.sold==1 }"><div class="fw-bolder" style="color:grey;">● SOLD</div></c:when>
-						       	<c:otherwise><div class="fw-bolder price2">${row.price }</div></c:otherwise>
+						       	<c:when test="${ row.paydate==null }"><button type="button" class="btn5">입금확인전</button></c:when>
+						       	<c:when test="${ row.paydate!=null and row.shipdate==null }"><button type="button" class="btn5">배송준비중</button></c:when>
+						       	<c:when test="${ row.paydate!=null and row.shipdate!=null }">
+						       	<button type="button" class="btn1">배송조회</button><button type="button" class="btn6">리뷰작성</button></c:when>
 						       </c:choose>
 					       </td>
-					       <td align="center" width="10%"><a class="btn1" href="javascript:deletepidx(${ row.pidx });">삭제</a></td>
-					       <td align="center" width="10%">무료배송</td>
+					       <td align="center" width="10%">${row.paymethod }
+					       	  <c:choose>
+						       	<c:when test="${ row.paymethod.equals('bank') }">무통장입금</c:when>
+						       	<c:when test="${ row.paymethod.equals('kakaopay') }">카카오페이</c:when>
+						       	<c:when test="${ row.paymethod.equals('tosspayments') }">토스페이먼츠</c:when>
+						       	<c:when test="${ row.paymethod.equals('html5_inicis') }">신용카드</c:when>
+						       </c:choose>
+					       </td>
+					       <td align="center" width="10%">
+					       	  <c:choose>
+						       	<c:when test="${ row.shipdate==null }"><button type="button" class="btn1">주문취소</button></c:when>
+						       	<c:otherwise><button type="button" class="btn1" ${row.shipdate.toLocalDate().until(currentDate, ChronoUnit.DAYS) > 10 ? 'disabled' : ''} >반품</button></c:otherwise>
+						       </c:choose>
+					       </td>
 					     </tr>
 					</c:forEach>
 				</c:otherwise>
@@ -415,15 +158,21 @@ table.order tr th, table.order tr td {padding-left:20px;}
 					<td colspan="2" >총 결제 금액 :  <b id="tprice2" class="price2" style="color:#AF0000">0</b> 원</td>
 				</tr>
 			   </tbody>
-			</table>
+			</table>    
+        
+        </div>
+        <div class="tab-pane fade" id="myreview" role="tabpanel" aria-labelledby="myreview-tab">
+        내리뷰리스트 탭
+        
+        
+        </div>
+      </div>
 			
-			<ul class="border my-5" style="padding:20px 40px;">
-				<li>● 아래의 내용을 정확하게 작성 후 구매하기 버튼을 눌러 주세요.</li>
-				<li>● 무통장입금의 경우 구매 후 1영업일 (24시간) 이내에 구매금액을 입금해 주세요.</li>
-				<li style="color:#AF0000">● 24시간 이내 입금이 되지 않을시 자동으로 구매취소처리됩니다.</li>
-				<li>● 입금계좌 : <span style="color:#AF0000"> KB 333333-44-555555 (예금주 : 주식회사 아뜰리에)</span></li>
-				<li>● 결제완료 후 작품 포장 및 배송이 이루어집니다. (최대 5 영업일 소요)</li>
-			</ul>
+			
+			
+			
+			
+			
 			
 			<div style="height:50px;"></div>
 			<div class="headerL2 my-5">배송 및 결제 정보 </div>

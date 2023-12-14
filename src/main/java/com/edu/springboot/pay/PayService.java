@@ -23,7 +23,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class PayService {
 
@@ -31,7 +30,7 @@ public class PayService {
 	IBoardService dao;
     
     public OrderDTO orderProc(Principal principal, HttpServletRequest req, OrderDTO orderDTO, PointDTO pointDTO) {
-    	int resulto1 = 0, resPoint1 = 0, piresult = 0, setsold = 0;
+    	int resulto1 = 0, resPoint1 = 0, resPoint2 = 0, piresult = 0, setsold = 0;
     	List<Integer> resListo2 = new ArrayList<>();
     	List<Integer> resDelCartList = new ArrayList<>();
     	
@@ -42,6 +41,7 @@ public class PayService {
 		orderDTO.setPrice(Integer.parseInt(req.getParameter("oprice")));
 		orderDTO.setReceiver(req.getParameter("m_name"));
 		orderDTO.setR_phone(req.getParameter("phone"));
+		orderDTO.setPidx(req.getParameter("pidxList"));
 		String address = req.getParameter("zip") +" | "+ req.getParameter("addr1") +" | "+ req.getParameter("addr2");
 		orderDTO.setR_address(address);
 		orderDTO.setMessage(req.getParameter("msg2"));
@@ -82,13 +82,16 @@ public class PayService {
 		}
 		
 		int minusPoint = Integer.parseInt(req.getParameter("point"));
-		resPoint1 = dao.minusPoint(minusPoint, memberDTO.getMidx()); //멤버테이블에 포인트사용 반영
+		int addPoint = (int)(Integer.parseInt(req.getParameter("oprice"))*0.01);
+		resPoint1 = dao.memberPoint(minusPoint-addPoint, memberDTO.getMidx()); //멤버테이블에 포인트사용.적립 반영
 		
 		pointDTO.setMidx(memberDTO.getMidx());
 		pointDTO.setMinus_point(minusPoint);
+		pointDTO.setAdd_point(addPoint);
 		pointDTO.setOidx(dao.orderNum(memberDTO.getMidx()));
 		
-		piresult = dao.pminsert(pointDTO); //포인트테이블에 포인트사용내용 입력
+		piresult = dao.pinsert(pointDTO); //포인트테이블에 포인트사용/적립 내용 입력
+		
 		System.out.println("포인트테이블에 입력결과 : "+resPoint1+" : "+piresult);
 		
 		int sum1 = 0, sum2 = 0;
@@ -111,16 +114,14 @@ public class PayService {
         List<OrderDTO> olist = dao.olist(memberDTO.getMidx());
         int sum = 0;
         for(OrderDTO odto : olist) { sum += odto.getPrice();}
-        System.out.println("주문건수 : " + olist.size() + ", 주문합계 : "+sum);
+        System.out.println("주문작품수 : " + olist.size() + ", 주문합계 : "+sum);
         
         List<OrderDTO> nplist = dao.notPaid(memberDTO.getMidx());
         List<OrderDTO> nslist = dao.notShipped(memberDTO.getMidx());
        System.out.println("입금전 건수 : "+nplist.size() + ", 배송전건수 : "+nslist.size());
         
-       map.put("nplist", nslist);
        map.put("mdto", memberDTO);
        map.put("olist", olist);
-       map.put("olistSize", olist.size());
        map.put("orderSum", sum);
        map.put("nplistSize", nplist.size());
        map.put("nslistSize", nslist.size());

@@ -31,6 +31,7 @@ import com.edu.springboot.restboard.CartDTO;
 import com.edu.springboot.restboard.IBoardService;
 import com.edu.springboot.restboard.IMemberService;
 import com.edu.springboot.restboard.MemberDTO;
+import com.edu.springboot.restboard.OPjoinDTO;
 import com.edu.springboot.restboard.Order2DTO;
 import com.edu.springboot.restboard.OrderDTO;
 
@@ -69,10 +70,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping("member/editWindow")
-	public String editWinddow(Principal principal,Model model, MemberDTO memberDTO) {
-		memberDTO = dao.mview(principal.getName());
-		model.addAttribute("mdto", memberDTO);
-		System.out.println(memberDTO);
+	public String editWinddow() {
 		return "member/editWindow";
 	}
 	
@@ -103,7 +101,11 @@ public class MemberController {
 	public String orderhistory (Principal principal, Model model) {
 		
 		Map<Object, Object> map = payService.memberIndex(principal);
-        model.addAttribute("map", map);
+		int midx = dao2.mview(principal.getName()).getMidx();
+		List<OPjoinDTO> oplist = dao2.opjoin(midx);
+
+		model.addAttribute("map", map);
+		model.addAttribute("oplist", oplist);
          
 		return "member/orderhistory";
 	}

@@ -169,13 +169,13 @@
 	<delete id="delCart">DELETE FROM cart WHERE pidx=#{param1}</delete>
 	
 	<insert id="payorder" parameterType="com.edu.springboot.restboard.OrderDTO">
-		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message, apinum) VALUES 
-		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{apinum})
+		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message, apinum, pidx) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{apinum}, #{pidx)
 	</insert>
 	
 	<insert id="bankorder" parameterType="com.edu.springboot.restboard.OrderDTO">
-		INSERT INTO order1 (oidx, midx, paymethod, price, receiver, r_phone, r_address, message, owner) VALUES 
-		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{owner})
+		INSERT INTO order1 (oidx, midx, paymethod, price, receiver, r_phone, r_address, message, owner, pidx) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{owner}, #{pidx})
 	</insert>
 	
 	<insert id="insertorder2" parameterType="com.edu.springboot.restboard.Order2DTO">
@@ -189,24 +189,17 @@
 	SELECT oidx FROM (SELECT oidx FROM order1 WHERE midx=#{param1} ORDER BY orderdate DESC) WHERE ROWNUM = 1
 	</select>
 		
-	<update id="minusPoint">
+	<update id="memberPoint">
 		UPDATE member SET total_point = total_point - #{param1} WHERE midx=#{param2}
 	</update>
 	
-	<insert id="pminsert" parameterType="com.edu.springboot.restboard.PointDTO">
-		INSERT INTO m_point (point_idx, midx, minus_point, oidx) VALUES 
-		(seq_point.nextval, #{midx}, #{minus_point}, #{oidx})
+	<insert id="pinsert" parameterType="com.edu.springboot.restboard.PointDTO">
+		INSERT INTO m_point (point_idx, midx, minus_point, add_point, oidx) VALUES 
+		(seq_point.nextval, #{midx}, #{minus_point}, #{add_point}, #{oidx})
 	</insert>
 	
-	<select id="ordersview" resultType="com.edu.springboot.restboard.Order2DTO">
-		SELECT * FROM order2 WHERE oidx=#{param1}
-	</select>
-	<select id="oview" resultType="com.edu.springboot.restboard.OrderDTO">
-		SELECT * FROM order1 WHERE oidx=#{param1}
-	</select>
-	
 	<select id="olist" resultType="com.edu.springboot.restboard.OrderDTO">
-		SELECT * FROM order1 WHERE midx=#{midx}
+		SELECT * FROM order1 WHERE midx=#{param1}
 	</select>
 	
 	<select id="notPaid" resultType="com.edu.springboot.restboard.OrderDTO">
@@ -215,5 +208,11 @@
 	
 	<select id="notShipped" resultType="com.edu.springboot.restboard.OrderDTO">
 		SELECT * FROM order1 WHERE midx=#{param1} and shipdate is null
+	</select>
+	
+	<select id="opjoin" resultType="com.edu.springboot.restboard.OPjoinDTO">
+		select order1.oidx, order1.midx, order1.paymethod, order1.price, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, order1.auction, 
+product.pidx, product.sfile, product.title, product.m_name from order1 join product 
+on to_char(substr(order1.pidx, 1, 4), '9999') = to_char(product.pidx, '9999') where order1.midx=#{param1};
 	</select>
 </mapper> 

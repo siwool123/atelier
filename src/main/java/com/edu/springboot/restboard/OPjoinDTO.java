@@ -8,22 +8,19 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-public class OrderDTO {
+public class OPjoinDTO {
 	private String oidx;
 	private int midx;
 	private String paymethod;
 	private int price;
 	private Date orderdate;
 	private Date paydate;
-	private String receiver;
-	private String r_phone;
-	private String r_address;
-	private String message;
 	private Date shipdate;
 	private String courier;
 	private String t_num;
-	private String owner;
-	private String apinum;
 	private int auction;
 	private String pidx;
+	private String sfile;
+	private String title;
+	private String m_name;
 }

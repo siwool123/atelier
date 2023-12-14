@@ -65,15 +65,18 @@ public interface IBoardService {
 	public int setsold(int pidx);
 	//주문번호구하기
 	public String orderNum(int midx);
-	//멤버테이블에 포인트 반영
-	public int minusPoint(int point, int midx);
-	//포인트테이블에삽입
-	public int pminsert(PointDTO pointDTO);
+	
+	//멤버테이블에 포인트 사용 및 적립 반영
+	public int memberPoint(int point, int midx);
+	
+	//포인트테이블에 포인트사용 삽입
+	public int pinsert(PointDTO pointDTO);
 	
 	//동일주문번호가진 작품들조회
-	public List<Order2DTO> ordersview(String oidx);
+
+
 	//주문조회1
-	public OrderDTO oview(String oidx);
+	public List<OPjoinDTO> opjoin(int midx);
 	//주문리스트 조회
 	public List<OrderDTO> olist(int midx);
 	
