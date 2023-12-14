@@ -69,12 +69,12 @@ public class MemberController {
 		return "member/editMember";
 	}
 	
-	@RequestMapping("member/editWindow")
+	@RequestMapping("/member/editWindow")
 	public String editWinddow() {
 		return "member/editWindow";
 	}
 	
-	@PostMapping("member/edit.do")
+	@PostMapping("/member/edit.do")
 	public String editProcess(Principal principal, MemberDTO memberDTO, Model model, HttpServletRequest req) {
 		memberDTO.setId(principal.getName());
 		
@@ -89,7 +89,7 @@ public class MemberController {
 	}
 	
 
-	@RequestMapping("member/leave.do")
+	@RequestMapping("/member/leave.do")
 	public String leaveProcess(Principal principal) {
 		int leaveResult = dao.leave(principal.getName());
 		if (leaveResult == 1) { System.out.println("회원탈퇴 성공(비활성화)");
@@ -97,17 +97,16 @@ public class MemberController {
 		return "redirect:/logout";
 	}
 	
-	@RequestMapping("member/orderhistory")
-	public String orderhistory (Principal principal, Model model) {
+	@RequestMapping("/member/point")
+	public String point(Principal principal, Model model) {
 		
 		Map<Object, Object> map = payService.memberIndex(principal);
-		int midx = dao2.mview(principal.getName()).getMidx();
-		List<OPjoinDTO> oplist = dao2.opjoin(midx);
-
-		model.addAttribute("map", map);
-		model.addAttribute("oplist", oplist);
-         
-		return "member/orderhistory";
+        model.addAttribute("map", map);
+        
+        int midx = dao.mview(principal.getName()).getMidx();
+        
+        
+		return "member/point";
 	}
 	
 }

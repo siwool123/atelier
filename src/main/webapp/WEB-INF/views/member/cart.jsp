@@ -19,7 +19,7 @@
 <script src="/js/atelier.js"></script>
 
 <script type="text/javascript">
-$( document ).ready( function() {
+/* $( document ).ready( function() {
  	
     $('#point').focus(function () {
         if ($(this).val() === '0') { $(this).val(''); }
@@ -47,7 +47,7 @@ $( document ).ready( function() {
 	    console.log("최종가격", ffprice);
 	}); 
     
-});
+}); */
 
 function deletepidx(pidx) {
 	if(confirm('정말로 삭제하시겠습니까?')) { 
@@ -93,6 +93,32 @@ function inputMsg(frm) {
     }
 }
 
+function handlePointInput() {
+    var totalAmount = parseInt($('#tprice3').text().replace(/,/g, ''));
+    var maxPoint = parseInt($('#maxPoint').text()); // 최대 포인트 값
+    var pointUsed = parseInt($('#point').val());
+
+    // 최대 포인트를 초과하지 않도록 처리
+    if (pointUsed > maxPoint) {
+    	alert('적립하신 포인트를 초과합니다.');
+        $('#point').val(maxPoint); // 최대 포인트로 설정
+        pointUsed = maxPoint; // 사용된 포인트 값 갱신
+    }
+
+    var finalPrice = parseInt($('#tprice3').text().replace(/,/g, '')) - parseInt($('#point').val());
+	console.log($('input[name="point"]').val());
+    // #fprice와 #oprice 업데이트
+    $('#fprice').html(numberWithCommas(totalAmount - $('input[name="point"]').val()));
+    $('input[name=oprice]').val(totalAmount);
+    $('input[name=fprice]').val(totalAmount - parseInt($('#point').val()));
+
+    // #futurepoint 업데이트
+    $('#futurepoint').html(totalAmount * 0.01);
+}
+//#point에 포커스가 갔을 때, 값이 0이면 빈 문자열로 설정
+$('#point').on('focus', function() {
+    if ($(this).val() === '0') {   $(this).val(''); }
+});
 </script>
 <style>
 @media (max-width: 600px) {
@@ -224,11 +250,14 @@ ul.border { list-style-type: disc !important;  }
 				</tr>
 				<tr>
 					<th>포인트 사용</th>
-					<td><input type="text" name="point" id="point" value="0" onchange="pointUse(this.val);" /> P ( 사용가능 포인트 <b style="color:#AF0000" id="maxPoint">${not empty map.mdto ? map.mdto.total_point : "0" }</b> P )</td>
+					<td><input type="number" name="point" id="point"  value="0" onkeyup="handlePointInput();" onfocus="if(this.value=='0')this.value='';"  /> P 
+					( 사용가능 포인트 <b style="color:#AF0000" id="maxPoint">${not empty map.mdto ? map.mdto.total_point : "0" }</b> P )</td>
 				</tr>
 				<tr>
 					<th>최종 결제할 금액</th>
-					<td><b id="fprice" class="price2" style="color:blue;">0</b> 원 <input type="hidden" name="oprice" id="oprice" /> </td>
+					<td><b id="fprice" class="price2" style="color:blue;">0</b> 원 
+					<input type="hidden" name="oprice" id="oprice" />
+					<input type="hidden" name="fprice" /> </td>
 				</tr>
 				<tr>
 					<th>적립예정 포인트</th>

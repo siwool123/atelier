@@ -47,9 +47,9 @@ $(function() {
 		console.log(formData);
 		$.ajax({
 			type: 'post',
-			url: '/rest/profileUpload.do',
+			url: '/member/profileUpload.do',
 			data : formData,
-			//enctype: 'multipart/form-data',
+			enctype: 'multipart/form-data',
 			contentType : false,
 			processData : false, 
 			success : function(rdata0){

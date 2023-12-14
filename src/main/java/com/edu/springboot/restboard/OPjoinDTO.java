@@ -19,8 +19,19 @@ public class OPjoinDTO {
 	private String courier;
 	private String t_num;
 	private int auction;
-	private String pidx;
+	private int pidx;
 	private String sfile;
 	private String title;
 	private String m_name;
+	
+	private String receiver;
+	private String r_phone;
+	private String r_address;
+	private String message;
+	private String owner;
+	
+	private int tprice;
+	private int add_point;
+	private int minus_point;
+	private int o2idx;
 }

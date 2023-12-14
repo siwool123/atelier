@@ -1,25 +1,26 @@
 <%@page import="java.time.LocalDate"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-   <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+ <%@ taglib prefix="c" uri="jakarta.tags.core" %> 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Atelier</title>
-<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
-<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-<script src="https://js.tosspayments.com/v1/payment-widget"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<!-- 다음 주소 찾기 api -->
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js "></script>
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
 <link href="../css/atelier.css" rel="stylesheet" type="text/css" />
 <script src="../js/atelier.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
-<script type="text/javascript">
 
+<script>
+$( function() {
+    $( "#datepicker1" ).datepicker();
+    $( "#datepicker2" ).datepicker();
+  } );
+  
 function deletepidx(pidx) {
 	if(confirm('정말로 삭제하시겠습니까?')) { 
  	
@@ -42,28 +43,37 @@ function deletepidx(pidx) {
 let key = "${param.key}";
 if(key === "userinfo"){  $("#myreview-tab, #myreview, #userinfo-tab, #userinfo").toggleClass("active");
 }else if(key === "myreview"){ $("#userinfo-tab, #myreview-tab, #userinfo, #myreview").toggleClass("active");  }
-</script> 
+</script>
+
 <style>
 @media (max-width: 600px) {
 }
 .leftmenu li:nth-child(2) {background-color: black;}
 .leftmenu li:nth-child(2) a, .leftmenu li:nth-child(2) a i {color:white}
 .leftmenu li a {line-height:30px !important;}
-.btn3, .btn4 {padding:0 6% !important;}
 .border li {line-height:40px;}
 input {margin-right:10px !important;}
-table.order tr th {background-color:#ededed;}
-table.order tr th, table.order tr td {padding-left:20px;}
 .img1 {max-width:100px; max-height:100px;}
 .bpc1 {position:relative !important; top:-20px !important;}
 .circle {font-size:6px; color:grey; margin-right:10px;}
+.btn5 {padding:5px; background:red ; color:white;}
+#search {padding:5px 10px; background:black ; color:white;}
+
+.btn1 {padding:0 14px !important; margin-right:10px; display:inline; float:left;}
+.btn6 {padding: 5px; border: 1px solid grey;}
+.table1 tr th {vertical-align:middle; font-weight: normal;}
+.table1 tr td {padding:20px 10px;}
+button.nav-link {padding:10px 20px;}
+input[type="text"], input[type="date"] { border:none; border-bottom:1px solid grey !important; height:40px; margin-left:10px; }
+
+.param input {width:150px;}
+.bi-calendar3 {position: relative; right: 35px;}
+/* border:none; border-bottom:1px solid #dddddd; height:36px; padding:10px; outline:none; background-color: white; border-radius: 0 !important; */
 </style>
 </head>
-<body> 
-<c:set var="currentDate" value="<%= LocalDate.now() %>" />
-<form name="delFrm" id="delFrm" ><input type="hidden" name="pidx" /></form>
+<body>
 <%@ include file="index.jsp" %>
-    <div class="container">
+    <div class="container" style="margin-bottom:80px;">
     <div class="row my-5">
         <div class="col-sm-2"><%@ include file="../include/memberSidebar.jsp" %></div>
         
@@ -94,8 +104,19 @@ table.order tr th, table.order tr td {padding-left:20px;}
 				<li><span class="circle">●</span>실제 상품이 온라인 상의 내용과 다른 경우, 작품에 하자가 있거나 운송중 파손이 발생한 경우, 반품이 가능합니다. </li>
 				<li><span class="circle">●</span>택배를 이용하여 아뜰리에 측으로 반품해 주시면 됩니다. 단순변심에 따른 반품은 불가합니다.</li>
 			</ul>
+			<div class="mt-5 param" style="height:80px;">
+				<a href="?status=aa" class="btn1">입금확인전</a> 
+				<a href="?status=bb" class="btn1">배송준비중</a> 
+				<a href="?status=cc" class="btn1">발송완료</a> 
+				<form action="" style="display:inline; float:right">
+				<input type="date" name="dmin" id="datepicker1"><!-- <i class="bi bi-calendar3"></i> --> ~ 
+				<input type="date" name="dmax" id="datepicker2"> <!-- <i class="bi bi-calendar3"></i> -->
+                <input type="text" name="sWord" style="width: 150px;" placeholder="작가 또는 작품명 검색" />
+                <button type="submit" id="search"> 검색 <i class="bi bi-search fs-5"></i></button>
+                </form>
+			</div>
 			
-			<table class="table table-hover">
+			 <table class="table table-hover table1">
 			   <thead class="table-secondary">
 			     <tr align="center" style="height:40px">
 			       <th width="10%">구분</th>
@@ -110,31 +131,31 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			   <tbody>
 			<c:choose> 
 				<c:when test="${ empty oplist }">
-				<tr><td colspan="6" align="center">주문한 작품이 없습니다.</td></tr>
+				<tr><td colspan="8" align="center">주문한 작품이 없습니다.</td></tr>
 				</c:when>
 				<c:otherwise> <!-- 출력할 게시물이 있을때 -->
 					<c:forEach items="${ oplist }" var="row" varStatus="loop">
 					     <tr id="orderItem_${row.pidx}">
-					       <td align="center" width="10%">${ row.auction==0 ? "구매" : "낙찰" }</td>
-					       <td align="center" width="10%">
+					       <td align="center">${ row.auction==0 ? "구매" : "<span style='color:red'>낙찰</span>" }</td>
+					       <td align="center">
 					       		${row.orderdate } <br/>
-						      <a href="./oview?oidx=${row.oidx }">${row.oidx }</a> 
+						      <a href="oview?oidx=${row.oidx }" style="text-decoration: underline;">${row.oidx }</a> 
 					       </td>
-					       <td align="center" width="10%"><a href="/view?pidx=${ row.pidx }">
+					       <td align="center"><a href="/view?pidx=${ row.pidx }">
 					       <c:set var="imgsrc" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
    				 			<img src="${imgsrc}" alt="작품이미지" class="img1" />
 					       	</a></td>
 					       	<td><a href="view?pidx=${ row.pidx }"><b > ${ row.title }</b><br/>  ${row.m_name }</a></td>
-					       <td><b class="price2">${row.price }</b></td>
-					       <td width="20%" align="right" >
+					       <td align="right"><span class="price2">${row.price }</span></td>
+					       <td align="center" >
 					       	 <c:choose>
-						       	<c:when test="${ row.paydate==null }"><button type="button" class="btn5">입금확인전</button></c:when>
-						       	<c:when test="${ row.paydate!=null and row.shipdate==null }"><button type="button" class="btn5">배송준비중</button></c:when>
+						       	<c:when test="${ row.paydate==null and row.shipdate==null }"><span style="color:red;">입금확인전</span></c:when>
+						       	<c:when test="${ row.paydate!=null and row.shipdate==null }"><span style="color:red;">배송준비중</span></c:when>
 						       	<c:when test="${ row.paydate!=null and row.shipdate!=null }">
-						       	<button type="button" class="btn1">배송조회</button><button type="button" class="btn6">리뷰작성</button></c:when>
+						       	<button class="btn6">배송조회</button><br /> <button class="btn7">리뷰작성</button></c:when>
 						       </c:choose>
 					       </td>
-					       <td align="center" width="10%">${row.paymethod }
+					       <td align="center" >
 					       	  <c:choose>
 						       	<c:when test="${ row.paymethod.equals('bank') }">무통장입금</c:when>
 						       	<c:when test="${ row.paymethod.equals('kakaopay') }">카카오페이</c:when>
@@ -142,113 +163,31 @@ table.order tr th, table.order tr td {padding-left:20px;}
 						       	<c:when test="${ row.paymethod.equals('html5_inicis') }">신용카드</c:when>
 						       </c:choose>
 					       </td>
-					       <td align="center" width="10%">
+					       <td align="center">
 					       	  <c:choose>
-						       	<c:when test="${ row.shipdate==null }"><button type="button" class="btn1">주문취소</button></c:when>
-						       	<c:otherwise><button type="button" class="btn1" ${row.shipdate.toLocalDate().until(currentDate, ChronoUnit.DAYS) > 10 ? 'disabled' : ''} >반품</button></c:otherwise>
+						       	<c:when test="${ row.shipdate==null }"><button class="btn6">주문취소</button></c:when>
+						       	<c:otherwise><button class="btn6" ${row.shipdate.toLocalDate().until(currentDate, ChronoUnit.DAYS) > 10 ? 'disabled' : ''} >반품</button></c:otherwise>
 						       </c:choose>
 					       </td>
 					     </tr>
 					</c:forEach>
 				</c:otherwise>
 			</c:choose>
-				<tr style="height:50px;">
-					<td colspan="3" align="right">선택한 작품 <span id="tnum">0</span> 개 <i class="bi bi-chevron-right"></i></td>
-					<td colspan="2" align="center">작품합계  <span class="price2" id="tprice">0</span> +  배송비 0 <i class="bi bi-chevron-right"></i></td>
-					<td colspan="2" >총 결제 금액 :  <b id="tprice2" class="price2" style="color:#AF0000">0</b> 원</td>
-				</tr>
 			   </tbody>
 			</table>    
         
         </div>
-        <div class="tab-pane fade" id="myreview" role="tabpanel" aria-labelledby="myreview-tab">
-        내리뷰리스트 탭
+        <div class="tab-pane fade text-center p-5" id="myreview" role="tabpanel" aria-labelledby="myreview-tab">
+        취소 및 반품 내역이 없습니다.
         
         
         </div>
       </div>
 			
-			
-			
-			
-			
-			
-			
-			<div style="height:50px;"></div>
-			<div class="headerL2 my-5">배송 및 결제 정보 </div>
-		<form action="/member/orderProc" name="orderFm" id="orderFm" method="post">
-			<table class="table table-borderless order">
-				<tr>
-					<th>수령인 / 연락처</th>
-					<td><input type="text" name="m_name" value="${mdto.m_name }" /> 
-					<input type="text" name="phone" value="${mdto.phone }" />
-					<input type="hidden" name="mName" id="mName" value="${mdto.m_name }" />
-					<input type="hidden" name="mPhone" id="mPhone" value="${mdto.phone }" />
-					<input type="hidden" name="mId" id="mId" value="${mdto.id }" /></td>
-				</tr>
-				<tr>
-					<th style="vertial-align:top;">배송지 주소</th>
-					<td><input type="text" name="zip" id="zip" value="${mdto.zip }" readonly />
-					<button type="button" onClick="postOpen2();" class="btn btn-outline-secondary">주소찾기</button>
-					 <div class="my-3"><input type="text" name="addr1" value="${mdto.addr1 }" /> <input type="text" name="addr2" value="${mdto.addr2 }" /></div></td>
-				</tr>
-				<tr>
-					<th style="vertial-align:top;">배송메세지</th>
-					<td>
-						<select name="msg" onchange="inputMsg(this.form);" style="width:40%">
-                            <option value="" selected>배송 메세지를 선택해주세요.</option>
-                            <option value="직접입력">배송 메세지를 직접 입력할게요.</option>
-                            <option value="경비실에 맡기고 문자주세요.">경비실에 맡기고 문자주세요.</option>
-                            <option value="현관문앞에 두고 문자주세요.">현관문앞에 두고 문자주세요.</option>
-						    <option value="무인택배함에 두고 문자주세요.">무인택배함에 두고 문자주세요.</option>
-	                    </select><br />
-						<input type="text" name="msg2" size="30" placeholder="배송메세지 (20자이내)" style="margin-top:10px;" readonly />
-					</td>
-				</tr>
-				<tr>
-					<th>입금시 입금자명</th>
-					<td><input type="text" name="owner" placeholder="무통장입금 시 반드시 입력하세요." style="width:30%;" /> </td>
-				</tr>
-				<tr>
-					<th>총 작품 금액</th>
-					<td><b id="tprice3" class="price2">0</b> 원 </td>
-				</tr>
-				<tr>
-					<th>포인트 사용</th>
-					<td><input type="text" name="point" id="point" value="0" /> P ( 사용가능 포인트 <b style="color:#AF0000" id="maxPoint">${not empty mdto ? mdto.total_point : "0" }</b> P )</td>
-				</tr>
-				<tr>
-					<th>최종 결제할 금액</th>
-					<td><b id="fprice" class="price2" style="color:blue;">0</b> 원 <input type="hidden" name="oprice" id="oprice" /> </td>
-				</tr>
-				<tr>
-					<th>적립예정 포인트</th>
-					<td><span id="futurepoint">0</span> P</td>
-				</tr>
-			</table>
-			<div class="m-5">
-			<input type="hidden" name="paymethod" />
-			<input type="hidden" name="pidxList" id="pidxList" />
-			<input type="hidden" name="titleList" id="titleList" />
-			<input type="hidden" name="imp_uid" id="imp_uid" />
-			<input type="hidden" name="user_id" id="user_id" value="${ not empty mdo ? mdto.id : '' }" />
-			<button class="btn3 account" type="button" onclick="submitFm('bank');">무통장입금</button>
-			
-			<button class="btn4" id="kakao" style="background-color:#f7e400; color:black; margin:0 10px;" type="button" onclick="requestPay2('kakaopay');">
-			<img alt="" src="../images/kakaopay.png" style="width:50px;"> 카카오페이</button>
-			<button class="btn4" id="toss" style="border:1px solid #004df7; background-color:white; color:#004df7;" type="button" onclick="tossPay();">
-			<img alt="" src="../images/toss.png" style="width:50px;"> 토스페이먼츠</button>
-			
-			<button class="btn1 px-5 mx-3" id="card" type="button" onclick="requestPay2('html5_inicis');">
-			<i class="bi bi-credit-card-2-back" style="margin-right:10px;"></i> 카드 결제</button>
-			</div>
-			</form>
         </div>
     </div>
     </div>
 <%@ include file="../include/footer.jsp" %>
+<c:set var="currentDate" value="<%= LocalDate.now() %>" />
 </body>
-
 </html>
- 
- 
