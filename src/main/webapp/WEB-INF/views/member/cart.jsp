@@ -114,6 +114,7 @@ function handlePointInput() {
 
     // #futurepoint 업데이트
     $('#futurepoint').html(totalAmount * 0.01);
+    $('input[name=futurepoint]').html(totalAmount * 0.01);
 }
 //#point에 포커스가 갔을 때, 값이 0이면 빈 문자열로 설정
 $('#point').on('focus', function() {
@@ -261,7 +262,7 @@ ul.border { list-style-type: disc !important;  }
 				</tr>
 				<tr>
 					<th>적립예정 포인트</th>
-					<td><span id="futurepoint">0</span> P</td>
+					<td><span id="futurepoint">0</span> P <input type="hidden" name="futurepoint" /></td>
 				</tr>
 			</table>
 			<div class="m-5">

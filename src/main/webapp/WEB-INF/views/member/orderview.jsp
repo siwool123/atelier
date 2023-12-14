@@ -137,11 +137,25 @@ input[type="text"], input[type="date"] { border:none; border-bottom:1px solid gr
 					<div class="headerL2 mt-5 mb-3">배송지 정보</div>
 					<table class="table-borderless">
 						<tr>
-							<th>이름</th>	<td>${map.mdto.m_name }</td>
+							<th>이름</th>	<td>${not empty odto ? odto.receiver : '' }</td>
+							<th>연락처</th>	<td>${not empty odto ? odto.r_phone : '' }</td>
+							<th>배송지 주소</th>	<td>${not empty odto ? odto.r_address : '' }</td>
+							<th>배송 메세지</th>	<td>${not empty odto ? odto.message : '' }</td>
 						</tr>
 					</table>
 				<div class="col-sm-6">
-				
+					<div class="headerL2 mt-5 mb-3">결제 정보</div>
+					<table class="table-borderless">
+						<tr>
+							<th>상품합계</th>	<td>${not empty odto ? odto.price+odto.minus_point : '0' }</td>
+							<th>배송비 합계</th>	<td>무료배송</td>
+							<th>포인트 할인</th>	<td>${not empty odto ? odto.minus_point : '0' }</td>
+							<th>포인트 	${row.paydate==null ? ' 적립예정' : ' 적립완료' }
+							</th>	<td>${not empty odto ? odto.add_point : '0' }</td>
+							<th>최종결제금액</th>	<td>${not empty odto ? odto.price : '0' }</td>
+							<th>결제수단</th>	<td>${not empty odto ? odto.paymethod : '' }</td>
+						</tr>
+					</table>
 				</div>
 			</div> 
         
