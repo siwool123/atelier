@@ -59,7 +59,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 .circle {font-size:6px; color:grey; margin-right:10px;}
 </style>
 </head>
-<body>
+<body> 
 <c:set var="currentDate" value="<%= LocalDate.now() %>" />
 <form name="delFrm" id="delFrm" ><input type="hidden" name="pidx" /></form>
 <%@ include file="index.jsp" %>
