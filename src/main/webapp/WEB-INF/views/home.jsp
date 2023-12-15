@@ -98,7 +98,7 @@ $(document).ready( function() {
 <body>
 <%@ include file="./include/header.jsp" %>
 <div class="container-fluid">
-	<div class="swiper swiper-container">
+	<div class="swiper swiper-container sc1">
 	    <div class="swiper-wrapper" >
 	        <div class="swiper-slide" id="container" style="background:black; width:100vw; height:480px; overflow:hidden;">  
 

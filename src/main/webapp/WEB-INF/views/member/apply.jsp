@@ -44,6 +44,16 @@ table.order tr th, table.order tr td {padding-left:20px;}
 <script>
 	//이미지 선택시 바로 이미지 띄우기
 	function loadApplyImage(img) {
+		/* 파일용량 제한*/
+		let maxSize = 4 * 1024 * 1024; //* 4MB 사이즈 제한
+		let fileSize = img.files[0].size; //업로드한 파일용량
+		
+		if(fileSize > maxSize){
+			alert("파일첨부 사이즈는 4MB 이내로 가능합니다.");
+			$(img).val(''); //업로드한 파일 제거
+			return; 
+		}
+		
 		//선택된 파일 가져오기
 	    var file = img.files[0];
 		/*이미지 태그 name 값 마지막 부분(숫자로 되어있음)을 잘라 num이라는 변수로 선언한다.
@@ -54,6 +64,8 @@ table.order tr th, table.order tr td {padding-left:20px;}
 		} else if (img.name.slice(-1) == 0) {
 			num = img.name.slice(-2);
 		}
+		
+		
 	    //기존 showImageDiv div태그를 삭제후 다시 만든다(이미지 두번 선택 방지)
 	   	document.getElementById("showImageDiv"+num).remove();
 	    //img태그가 담길 div 태그 새로 만들기
@@ -71,6 +83,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 		selectedApplyImage.setAttribute('style', 'max-width: 100px; max-height: 100px;');
 	    //이미지를 showImageDiv에 추가
 		showImageDiv.appendChild(selectedApplyImage);
+	    
 	}
 	
 	function applyValidate(form) {
@@ -86,7 +99,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 		}
 		// 이미지 10개 검증
 		for(var i=1; i<=10; i++) {
-			if(form['apply'+i].value == '') {
+			if(form['inputApply'+i].value == '') {
 				alert('작품 이미지는 10개를 첨부해야 합니다.');
 				return false;
 			}
@@ -114,8 +127,6 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			}
 		});
 	});
-	
-	
 </script>
 
 <%@ include file="index.jsp" %>
@@ -137,6 +148,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 				<p class="mt-5"><b>작가약력</b>&nbsp;&nbsp;&nbsp;<span id="ta_count_2">0</span><span class="count"> / 800 (80자 이상 800자 이내)</span></p>
 				<textarea class="form-control" rows="10" id="a_history" name="a_history"
 					placeholder="학력, 개인전, 단체전, 공모전 관련 약력을 80자 이상 800자 이내로 작성해주세요."></textarea>
+				<p class="pt-5" style="color: red;">* 파일첨부 사이즈는 4MB 이내로 가능합니다.</p>
 				<div class="row mx-auto text-center">
 					<c:forEach begin="0" end="9" step="1" varStatus="loop">
 					<div class="my-4 col-4 mx-auto" style="width: 210px; height: 120px; display: inline-block;">
