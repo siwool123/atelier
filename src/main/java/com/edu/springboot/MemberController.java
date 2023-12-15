@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.edu.springboot.restboard.ProductDTO;
 import com.edu.springboot.restboard.ReviewDTO;
 import com.edu.springboot.restboard.ParameterDTO;
+import com.edu.springboot.restboard.PlikeDTO;
 import com.edu.springboot.restboard.PointDTO;
 import com.edu.springboot.pay.PayService;
 import com.edu.springboot.restboard.ApplyDTO;
@@ -196,10 +197,20 @@ public class MemberController {
 		}
 	}
 	
-	@PostMapping("member/deleteLike")
-	public String deleteLike() {
+	@RequestMapping("member/deleteLike.do")
+	public String deleteLikeProcess(Principal principal, Model model, HttpServletRequest req, MemberDTO memberDTO, PlikeDTO plikeDTO, @RequestParam int pidx) {
 		
-		return "member/like";
+		plikeDTO = dao2.plview(pidx, dao.mview(principal.getName()).getMidx());
+		int result = dao2.pldelete(plikeDTO.getLidx());
+		if (result == 1) {
+			System.out.println("좋아요 삭제 성공");
+		} else {
+			System.out.println("좋아요 삭제 실패");
+		}
+		Map<Object, Object> map = payService.memberIndex(principal);
+        model.addAttribute("map", map);
+        
+		return "redirect:/member/like";
 	}
 	
 	

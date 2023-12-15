@@ -23,7 +23,8 @@
 	background-color: black;
 }
 
-.leftmenu li:nth-child(5) a, .leftmenu li:nth-child(7) a i {
+.leftmenu li:nth-child(5) a,
+.leftmenu li:nth-child(5) a i {
 	color: white
 }
 
@@ -90,9 +91,9 @@ table.order tr th, table.order tr td {
 	}
 	
 	//좋아요 삭제하기
-	function delLike() {
+	function deleteLike(pidx) {
 		if(confirm("해당 작품을 좋아요 목록에서 삭제하시겠습니까?")) {
-			location.href('/member/deleteLike.do');
+			location.href ='/member/deleteLike.do?pidx='+pidx;
 		}
 	}
 	
@@ -239,9 +240,10 @@ table.order tr th, table.order tr td {
 								<c:forEach items="${ plist }" var="row" varStatus="loop">
 									<div class="swiper-slide arttile2">
 										<input type="checkbox" name="likeImgChk" id="likeImgChk${loop.index}" class="ms-3 my-3" onChange="loadChkImg(this);" style="width: 30px; height: 30px;" />
-										<i class="bi bi-x-lg mt-4 me-3" id="delLike${loop.index }" style="font-size: 25px; float: right; cursor: pointer;" onclick="delLike()"></i>
+										<i class="bi bi-x-lg mt-4 me-3" id="delLike${loop.index }" style="font-size: 25px; float: right; cursor: pointer;" onclick="deleteLike(${row.pidx });"></i>
 										<div class="image">
-											<a href="./view?pidx=${row.pidx }"> <c:choose>
+											<a href="./view?pidx=${row.pidx }">
+												<c:choose>
 													<c:when test="${row.sfile.length()>40 }">
 														<img id="likeImg${loop.index}" src="${row.sfile }" alt="" />
 													</c:when>

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-<!-- 에이잭스 -->
+<!-- 제이쿼리 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <!-- 다음 주소 찾기 api -->
@@ -17,7 +17,8 @@
 @media (max-width: 600px) {
 }
 .leftmenu li:nth-child(6) {background-color: black;}
-.leftmenu li:nth-child(6) a, .leftmenu li:nth-child(7) a i {color:white}
+.leftmenu li:nth-child(6) a,
+.leftmenu li:nth-child(6) a i {color:white}
 .leftmenu li a {line-height:30px !important;}
 .btn3, .btn4 {padding:0 6% !important;}
 .border li {line-height:40px;}
