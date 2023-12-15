@@ -360,7 +360,7 @@ $( document ).ready( function() {
 	$('a#total').addClass( 'active' );
 	
 	$('.btn2').click(function (e) {
-        e.preventDefault(); // 기존의 클릭 이벤트 방지
+        e.preventDefault(); // 기존의 클릭 이벤트 방지 
         // 현재 URL 가져오기
         var currentUrl = window.location.href.includes('orderby') ? window.location.href.slice(0, -11) : window.location.href;
         var orderbyValue = $(this).attr('href').replace('?', ''); // .btn2의 href 값 가져오기
