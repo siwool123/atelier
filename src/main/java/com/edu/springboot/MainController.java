@@ -61,24 +61,6 @@ public class MainController {
 		return "auth/denied";
 	}
 	
-	@RequestMapping("/admin")
-	public String admin() {
-		
-		return "admin/admin";
-	}
-	
-	@RequestMapping("/admin/member")
-	public String adminMember() {
-		
-		return "admin/adminMember";
-	}
-	
-	@RequestMapping("/admin/noticewrite")
-	public String noticewrite() {
-		
-		return "admin/adminNoticeWrite";
-	}
-	
 	@RequestMapping(value={"/", "/shop"})
 	public String home(Model model, HttpServletRequest req, ParameterDTO parameterDTO) {
 		

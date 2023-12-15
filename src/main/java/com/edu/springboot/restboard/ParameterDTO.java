@@ -29,5 +29,7 @@ public class ParameterDTO {
 	private String status;
 	private String dmin;
 	private String dmax;
+
+	private String searchKeyword;
 	
 }
