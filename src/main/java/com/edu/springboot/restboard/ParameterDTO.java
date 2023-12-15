@@ -24,6 +24,7 @@ public class ParameterDTO {
 	private String size;
 	private String cate;
 	private String ptype;
+	private String auction;
 	
 	private String status;
 	private String dmin;

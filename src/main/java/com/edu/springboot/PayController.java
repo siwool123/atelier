@@ -193,6 +193,7 @@ public class PayController {
 	public String orderhistory (Principal principal, Model model, ParameterDTO parameterDTO, HttpServletRequest req) {
 		try {
 			Map<Object, Object> map = payService.memberIndex(principal);
+			
 			int midx = dao.mview(principal.getName()).getMidx();
 			System.out.println("midx="+ midx);
 			
@@ -224,6 +225,8 @@ public class PayController {
 			model.addAttribute("map", map);
 			
 			String oidx = req.getParameter("oidx");
+			System.out.println("oidx : "+oidx);
+			
 			OrderDTO odto = dao.oview(oidx);
 			List<OPjoinDTO> oplist2 = dao.opjoin2(oidx);
 			String orderdate = dao.orderdate(oidx);
@@ -234,6 +237,7 @@ public class PayController {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("주문상세내역불러오기실패");
 		}
          
 		return "member/orderview";
@@ -243,5 +247,10 @@ public class PayController {
 	public String ohistory () {
          
 		return "member/orderview";
+	}
+	
+	@RequestMapping("/member/trackWindow")
+	public String editWinddow() {
+		return "member/trackWindow";
 	}
 }

@@ -34,4 +34,7 @@ public class OPjoinDTO {
 	private int add_point;
 	private int minus_point;
 	private int o2idx;
+	
+	private int size1;
+	private int size2;
 }

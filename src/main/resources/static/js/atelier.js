@@ -323,6 +323,8 @@ $( document ).ready( function() {
     }
     activeByParam('sell', 'on', '#onsale');
 	activeByParam('sell', 'so', '#sold');
+	activeByParam('auction', 'na', '#nauction');
+	activeByParam('auction', 'au', '#auction');
 	
     activeByParam('ori', 'sq', '#square');
 	activeByParam('ori', 'la', '#landscape');

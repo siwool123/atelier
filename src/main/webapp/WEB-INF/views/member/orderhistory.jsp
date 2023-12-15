@@ -40,6 +40,16 @@ function deletepidx(pidx) {
 	} 
 }
 
+function trackWindow(tnum) {
+	var popupWidth = 500;
+	var popupHeight = 900;
+
+	var popupX = Math.round(window.screenX + (window.outerWidth / 2) - (popupWidth / 2));
+	var popupY = Math.round(window.screenY + (window.outerHeight / 2) - (popupHeight / 2));
+
+	window.open('/member/trackWindow?tnum='+tnum, 'track', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupX + ', top=' + popupY);
+}
+
 let key = "${param.key}";
 if(key === "userinfo"){  $("#myreview-tab, #myreview, #userinfo-tab, #userinfo").toggleClass("active");
 }else if(key === "myreview"){ $("#userinfo-tab, #myreview-tab, #userinfo, #myreview").toggleClass("active");  }
@@ -58,6 +68,7 @@ input {margin-right:10px !important;}
 .circle {font-size:6px; color:grey; margin-right:10px;}
 .btn5 {padding:5px; background:red ; color:white;}
 #search {padding:5px 10px; background:black ; color:white;}
+.btn7 {padding:5px; background:black ; color:white; margin-top:5px;}
 
 .btn1 {padding:0 14px !important; margin-right:10px; display:inline; float:left;}
 .btn6 {padding: 5px; border: 1px solid grey;}
@@ -136,7 +147,7 @@ input[type="text"], input[type="date"] { border:none; border-bottom:1px solid gr
 				<c:otherwise> <!-- 출력할 게시물이 있을때 -->
 					<c:forEach items="${ oplist }" var="row" varStatus="loop">
 					     <tr id="orderItem_${row.pidx}">
-					       <td align="center">${ row.auction==0 ? "구매" : "<span style='color:red'>낙찰</span>" }</td>
+					       <td align="center">${ row.auction==0 ? '구매' : '<span style="color:red">낙찰</span>' }</td>
 					       <td align="center">
 					       		${row.orderdate } <br/>
 						      <a href="oview?oidx=${row.oidx }" style="text-decoration: underline;">${row.oidx }</a> 
@@ -145,14 +156,18 @@ input[type="text"], input[type="date"] { border:none; border-bottom:1px solid gr
 					       <c:set var="imgsrc" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
    				 			<img src="${imgsrc}" alt="작품이미지" class="img1" />
 					       	</a></td>
-					       	<td><a href="view?pidx=${ row.pidx }"><b > ${ row.title }</b><br/>  ${row.m_name }</a></td>
+					       	<td><a href="view?pidx=${ row.pidx }"><b > ${ row.title }</b><br/>  ${row.m_name } <br />
+					       	${row.size1 } x ${row.size2 } cm					       	
+					       	</a></td>
 					       <td align="right"><span class="price2">${row.price }</span></td>
 					       <td align="center" >
 					       	 <c:choose>
 						       	<c:when test="${ row.paydate==null and row.shipdate==null }"><span style="color:red;">입금확인전</span></c:when>
 						       	<c:when test="${ row.paydate!=null and row.shipdate==null }"><span style="color:red;">배송준비중</span></c:when>
 						       	<c:when test="${ row.paydate!=null and row.shipdate!=null }">
-						       	<button class="btn6">배송조회</button><br /> <button class="btn7">리뷰작성</button></c:when>
+						       	<button class="btn6" onclick="trackWindow(${row.t_num});" >배송조회</button> <br />
+						       	<button class="btn7" id="writereview_${row.pidx }">리뷰작성</button>
+						       	</c:when>
 						       </c:choose>
 					       </td>
 					       <td align="center" >
@@ -164,12 +179,27 @@ input[type="text"], input[type="date"] { border:none; border-bottom:1px solid gr
 						       </c:choose>
 					       </td>
 					       <td align="center">
+					       <c:set var="currentDate" value="<%= LocalDate.now() %>" />
 					       	  <c:choose>
 						       	<c:when test="${ row.shipdate==null }"><button class="btn6">주문취소</button></c:when>
-						       	<c:otherwise><button class="btn6" ${row.shipdate.toLocalDate().until(currentDate, ChronoUnit.DAYS) > 10 ? 'disabled' : ''} >반품</button></c:otherwise>
+						       	<c:otherwise>
+						       	<button class="btn6" disabled > 반품</button></c:otherwise>
 						       </c:choose>
 					       </td>
 					     </tr>
+					     
+					     <c:if test="${ row.paydate!=null and row.shipdate!=null }">
+					     <tr style="background:#ededed;" class="p-3 toggle" id="toggle_${row.pidx }"> <td colspan="8">
+					     <form action="" name="reviewFm_${row.pidx }" id="reviewFm__${row.pidx }" method="post" enc>
+					     	<b>리뷰내용</b> (작품 구매 및 수령 후 한달안에 리뷰 작성시 10,000 포인트를 지급합니다. )
+					     	<span style="float:right;"><span>별점을 매겨주세요.  </span>
+					     	<c:forEach var="i" begin="1" end="5"><i class="bi bi-star-fill"></i></c:forEach> </span>
+					     	<textarea name="" id="" cols="30" rows="10"></textarea>
+					     	
+					     </form>
+					     	</td> </tr>
+					     </c:if>
+					     
 					</c:forEach>
 				</c:otherwise>
 			</c:choose>
@@ -188,6 +218,6 @@ input[type="text"], input[type="date"] { border:none; border-bottom:1px solid gr
     </div>
     </div>
 <%@ include file="../include/footer.jsp" %>
-<c:set var="currentDate" value="<%= LocalDate.now() %>" />
+
 </body>
 </html>
