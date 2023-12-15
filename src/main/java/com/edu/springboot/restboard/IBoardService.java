@@ -23,6 +23,9 @@ public interface IBoardService {
 	public List<ProductDTO> selectProduct(ParameterDTO parameterDTO);
 	public List<ProductDTO> selectbya(int aidx);
 	
+	//경매작품목록(페이징기능)
+	public List<ProductDTO> selectAuction(ParameterDTO parameterDTO);
+	
 	//게시물 검색
 	public ArrayList<ProductDTO> search(ParameterDTO parameterDTO);
 	
@@ -100,5 +103,8 @@ public interface IBoardService {
 	
 	//주문조회2
 	public List<OPjoinDTO> opjoin2(String oidx);
+	
+	//리뷰작성
+	public int rinsert(ReviewDTO reviewDTO);
 	
 }

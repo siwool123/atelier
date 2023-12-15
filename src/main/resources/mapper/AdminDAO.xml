@@ -4,14 +4,14 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.edu.springboot.restboard.IAdminService">
-	
-	 <select id="adminTotalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+	<!-- 회원 카운트 -->
+	<select id="adminTotalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		SELECT COUNT(*) from member
 		<if test="searchKeyword!=null and !searchKeyword.equals('')"> 
 			WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
 		</if>
 	</select>
-	
+	<!-- 회원 목록 -->
 	<select id="adminList" resultType="com.edu.springboot.restboard.MemberDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">			
 		SELECT * FROM (
 		    SELECT Tb.*, rownum rNum FROM (
@@ -24,15 +24,39 @@
 		)
 		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}		
 	</select>
-	
+	<!-- 회원강제탈퇴 -->
 	<update id="memberLeave" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		UPDATE member SET enabled=0 WHERE midx=#{midx}
 	</update>
-	
+	<!-- 영구삭제 -->
 	<delete id="memberDelete" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		DELETE FROM member WHERE midx=#{midx}
 	</delete>
 	
-	
+	<!-- 아티스트 카운트 -->
+	<select id="artistTotalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT COUNT(*) from apply
+		<if test="searchKeyword!=null and !searchKeyword.equals('')"> 
+			WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+	<!-- 아티스트 신청 목록 -->
+	<select id="artistList" resultType="com.edu.springboot.restboard.ApplyDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">			
+		SELECT * FROM (
+		    SELECT Tb.*, rownum rNum FROM (
+		        SELECT A.*, M.m_name FROM apply A INNER JOIN member M ON A.midx=M.midx
+		        <if test="searchKeyword!=null and !searchKeyword.equals('')"> 
+					WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
+		        ORDER BY apply_idx DESC
+		    ) Tb
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}		
+	</select>
+	<!-- 아티스트 신청 상세보기 -->
+	<select id="artistView" resultType="com.edu.springboot.restboard.ApplyDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">			
+		SELECT A.*, M.m_name FROM apply A INNER JOIN member M ON A.midx=M.midx
+		where apply_idx=#{apply_idx}		
+	</select>
 	
 </mapper>

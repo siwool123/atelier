@@ -97,7 +97,7 @@ public class PayService {
 		pointDTO.setAdd_point(addPoint);
 		pointDTO.setOidx(dao.orderNum(memberDTO.getMidx()));
 		
-		piresult = dao.pinsert(pointDTO); //포인트테이블에 포인트사용/적립 내용 입력
+		piresult = dao.pinsert(pointDTO);  //포인트테이블에 포인트사용/적립 내용 입력
 		
 		System.out.println("포인트테이블에 입력결과 : "+resPoint1+" : "+piresult);
 		

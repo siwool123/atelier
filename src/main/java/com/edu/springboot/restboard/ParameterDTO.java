@@ -31,5 +31,6 @@ public class ParameterDTO {
 	private String dmax;
 
 	private String searchKeyword;
+	private String apply_idx;
 	
 }

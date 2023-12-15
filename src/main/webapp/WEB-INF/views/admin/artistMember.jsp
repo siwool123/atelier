@@ -42,16 +42,18 @@ function memberDelete(midx){
 		fm.submit();
 }
 </script>
-<form name="stateChange"> <input type="hidden" name="midx" /> </form>
+<style>
+.portImg{max-width:50px;margin-right:5px;}
+</style>
+<form name="stateChange">
+	<input type="hidden" name="midx" />
+</form>
 	<div id="wrapper">
 	
 	<%@ include file="../include/adminSidebar.jsp" %>
 
                 <div class="container-fluid p-5">
- <form name="stateChange">
-	<input type="hidden" name="midx" />
-</form>
-                    <h3 class="mb-3 text-gray-800 fw-bolder">회원관리</h3>
+                    <h3 class="mb-3 text-gray-800 fw-bolder">아티스트 신청관리</h3>
                     <p class="mb-4">
                     	${error }
                     </p>
@@ -68,14 +70,13 @@ function memberDelete(midx){
                                 <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
                                     <thead class="table-secondary">
                                         <tr>
-                                            <th>No</th>
-                                            <th>아이디</th>
-                                            <th>이름</th>
-                                            <th>핸드폰</th>
-                                            <th>포인트</th>
-                                            <th>가입일</th>
-                                            <th>권한</th>
-                                            <th></th>
+                                            <th>회원번호</th>
+                                            <th>회원명</th>
+                                            <th>신청일</th>
+                                            <th>포트폴리오</th>
+                                            <th>작가소개</th>
+                                            <th>작가이력</th>
+                                            <th>작가심사</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -92,23 +93,36 @@ function memberDelete(midx){
                                         <tr>
                                             <td>
                                             	<%-- ${maps.totalCount - (((maps.pageNum-1) * maps.pageSize)	+ loop.index)} --%>
-                                            	${ row.midx }
+                                            	${ row.apply_idx }
                                             </td>
-                                            <td>${ row.id }</td>
-                                            <td>${ row.m_name }</td>
-                                            <td>${ row.phone }</td>
-                                            <td>${ row.total_point }</td>
-                                            <td>${ row.regidate }</td>
-                                            <td>${ row.authority }</td>
+                                            <td><a href="/admin/artistView?apply_idx=${ row.apply_idx }">${ row.m_name }</a></td>
+                                            <td>${ row.apply_date }</td>
+                                            <td>
+<c:if test="${ not empty row.apply1 }"><img src="/uploads/${ row.apply1 }" class="portImg" /></c:if>                                            
+<c:if test="${ not empty row.apply2 }"><img src="/uploads/${ row.apply2 }" class="portImg" /></c:if>                                            
+<c:if test="${ not empty row.apply3 }"><img src="/uploads/${ row.apply3 }" class="portImg" /></c:if>                                            
+<c:if test="${ not empty row.apply4 }"><img src="/uploads/${ row.apply4 }" class="portImg" /></c:if>                                            
+<c:if test="${ not empty row.apply5 }"><img src="/uploads/${ row.apply5 }" class="portImg" /></c:if>                                            
+<c:if test="${ not empty row.apply6 }"><img src="/uploads/${ row.apply6 }" class="portImg" /></c:if>                                            
+<c:if test="${ not empty row.apply7 }"><img src="/uploads/${ row.apply7 }" class="portImg" /></c:if>                                            
+<c:if test="${ not empty row.apply8 }"><img src="/uploads/${ row.apply8 }" class="portImg" /></c:if>                                            
+<c:if test="${ not empty row.apply9 }"><img src="/uploads/${ row.apply9 }" class="portImg" /></c:if>                                            
+<c:if test="${ not empty row.apply10 }"><img src="/uploads/${ row.apply10 }" class="portImg" /></c:if>                                            
+                                            </td>
+                                            <td>${ row.a_intro }</td>
+                                            <td>${ row.a_history }</td>
                                             <td>
 			<c:choose>
-				<c:when test="${ row.enabled eq 1 }">
-					<button type="button" class="btn btn-secondary" onclick="memberLeave('${ row.midx }');">강제탈퇴</button>
+				<c:when test="${ row.pass eq 0 }">
+					<button type="button" class="btn btn-dark" onclick="">불합격</button>			                                         
+				</c:when>
+				<c:when test="${ row.pass eq 1 }">
+					<button type="button" class="btn btn-danger" onclick="">합격</button>
 				</c:when>
 				<c:otherwise>
-					<button type="button" class="btn btn-danger" onclick="memberDelete('${ row.midx }');">영구삭제</button>	
+					<button type="button" class="btn btn-primary" onclick="">심사중</button>
 				</c:otherwise>
-			</c:choose>                                            
+			</c:choose>
                                             </td>
                                         </tr>
         </c:forEach>        
