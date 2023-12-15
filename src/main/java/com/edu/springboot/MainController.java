@@ -201,4 +201,9 @@ public class MainController {
 		return "viewartist";
 	}
 	
+	@RequestMapping("admin/test")
+	String testPage() {
+		return "testPage";
+	}
+	
 }

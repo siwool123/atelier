@@ -211,16 +211,17 @@
 	
 	<select id="selectLikeProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		<!-- select * from product -->
-		SELECT * FROM (
+		<!-- SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT * FROM product inner join p_like on product.pidx = p_like.pidx where p_like.midx=#{midx}
-			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end} -->
+			SELECT * FROM product inner join p_like on product.pidx = p_like.pidx where p_like.midx=#{midx}
 	</select>
 	
 	<select id="opjoin" resultType="com.edu.springboot.restboard.OPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		select order1.oidx, order1.midx, order1.paymethod, order1.price, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, order1.auction, 
-product.pidx, product.sfile, product.title, product.m_name from order1 join product 
-on to_char(substr(order1.pidx, 1, 4), '9999') = to_char(product.pidx, '9999') where order1.midx=#{midx}
+		product.pidx, product.sfile, product.title, product.m_name from order1 join product 
+		on to_char(substr(order1.pidx, 1, 4), '9999') = to_char(product.pidx, '9999') where order1.midx=#{midx}
 			<choose>
 				<when test="status != null and !status.isEmpty() and status.equals('aa')"> and order1.paydate is null and order1.shipdate is null</when>
 				<when test="status != null and !status.isEmpty() and status.equals('bb')"> and order1.paydate is not null and order1.shipdate is null</when>

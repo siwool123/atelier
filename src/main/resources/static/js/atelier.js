@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var swiper = new Swiper('.swiper-container', {
+    var swiper = new Swiper('.sc1', {
         slidesPerView: 1, // 한 번에 보여지는 슬라이드 개수
         spaceBetween: 0, // 슬라이드 사이의 간격 (픽셀)*/
         pagination: {
@@ -33,8 +33,20 @@ document.addEventListener('DOMContentLoaded', function () {
             width:380,
             }}*/
     });
+    var swiper3 = new Swiper('.sc3', {
+        slidesPerView: 4, // 한 번에 보여지는 슬라이드 개수
+        spaceBetween: 0, // 슬라이드 사이의 간격 (픽셀)*/
+        navigation: {
+            nextEl: ".bi-chevron-right",
+        	prevEl: ".bi-chevron-left",
+        },
+    	loop: false, // 무한 루프 활성화
+    	//loopAdditionalSlides: 0,
+    });
     
 });
+
+
 /*function handleActiveClass(selector, attributeName) {
     $(selector).each(function () {
         var hrefValue = $(this).attr('href').slice(-2);
@@ -639,40 +651,3 @@ $( document ).ready( function() {
       } else { alert('결제에 실패하였습니다. 에러내용 : ' + rsp.error_msg);  }
   });
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-    var swiper = new Swiper('.swiper-container', {
-        slidesPerView: 1, // 한 번에 보여지는 슬라이드 개수
-        spaceBetween: 0, // 슬라이드 사이의 간격 (픽셀)*/
-        pagination: {
-        el: ".swiper-pagination",
-        //type: "progressbar",
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-        	prevEl: ".swiper-button-prev",
-        },
-        /*autoplay: {
-        delay: 3000,
-        disableOnInteraction: false, // 사용자와의 상호작용이 있을 때 자동 이동 중지하지 않음
-    	},
-    	speed:5000,*/
-    	loop: true, // 무한 루프 활성화
-    	loopAdditionalSlides: 1,
-    });
-    var swiper2 = new Swiper('.sc2', {
-        slidesPerView: 4, // 한 번에 보여지는 슬라이드 개수
-        spaceBetween: 20, // 슬라이드 사이의 간격 (픽셀)*/
-        navigation: {
-            nextEl: ".bi-chevron-right",
-        	prevEl: ".bi-chevron-left",
-        },
-    	loop: true, // 무한 루프 활성화
-    	loopAdditionalSlides: 1,
-    	/*breakpoints: {
-            '@0.75': {
-            slidesPerView: 1,
-            width:380,
-            }}*/
-    });
-});
