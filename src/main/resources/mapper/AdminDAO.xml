@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.edu.springboot.restboard.IAdminService">
+	
+	 <select id="adminTotalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT COUNT(*) from member
+		<if test="searchKeyword!=null and !searchKeyword.equals('')"> 
+			WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+	
+	<select id="adminList" resultType="com.edu.springboot.restboard.MemberDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">			
+		SELECT * FROM (
+		    SELECT Tb.*, rownum rNum FROM (
+		        SELECT * FROM member 
+		        <if test="searchKeyword!=null and !searchKeyword.equals('')"> 
+					WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
+		        ORDER BY midx DESC
+		    ) Tb
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}		
+	</select>
+	
+	<update id="memberLeave" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		UPDATE member SET enabled=0 WHERE midx=#{midx}
+	</update>
+	
+	<delete id="memberDelete" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		DELETE FROM member WHERE midx=#{midx}
+	</delete>
+	
+	
+	
+</mapper>
