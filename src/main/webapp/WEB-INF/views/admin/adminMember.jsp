@@ -42,14 +42,14 @@ function memberDelete(midx){
 		fm.submit();
 }
 </script>
-<form name="stateChange">
-	<input type="hid-den" name="midx" />
-</form>
 	<div id="wrapper">
 	
 	<%@ include file="../include/adminSidebar.jsp" %>
 
                 <div class="container-fluid p-5">
+ <form name="stateChange">
+	<input type="hidden" name="midx" />
+</form>
                     <h3 class="mb-3 text-gray-800 fw-bolder">회원관리</h3>
                     <p class="mb-4">
                     	${error }

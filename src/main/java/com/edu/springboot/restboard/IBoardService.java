@@ -101,4 +101,7 @@ public interface IBoardService {
 	//주문조회2
 	public List<OPjoinDTO> opjoin2(String oidx);
 	
+	//리뷰작성
+	public int rinsert(ReviewDTO reviewDTO);
+	
 }

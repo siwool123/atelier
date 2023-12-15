@@ -1,5 +1,6 @@
 package com.edu.springboot;
 
+import java.io.File;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +28,12 @@ import com.edu.springboot.restboard.OrderDTO;
 import com.edu.springboot.restboard.ParameterDTO;
 import com.edu.springboot.restboard.PointDTO;
 import com.edu.springboot.restboard.ProductDTO;
+import com.edu.springboot.restboard.ReviewDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import utils.MyFunctions;
 
 @Controller
 public class PayController {
@@ -253,4 +258,75 @@ public class PayController {
 	public String editWinddow() {
 		return "member/trackWindow";
 	}
+	
+	@PostMapping("/member/reviewWrite.do")
+	public String reviewWrite(Principal principal, HttpServletRequest req, Model model, ReviewDTO reviewDTO) {
+		
+		try {
+			//물리적 경로 얻어오기 
+			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
+			System.out.println("물리적경로:"+uploadDir);
+			
+			List<String> savedFileNames = new ArrayList();
+			
+			for(int n=1; n<=3; n++) {
+				//전송된 첨부파일을 Part객체를 통해 얻어온다. 
+				Part part = req.getPart("ofile"+n);	
+				System.out.println(part.getSize());
+				if (part.getSize() > 0) { System.out.println("파일있음");
+				} else {
+					System.out.println("파일 없음. 잘못된 접근. 함수종료");
+					return "redirect:/member/apply";
+				}
+				//파일명 확인을 위해 헤더값을 얻어온다. 
+				String partHeader = part.getHeader("content-disposition");
+				System.out.println("partHeader="+ partHeader);
+				//헤더값에서 파일명 추출을 위해 문자열을 split()한다. 
+				String[] phArr = partHeader.split("filename=");
+				//따옴표를 제거한 후 원본파일명을 추출한다. 
+				String originalFileName = phArr[1].trim().replace("\"", "");
+				//파일명을 중복되지 않는 이름으로 변경한다. 
+				String savedFileName = MyFunctions.renameFile(uploadDir, originalFileName);
+				//전송된 파일이 있다면 서버에 저장한다. 
+				if (!savedFileName.isEmpty()) {	 part.write(uploadDir+ File.separator +savedFileName); }
+				System.out.println("파일 업로드 성공 / 저장된 파일 이름 : "+savedFileName);
+				// 파일명을 리스트에 추가
+	            savedFileNames.add(savedFileName);
+			}
+			
+			// reviewDTO 객체에 파일명 할당
+	        for (int i = 0; i < savedFileNames.size(); i++) {
+	            switch (i + 1) {
+	                case 1: reviewDTO.setSfile1(savedFileNames.get(i)); break;
+	                case 2: reviewDTO.setSfile2(savedFileNames.get(i)); break;
+	                case 3: reviewDTO.setSfile3(savedFileNames.get(i)); break;
+	                default: break; // 예외 처리 혹은 다른 로직 추가 가능
+	            }
+	        }
+			
+	        System.out.println("파일 업로드 성공 / 저장된 파일 이름(list) : " + savedFileNames);
+	        
+	        reviewDTO.setMidx(dao.mview(principal.getName()).getMidx());
+	        ProductDTO pdto = dao.pview(Integer.parseInt(req.getParameter("pidx")));
+	        reviewDTO.setPidx(pdto.getPidx());
+	        reviewDTO.setAidx(pdto.getAidx());
+	        reviewDTO.setR_content(req.getParameter("rContent").replace("\r\n","</br>"));
+	        reviewDTO.setStar(Integer.parseInt(req.getParameter("star")));
+	        MemberDTO mdto = dao.mview(principal.getName());)
+			reviewDTO.setM_name(mdto.getM_name());
+			reviewDTO.setPsfile(pdto.getSfile());
+			reviewDTO.setTitle(pdto.getTitle());
+			//JDBC연동
+	        int result = dao.rinsert(reviewDTO);
+			if(result != 0) { System.out.println("jdbc연동 성공");
+			} else { System.out.println("실패"); }
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("리뷰업로드 실패");
+		}
+		
+		return "redirect:/member/orderhistory";
+	}
+	
 }

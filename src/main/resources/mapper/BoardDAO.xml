@@ -265,4 +265,11 @@ inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 		    inner join product on order2.pidx = product.pidx
 		    inner join m_point on order2.oidx = m_point.oidx where order2.oidx=#{param1}
 	</select>
+	
+	<insert id="rinsert" parameterType="com.edu.springboot.restboard.ReviewDTO">
+	 	insert into review (ridx, pidx, aidx, midx, r_content, star, sfile1, sfile2, sfile3, m_name, psfile, title)
+	 	values (seq_review, #{pidx}, #{aidx}, #{midx}, #{r_content}, #{star}, #{sfile1}, #{sfile2}, #{sfile3}, #{m_name}, #{psfile}, #{title})
+	</insert>
+	
+	
 </mapper> 

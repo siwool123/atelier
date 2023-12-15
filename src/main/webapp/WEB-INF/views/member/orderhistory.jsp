@@ -21,39 +21,83 @@ $( function() {
     $( "#datepicker2" ).datepicker();
     
    	$('input[type=file]').change(function(){
-   		var fsize = document.getElementById("ofile").files[0].size;
-   		if(fsize > 1024*1024*4) alert("첨부파일은 개당 4MB까지 가능합니다.");
-   		
-   		if($(this).val().files && $(this).val().files[0]){
-   			var reader = new FileReader();
-   			reader.onload = function (e) {
-   				$('#loadImg').attr('src', e.target.result);
-   			}
-   			reader.readAsDataURL($(this).val().files[0]);
-   		}
+	    var files = this.files; // 현재 선택된 파일 정보 가져오기
+	    // 각 파일에 대해 용량 체크
+	    for (var i = 0; i < files.length; i++) {
+	        var fileSize = files[i].size;
+	
+	        if (fileSize > 1024*1024*4) {
+	            alert("첨부파일은 개당 4MB까지 가능합니다.");
+	            $(this).val(''); // 파일 선택 초기화 (선택된 파일 제거)
+	            return;
+	        }
+	
+	        var reader = new FileReader(); // 파일을 미리 보여주는 코드
+	        reader.onload = function (e) {
+	            $('#thumb'+(i+1)).attr('src', e.target.result);
+	        };
+	        reader.readAsDataURL(files[i]);
+	    }
+	   		
+	   		/* var fsize = document.getElementById("ofile").files[0].size;
+	   		if(fsize > 1024*1024*4) alert("첨부파일은 개당 4MB까지 가능합니다.");
+	   		
+	   		if($(this).val().files && $(this).val().files[0]){
+	   			var reader = new FileReader();
+	   			reader.onload = function (e) {
+	   				$('#loadImg').attr('src', e.target.result);
+	   			}
+	   			reader.readAsDataURL($(this).val().files[0]); } */
    	});	
    	
-   	$('input[name=title]').keyup(function(){
+   	$('textarea[name=rContent]').keyup(function(){
    		$('#ta_count').html($(this).val().length);
-   		if($(this).val().length>80){
-   			alert("제목을 80자 이내로 입력해주세요.");
-   			$(this).val($(this).val().substring(0,80));
-   			$('#ta_count').html("80");
-   			$(this).focus(); 
-   		}
-   	});
-   	
-   	$('textarea[name=content]').keyup(function(){
-   		$('#ta_count_2').html($(this).val().length);
    		if($(this).val().length>800){
    			alert("내용을 800자 이내로 입력해주세요.");
    			$(this).val($(this).val().substring(0,800));
-   			$('#ta_count_2').html("800");
+   			$('#ta_count').html("800");
    			$(this).focus(); 
    		}
    	});
-  } );
-  
+   	
+   	$('i[class^="bi-star-fill"]').click(function() {
+   	    var clickedValue = $(this).data('value');
+   	    
+   	    // 모든 별의 활성 클래스 제거
+   	    $('i[class^="bi-star-fill"]').removeClass('starActive');
+   	    
+   	    // 클릭한 별과 그 이전 별까지 활성 클래스 추가
+   	    for (var i = 1; i <= clickedValue; i++) { $('#star' + i).addClass('starActive'); }
+
+   	    // 클릭한 별의 값을 숨겨진 input에 설정
+   	    $('#starInput').val(clickedValue);
+   	  });
+   	
+ });
+
+function submitReview(pidx) {
+	if($('input[name="rContent"]').val()=='' || $('input[name="rContent"]').val().length()<20) {
+		alert('리뷰내용을 20자 이상 작성해주세요.');
+		$('input[name="rContent"]').focus(); return;
+	}
+	if ($('input[name="star"]').val()==0) {
+		alert('별점을 1점이상 매겨주세요');  return;
+	}
+	
+	// 첨부 이미지 확인
+	  var hasImage = false;
+	  $('input[name^="ofile"]').each(function () {
+	    if ($(this)[0].files.length > 0) {
+	      hasImage = true;
+	      return false; // 이미지가 하나라도 있으면 반복문을 빠져나옴
+	    }
+	  });
+	  if (!hasImage) {  alert('최소 한 개 이상의 이미지를 첨부해주세요.');  return; }
+	  if (!$('#chk_' + pidx).prop('checked')) { alert('홍보 콘텐츠 사용에 동의해주세요.'); return; }
+	  
+	$('#reviewFm_'+pidx).submit();
+}
+
 function deletepidx(pidx) {
 	if(confirm('정말로 삭제하시겠습니까?')) { 
  	
@@ -109,12 +153,15 @@ input {margin-right:10px !important;}
 .table1 tr td {padding:20px 10px;}
 button.nav-link {padding:10px 20px;}
 input[type="text"], input[type="date"] { border:none; border-bottom:1px solid grey !important; height:40px; margin-left:10px; }
-
+input[type="file"] {width:0; height:0}
 .param input {width:150px;}
 .bi-calendar3 {position: relative; right: 35px;}
 tr.toggle td {background:#ededed;}
 
 label.btn1 {width: 50px; height: 50px; vertical-align: middle; cursor: pointer;}
+#thumb1, #thumb2, #thumb3 {max-width: 100px; max-height: 100px;}
+i.bi-star-fill {font-size:20px;}
+span.count {position: relative; top: -30px; float: right; right: 15px;}
 </style>
 </head>
 <body>
@@ -162,7 +209,7 @@ label.btn1 {width: 50px; height: 50px; vertical-align: middle; cursor: pointer;}
                 </form>
 			</div>
 			
-			 <table class="table table-hover table1">
+			 <table class="table table1">
 			   <thead class="table-secondary">
 			     <tr align="center" style="height:40px">
 			       <th width="10%">구분</th>
@@ -224,27 +271,27 @@ label.btn1 {width: 50px; height: 50px; vertical-align: middle; cursor: pointer;}
 					     </tr>
 					     
 					     <c:if test="${ row.paydate!=null and row.shipdate!=null }">
-					     <tr class="p-3 toggle" id="toggle_${row.pidx }"> <td colspan="8">
-					     <form action="/member/reviewWrite.do" onsubmit="return validateForm(this);" name="reviewFm_${row.pidx }" 
-					     id="reviewFm__${row.pidx }" method="post" enctype="multipart/form-data" multiple>
+					     <tr class="p-5 toggle" id="toggle_${row.pidx }"> <td colspan="8" class="p-5">
+					     <form action="/member/reviewWrite.do?pidx=${row.pidx }" name="reviewFm_${row.pidx }" 
+					     id="reviewFm_${row.pidx }" method="post" enctype="multipart/form-data" multiple>
+					     <div class="mb-3">
 					     	<b>리뷰내용</b> (작품 구매 및 수령 후 한달안에 리뷰 작성시 10,000 포인트를 지급합니다. )
 					     	<span style="float:right;"><span>별점을 매겨주세요.  </span>
-					     	<c:forEach var="i" begin="1" end="5"><i class="bi bi-star-fill"></i></c:forEach> </span><br />
-					     	<input type="hidden" name="star" />
-					     	<textarea name="rContent" id="" cols="30" rows="10" placeholder="20자 이상 800자 이내로 작성해주세요."
-					     	 class="form-control form-control-sm"></textarea><br />
+					     	<c:forEach var="i" begin="1" end="5"><i class="bi bi-star-fill" id="star${i }" data-value="${i}"></i></c:forEach> </span>
+						</div>
+					     	<input type="hidden" name="star" id="starInput" value="0" />
+					     	<input type="hidden" name="pidx" id="pidx" value="${row.pidx }" />
+					     	<textarea name="rContent" id="rContent" cols="30" rows="10" placeholder="20자 이상 800자 이내로 작성해주세요."
+					     	 class="form-control form-control-sm" style="padding:10px;"></textarea> <span class="count"> <span id="ta_count_${row.pidx }">0 </span> / 800</span><br />
 					     	첨부파일 용량 : 이미지 파일 3개까지. 파일 1개당 2M, 총 6M 까지 가능합니다. <br/>
-					     	<input type="file" name="ofile1" id="ofile1" class="form-control form-control-sm imgfile" accept=".jpg, .png, .gif"  />
-					     	<label class="my-2 btn1" for="ofile1">+</label>
 					     	
-					     	<input type="file" name="ofile2" id="ofile2" class="form-control form-control-sm imgfile" accept=".jpg, .png, .gif"  />
-					     	<label class="my-2 btn1" for="ofile2">+</label>
+					     	<c:forEach var="i" begin="1" end="3">
+					     	<input type="file" name="ofile${i }" id="ofile${i }" class="form-control form-control-sm imgfile" accept=".jpg, .png, .gif"  />
+					     	<label class="my-2 btn1" for="ofile${i }">+</label> <img src="" id="thumb${i }" />
+					     	</c:forEach>
 					     	
-					     	<input type="file" name="ofile3" id="ofile3" class="form-control form-control-sm imgfile" accept=".jpg, .png, .gif"  />
-							<label class="my-2 btn1" for="ofile3">+</label>
-							
-							<br /><input type="checkbox" /> 작성된 후기는 아뜰리에 홍보 콘텐츠로 사용될 수 있습니다. (필수)
-							<button class="btn7" id="reviewBtn" onclick="submitReview()">리뷰등록</button>
+							<br /><input type="checkbox" id="chk_${row.pidx }" /> 작성된 후기는 아뜰리에 홍보 콘텐츠로 사용될 수 있습니다. (필수)
+							<br /><button class="btn7" id="reviewBtn" onclick="submitReview(${row.pidx })">리뷰등록</button>
 					     </form>
 					     	</td> </tr>
 					     </c:if>
