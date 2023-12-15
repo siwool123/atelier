@@ -72,18 +72,33 @@ public interface IBoardService {
 	//포인트테이블에 포인트사용 삽입
 	public int pinsert(PointDTO pointDTO);
 	
-	//동일주문번호가진 작품들조회
-
-
 	//주문조회1
-	public List<OPjoinDTO> opjoin(int midx);
-	//주문리스트 조회
+	public List<OPjoinDTO> opjoin(ParameterDTO parameterDTO);
+	
+	//회원번호로 주문리스트 조회
 	public List<OrderDTO> olist(int midx);
 	
 	//입금전 건수 조회
 	public List<OrderDTO> notPaid(int midx); 
 	//배송전 건수 조회
 	public List<OrderDTO> notShipped(int midx); 
+	
+	//Paging 처리를 위해 좋아요 게시물의 갯수를 카운트
+	public int totalLikeCount(int midx);
+	
+	//좋아요 상품 리스트
+	public List<ProductDTO> selectLikeProduct(ParameterDTO parameterDTO);
+	
+	//주문번호로 주문리스트 조회
+	public List<Order2DTO> o2list(String oidx);
+	
+	//주문번호로 주문상세정보조회
+	public OrderDTO oview(String oidx);
+	
+	//주문날짜 시분초까지조회
+	public String orderdate(String oidx);
+	
+	//주문조회2
+	public List<OPjoinDTO> opjoin2(String oidx);
+	
 }
-
-

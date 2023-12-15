@@ -62,4 +62,9 @@
 		update apply set apply1=#{apply1} where id=#{id}
 	</update>
 	
+	<!-- 프로필 업로드 -->
+	<update id="mplupdate" parameterType="com.edu.springboot.restboard.MemberDTO">
+		update member set places=#{places} where id=#{id}
+	</update>
+	
 </mapper>

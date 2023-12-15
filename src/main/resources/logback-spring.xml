@@ -22,8 +22,8 @@
 	
 	<!-- 루트는 info레벨로출력 -->
 	<!-- 추가설정에서 off로 변경 -->
-	<!-- <root level="info">
+	 <root level="warn">
 		<appender-ref ref="console" />
-	</root> -->
-	<root level="off"><appender-ref ref="console" /></root> 
+	</root> 
+	<!-- <root level="off"><appender-ref ref="console" /></root>  -->
 </configuration>

@@ -42,6 +42,14 @@ public class PayService {
 		orderDTO.setReceiver(req.getParameter("m_name"));
 		orderDTO.setR_phone(req.getParameter("phone"));
 		orderDTO.setPidx(req.getParameter("pidxList"));
+		orderDTO.setAdd_point(setsold);
+		
+		int minusPoint = Integer.parseInt(req.getParameter("point"));
+		int addPoint = Integer.parseInt(req.getParameter("futurepoint"));
+		
+		orderDTO.setMinus_point(minusPoint);
+		orderDTO.setAdd_point(addPoint);
+		
 		String address = req.getParameter("zip") +" | "+ req.getParameter("addr1") +" | "+ req.getParameter("addr2");
 		orderDTO.setR_address(address);
 		orderDTO.setMessage(req.getParameter("msg2"));
@@ -81,8 +89,7 @@ public class PayService {
 			System.out.println("장바구니 삭제결과 : "+resultDelCart);
 		}
 		
-		int minusPoint = Integer.parseInt(req.getParameter("point"));
-		int addPoint = (int)(Integer.parseInt(req.getParameter("oprice"))*0.01);
+		
 		resPoint1 = dao.memberPoint(minusPoint-addPoint, memberDTO.getMidx()); //멤버테이블에 포인트사용.적립 반영
 		
 		pointDTO.setMidx(memberDTO.getMidx());

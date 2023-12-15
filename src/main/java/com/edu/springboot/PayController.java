@@ -20,7 +20,10 @@ import com.edu.springboot.pay.PayService;
 import com.edu.springboot.restboard.CartDTO;
 import com.edu.springboot.restboard.IBoardService;
 import com.edu.springboot.restboard.MemberDTO;
+import com.edu.springboot.restboard.OPjoinDTO;
+import com.edu.springboot.restboard.Order2DTO;
 import com.edu.springboot.restboard.OrderDTO;
+import com.edu.springboot.restboard.ParameterDTO;
 import com.edu.springboot.restboard.PointDTO;
 import com.edu.springboot.restboard.ProductDTO;
 
@@ -184,5 +187,70 @@ public class PayController {
 			System.out.println("주문페이지에서 작품및유저정보 조회 실패");
 		}
 		return "member/paynow";
+	}
+	
+	@RequestMapping("/member/orderhistory")
+	public String orderhistory (Principal principal, Model model, ParameterDTO parameterDTO, HttpServletRequest req) {
+		try {
+			Map<Object, Object> map = payService.memberIndex(principal);
+			
+			int midx = dao.mview(principal.getName()).getMidx();
+			System.out.println("midx="+ midx);
+			
+			if(req.getParameter("sWord")!=null) {
+				parameterDTO.getSWord().clear();
+				for(String str : req.getParameter("sWord").split(" ")) {
+					System.out.println(str); parameterDTO.getSWord().add(str);}
+			}
+			
+			parameterDTO.setMidx(midx);
+			
+			List<OPjoinDTO> oplist = dao.opjoin(parameterDTO);
+			System.out.println("oplist="+ oplist);
+			
+			model.addAttribute("map", map);
+			model.addAttribute("oplist", oplist);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+         
+		return "member/orderhistory";
+	}
+	
+	@RequestMapping("/member/oview")
+	public String oview (Principal principal, Model model, HttpServletRequest req) {
+		try {
+			Map<Object, Object> map = payService.memberIndex(principal);
+			model.addAttribute("map", map);
+			
+			String oidx = req.getParameter("oidx");
+			System.out.println("oidx : "+oidx);
+			
+			OrderDTO odto = dao.oview(oidx);
+			List<OPjoinDTO> oplist2 = dao.opjoin2(oidx);
+			String orderdate = dao.orderdate(oidx);
+			
+			model.addAttribute("oplist2", oplist2);
+			model.addAttribute("odto", odto);
+			model.addAttribute("orderdate", orderdate);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("주문상세내역불러오기실패");
+		}
+         
+		return "member/orderview";
+	}
+	
+	@RequestMapping("/member/ohistory")
+	public String ohistory () {
+         
+		return "member/orderview";
+	}
+	
+	@RequestMapping("/member/trackWindow")
+	public String editWinddow() {
+		return "member/trackWindow";
 	}
 }

@@ -18,20 +18,22 @@
 	</select>
 
 	<select id="totalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
-		SELECT count(*) from product
+		SELECT count(*) from product 
+		<where> 
 		<!-- 검색어가 null, 빈값이 아닐때만 where 절을 동적으로 추가한다. -->
-		<where>
 		<choose>
 			<when test="sWord!=null and !sWord.isEmpty()">
 				<foreach collection="sWord" item="str" separator="or">
-					title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+					 title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
 				</foreach>
 			</when>
 			<when test="pmin!=null and !pmin.isEmpty() and pmax!=null and !pmax.isEmpty()">
-				price BETWEEN #{pmin} AND #{pmax}
+				 price BETWEEN #{pmin} AND #{pmax}
 			</when>
 			<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> sold = 1</when>
 			<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> sold = 0</when>
+			<when test="auction!=null and !auction.isEmpty() and auction.equals('na')"> auction = 0</when>
+			<when test="auction!=null and !auction.isEmpty() and auction.equals('au')"> auction = 1</when>
 			<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> size1=size2</when>
 			<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> size1 &gt; size2</when>
 			<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> size1 &lt; size2</when>
@@ -61,18 +63,20 @@
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT * FROM product 
-					<where>
+				<where> 
 						<choose>
 							<when test="sWord!=null and !sWord.isEmpty()">
 								<foreach collection="sWord" item="str" separator="or">
-									title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+									 title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
 								</foreach>
 							</when>
 							<when test="pmin!=null and !pmin.isEmpty() and pmax!=null and !pmax.isEmpty()">
-								price BETWEEN #{pmin} AND #{pmax}
+								 price BETWEEN #{pmin} AND #{pmax}
 							</when>
 							<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> sold = 1</when>
 							<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> sold = 0</when>
+							<when test="auction!=null and !auction.isEmpty() and auction.equals('na')"> auction = 0</when>
+							<when test="auction!=null and !auction.isEmpty() and auction.equals('au')"> auction = 1</when>
 							<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> size1=size2</when>
 							<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> size1 &gt; size2</when>
 							<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> size1 &lt; size2</when>
@@ -107,11 +111,10 @@
 	</select>
 	
 	<select id="search" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
-		SELECT * FROM product
+		SELECT * FROM product where auction=0 
 		<if test="sWord!=null">
-			WHERE
 			<foreach collection="sWord" item="str" open="(" close=")" separator="or">
-				title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+				 and title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
 			</foreach>
 		</if>
 		ORDER BY pidx DESC
@@ -169,13 +172,13 @@
 	<delete id="delCart">DELETE FROM cart WHERE pidx=#{param1}</delete>
 	
 	<insert id="payorder" parameterType="com.edu.springboot.restboard.OrderDTO">
-		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message, apinum, pidx) VALUES 
-		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{apinum}, #{pidx)
+		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message, apinum, pidx, add_point, minus_point) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{apinum}, #{pidx}, #{add_point}, #{minus_point})
 	</insert>
 	
 	<insert id="bankorder" parameterType="com.edu.springboot.restboard.OrderDTO">
-		INSERT INTO order1 (oidx, midx, paymethod, price, receiver, r_phone, r_address, message, owner, pidx) VALUES 
-		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{owner}, #{pidx})
+		INSERT INTO order1 (oidx, midx, paymethod, price, receiver, r_phone, r_address, message, owner, pidx, add_point, minus_point) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{owner}, #{pidx}, #{add_point}, #{minus_point})
 	</insert>
 	
 	<insert id="insertorder2" parameterType="com.edu.springboot.restboard.Order2DTO">
@@ -210,9 +213,56 @@
 		SELECT * FROM order1 WHERE midx=#{param1} and shipdate is null
 	</select>
 	
-	<select id="opjoin" resultType="com.edu.springboot.restboard.OPjoinDTO">
-		select order1.oidx, order1.midx, order1.paymethod, order1.price, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, order1.auction, 
-product.pidx, product.sfile, product.title, product.m_name from order1 join product 
-on to_char(substr(order1.pidx, 1, 4), '9999') = to_char(product.pidx, '9999') where order1.midx=#{param1};
+	<select id="totalLikeCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT count(*) from p_like where midx=#{param1}
+	</select>
+	
+	<select id="selectLikeProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		<!-- select * from product -->
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM product inner join p_like on product.pidx = p_like.pidx where p_like.midx=#{midx}
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="opjoin" resultType="com.edu.springboot.restboard.OPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select order2.o2idx, order1.oidx, order1.midx, order1.paymethod, order1.price as tprice, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, 
+ order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.owner, 
+order1.auction, order1.add_point, order1.minus_point, product.pidx, product.sfile, product.title, product.m_name, product.size1, product.size2, product.price
+from order2 inner join product on order2.pidx = product.pidx
+inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
+			<choose>
+				<when test="status != null and !status.isEmpty() and status.equals('aa')"> and order1.paydate is null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('bb')"> and order1.paydate is not null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('cc')"> and order1.paydate is not null and order1.shipdate is not null</when>
+				<when test="dmin!=null and !dmin.isEmpty() and dmax!=null and !dmax.isEmpty()">
+					 and order1.orderdate BETWEEN #{dmin} AND #{dmax}
+				</when>
+				<when test="sWord!=null and !sWord.isEmpty()">
+					<foreach collection="sWord" item="str" separator="or">
+						and product.title LIKE '%' || #{str} || '%' OR product.m_name LIKE '%' || #{str} || '%'
+					</foreach>
+				</when>
+			</choose>
+	</select>
+	
+	<select id="o2list" resultType="com.edu.springboot.restboard.Order2DTO">
+		SELECT * FROM order2 WHERE oidx=#{param1}
+	</select>
+	
+	<select id="oview" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order1 WHERE oidx=#{param1}
+	</select>
+	<select id="orderdate">
+		select to_char(orderdate, 'yyyy-mm-dd hh:mi:ss') from order1 where oidx = #{param1}
+	</select>
+	
+	<select id="opjoin2" resultType="com.edu.springboot.restboard.OPjoinDTO" >
+		select order2.o2idx, order2.oidx, order1.price as tprice, order2.midx, order1.paymethod, order1.orderdate, order1.paydate, order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.shipdate, order1.courier, order1.t_num,
+		 order1.owner, order1.auction, product.pidx, product.title, product.size1, product.size2, product.price, product.sfile, product.m_name, m_point.add_point, m_point.minus_point
+		from order2 
+		    inner join order1 on order2.oidx = order1.oidx 
+		    inner join product on order2.pidx = product.pidx
+		    inner join m_point on order2.oidx = m_point.oidx where order2.oidx=#{param1}
 	</select>
 </mapper> 
