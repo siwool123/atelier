@@ -19,6 +19,39 @@
 $( function() {
     $( "#datepicker1" ).datepicker();
     $( "#datepicker2" ).datepicker();
+    
+   	$('input[type=file]').change(function(){
+   		var fsize = document.getElementById("ofile").files[0].size;
+   		if(fsize > 1024*1024*4) alert("첨부파일은 개당 4MB까지 가능합니다.");
+   		
+   		if($(this).val().files && $(this).val().files[0]){
+   			var reader = new FileReader();
+   			reader.onload = function (e) {
+   				$('#loadImg').attr('src', e.target.result);
+   			}
+   			reader.readAsDataURL($(this).val().files[0]);
+   		}
+   	});	
+   	
+   	$('input[name=title]').keyup(function(){
+   		$('#ta_count').html($(this).val().length);
+   		if($(this).val().length>80){
+   			alert("제목을 80자 이내로 입력해주세요.");
+   			$(this).val($(this).val().substring(0,80));
+   			$('#ta_count').html("80");
+   			$(this).focus(); 
+   		}
+   	});
+   	
+   	$('textarea[name=content]').keyup(function(){
+   		$('#ta_count_2').html($(this).val().length);
+   		if($(this).val().length>800){
+   			alert("내용을 800자 이내로 입력해주세요.");
+   			$(this).val($(this).val().substring(0,800));
+   			$('#ta_count_2').html("800");
+   			$(this).focus(); 
+   		}
+   	});
   } );
   
 function deletepidx(pidx) {
@@ -79,7 +112,9 @@ input[type="text"], input[type="date"] { border:none; border-bottom:1px solid gr
 
 .param input {width:150px;}
 .bi-calendar3 {position: relative; right: 35px;}
-/* border:none; border-bottom:1px solid #dddddd; height:36px; padding:10px; outline:none; background-color: white; border-radius: 0 !important; */
+tr.toggle td {background:#ededed;}
+
+label.btn1 {width: 50px; height: 50px; vertical-align: middle; cursor: pointer;}
 </style>
 </head>
 <body>
@@ -189,13 +224,27 @@ input[type="text"], input[type="date"] { border:none; border-bottom:1px solid gr
 					     </tr>
 					     
 					     <c:if test="${ row.paydate!=null and row.shipdate!=null }">
-					     <tr style="background:#ededed;" class="p-3 toggle" id="toggle_${row.pidx }"> <td colspan="8">
-					     <form action="" name="reviewFm_${row.pidx }" id="reviewFm__${row.pidx }" method="post" enc>
+					     <tr class="p-3 toggle" id="toggle_${row.pidx }"> <td colspan="8">
+					     <form action="/member/reviewWrite.do" onsubmit="return validateForm(this);" name="reviewFm_${row.pidx }" 
+					     id="reviewFm__${row.pidx }" method="post" enctype="multipart/form-data" multiple>
 					     	<b>리뷰내용</b> (작품 구매 및 수령 후 한달안에 리뷰 작성시 10,000 포인트를 지급합니다. )
 					     	<span style="float:right;"><span>별점을 매겨주세요.  </span>
-					     	<c:forEach var="i" begin="1" end="5"><i class="bi bi-star-fill"></i></c:forEach> </span>
-					     	<textarea name="" id="" cols="30" rows="10"></textarea>
+					     	<c:forEach var="i" begin="1" end="5"><i class="bi bi-star-fill"></i></c:forEach> </span><br />
+					     	<input type="hidden" name="star" />
+					     	<textarea name="rContent" id="" cols="30" rows="10" placeholder="20자 이상 800자 이내로 작성해주세요."
+					     	 class="form-control form-control-sm"></textarea><br />
+					     	첨부파일 용량 : 이미지 파일 3개까지. 파일 1개당 2M, 총 6M 까지 가능합니다. <br/>
+					     	<input type="file" name="ofile1" id="ofile1" class="form-control form-control-sm imgfile" accept=".jpg, .png, .gif"  />
+					     	<label class="my-2 btn1" for="ofile1">+</label>
 					     	
+					     	<input type="file" name="ofile2" id="ofile2" class="form-control form-control-sm imgfile" accept=".jpg, .png, .gif"  />
+					     	<label class="my-2 btn1" for="ofile2">+</label>
+					     	
+					     	<input type="file" name="ofile3" id="ofile3" class="form-control form-control-sm imgfile" accept=".jpg, .png, .gif"  />
+							<label class="my-2 btn1" for="ofile3">+</label>
+							
+							<br /><input type="checkbox" /> 작성된 후기는 아뜰리에 홍보 콘텐츠로 사용될 수 있습니다. (필수)
+							<button class="btn7" id="reviewBtn" onclick="submitReview()">리뷰등록</button>
 					     </form>
 					     	</td> </tr>
 					     </c:if>
