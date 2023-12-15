@@ -18,6 +18,17 @@
 <script>
 //이미지 선택시 바로 이미지 띄우기
 function loadImage(img) {
+	
+	//이미지 용량 제한
+	let maxSize = 4 * 1024 * 1024; //* 4MB 사이즈 제한
+	let fileSize = img.files[0].size; //업로드한 파일용량
+	
+	if(fileSize > maxSize){
+		alert("파일첨부 사이즈는 4MB 이내로 가능합니다.");
+		$(img).val(''); //업로드한 파일 제거
+		return; 
+	}
+	
     var file = img.files[0];	//선택된 파일 가져오기
     //폼태그 변수 선언
     var profileImageForm = document.getElementById("profileImageForm");
@@ -70,6 +81,7 @@ $(function() {
 	<form name="fileForm" id="profileImageForm" >
 		<div id="showImageDiv"></div>
 		<input class="form-control" type="file" name="profileImage" onChange="loadImage(this);"/>
+		<p style="color: red;">* 파일첨부 사이즈는 4MB 이내로 가능합니다.</p>
 		<button class="btn" type="button" id="useImage" value="이미지 사용하기" >이미지 사용하기</button>
 	</form>
 	</div>

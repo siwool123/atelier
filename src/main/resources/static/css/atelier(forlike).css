@@ -16,7 +16,7 @@
 	.pl {padding-left: 10px; padding-top:10px;}
 	.vtitle {margin-top:20px;}
 	.varrow {top:-30px !important;}
-	.sc2 div div.arttile2 {width: 50% !important;}
+	/*.sc2 div div.arttile2 {width: 50% !important;}*/
 	.image {height: 160px !important;}
 	.arttile {margin-right:1% !important; margin-left:0 !important;}
 	.imgback {padding:0 !important;}
@@ -110,7 +110,7 @@ i.icon {font-size: 20px; color:#bdbdbd; margin-right: 10px;}
 .proc {display: flex; align-items: center;}
 .ba, .ba:after, .ba:before {color:grey !important; font-size: 24px; }
 .arttile2 {width:25% !important; color: black; padding:0;}
-/*.arttile2:first-child {margin-left: 10% !important;}*/
+.arttile2:first-child {margin-left: 10% !important;}
 .arttile2 .sub {font-weight: normal ;}
 .arttile2 .price2 {letter-spacing: 0; font-size: 14px !important;}
 i.bi-heart-fill:hover {color: red;}
