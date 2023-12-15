@@ -7,20 +7,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Atelier</title>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js "></script>
-<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
 <link href="../css/atelier.css" rel="stylesheet" type="text/css" />
 <script src="../js/atelier.js"></script>
 
 <script>
+
 $( function() {
     $( "#datepicker1" ).datepicker();
     $( "#datepicker2" ).datepicker();
-    
-   	$('input[type=file]').change(function(){
+    $('#aaa').click(function(){
+        $('#bbb').hide();
+    });
+   	/* $('input[type=file]').change(function(){
 	    var files = this.files; // 현재 선택된 파일 정보 가져오기
 	    // 각 파일에 대해 용량 체크
 	    for (var i = 0; i < files.length; i++) {
@@ -37,17 +39,8 @@ $( function() {
 	            $('#thumb'+(i+1)).attr('src', e.target.result);
 	        };
 	        reader.readAsDataURL(files[i]);
-	    }
+	    } */
 	   		
-	   		/* var fsize = document.getElementById("ofile").files[0].size;
-	   		if(fsize > 1024*1024*4) alert("첨부파일은 개당 4MB까지 가능합니다.");
-	   		
-	   		if($(this).val().files && $(this).val().files[0]){
-	   			var reader = new FileReader();
-	   			reader.onload = function (e) {
-	   				$('#loadImg').attr('src', e.target.result);
-	   			}
-	   			reader.readAsDataURL($(this).val().files[0]); } */
    	});	
    	
    	$('textarea[name=rContent]').keyup(function(){
@@ -60,7 +53,7 @@ $( function() {
    		}
    	});
    	
-   	$('i[class^="bi-star-fill"]').click(function() {
+   	$('i.bi-star-fill"]').click(function() {
    	    var clickedValue = $(this).data('value');
    	    
    	    // 모든 별의 활성 클래스 제거
@@ -73,8 +66,38 @@ $( function() {
    	    $('#starInput').val(clickedValue);
    	  });
    	
+   	$('.toggle').click(function(){  $('.toggle').fadeToggle();
+    });
+   	
  });
 
+//이미지 선택시 바로 이미지 띄우기
+ function loadApplyImage(img) {
+ 	/* 파일용량 제한*/
+ 	let maxSize = 4 * 1024 * 1024; //* 4MB 사이즈 제한
+ 	let fileSize = img.files[0].size; //업로드한 파일용량
+ 	
+ 	if(fileSize > maxSize){
+ 		alert("파일첨부 사이즈는 4MB 이내로 가능합니다.");
+ 		$(img).val(''); //업로드한 파일 제거
+ 		return; 
+ 	}
+ 	
+     var file = img.files[0]; //선택된 파일 가져오기
+ 	//이미지 태그 name 값 마지막 부분(숫자로 되어있음)을 잘라 num이라는 변수로 선언한다.
+ 	let num = img.name.slice(-1);
+ 	
+ 	var showImgSpan = document.getElementById('showImg_'+num);
+     //새로운 img 태그 만들기(img태그는 뷰에서 foreach로 만들어지지 않기 때문에 num을 붙일 필요없다.)
+ 	var selectedApplyImage = document.createElement("img");
+     //이미지 source 가져오기
+ 	selectedApplyImage.src = URL.createObjectURL(file);
+     //이미지 크기 조정
+ 	selectedApplyImage.setAttribute('style', 'max-width: 100px; max-height: 100px;');
+     //이미지를 showImageDiv에 추가
+ 	showImgSpan.html(selectedApplyImage);
+ }
+	
 function submitReview(pidx) {
 	if($('input[name="rContent"]').val()=='' || $('input[name="rContent"]').val().length()<20) {
 		alert('리뷰내용을 20자 이상 작성해주세요.');
@@ -97,6 +120,17 @@ function submitReview(pidx) {
 	  
 	$('#reviewFm_'+pidx).submit();
 }
+
+function toggleDiv(divId) {
+    var div = document.getElementById(divId);
+
+    if (div.style.display === 'block') {
+        div.style.display = 'none';
+    } else {
+        div.style.display = 'block';
+    }
+}
+
 
 function deletepidx(pidx) {
 	if(confirm('정말로 삭제하시겠습니까?')) { 
@@ -146,6 +180,7 @@ input {margin-right:10px !important;}
 .btn5 {padding:5px; background:red ; color:white;}
 #search {padding:5px 10px; background:black ; color:white;}
 .btn7 {padding:5px; background:black ; color:white; margin-top:5px;}
+.btn8 {padding:10px 20px; background:black ; color:white; margin-top:20px;}
 
 .btn1 {padding:0 14px !important; margin-right:10px; display:inline; float:left;}
 .btn6 {padding: 5px; border: 1px solid grey;}
@@ -158,7 +193,7 @@ input[type="file"] {width:0; height:0}
 .bi-calendar3 {position: relative; right: 35px;}
 tr.toggle td {background:#ededed;}
 
-label.btn1 {width: 50px; height: 50px; vertical-align: middle; cursor: pointer;}
+label.btn1 {width: 50px; height: 50px; vertical-align: middle; cursor: pointer; margin-right:150px;}
 #thumb1, #thumb2, #thumb3 {max-width: 100px; max-height: 100px;}
 i.bi-star-fill {font-size:20px;}
 span.count {position: relative; top: -30px; float: right; right: 15px;}
@@ -248,7 +283,7 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
 						       	<c:when test="${ row.paydate!=null and row.shipdate==null }"><span style="color:red;">배송준비중</span></c:when>
 						       	<c:when test="${ row.paydate!=null and row.shipdate!=null }">
 						       	<button class="btn6" onclick="trackWindow(${row.t_num});" >배송조회</button> <br />
-						       	<button class="btn7" id="writereview_${row.pidx }">리뷰작성</button>
+						       	<button class="btn7" id="writeReview_${row.pidx }" <%-- onClick="toggleView(${row.pidx });" --%> >리뷰작성</button>
 						       	</c:when>
 						       </c:choose>
 					       </td>
@@ -273,8 +308,8 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
 					     <c:if test="${ row.paydate!=null and row.shipdate!=null }">
 					     <tr class="p-5 toggle" id="toggle_${row.pidx }"> <td colspan="8" class="p-5">
 					     <form action="/member/reviewWrite.do?pidx=${row.pidx }" name="reviewFm_${row.pidx }" 
-					     id="reviewFm_${row.pidx }" method="post" enctype="multipart/form-data" multiple>
-					     <div class="mb-3">
+					     id="reviewFm_${row.pidx }" method="post" enctype="multipart/form-data" >
+					     <div class="mb-3" style="line-height:30px;">
 					     	<b>리뷰내용</b> (작품 구매 및 수령 후 한달안에 리뷰 작성시 10,000 포인트를 지급합니다. )
 					     	<span style="float:right;"><span>별점을 매겨주세요.  </span>
 					     	<c:forEach var="i" begin="1" end="5"><i class="bi bi-star-fill" id="star${i }" data-value="${i}"></i></c:forEach> </span>
@@ -283,15 +318,15 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
 					     	<input type="hidden" name="pidx" id="pidx" value="${row.pidx }" />
 					     	<textarea name="rContent" id="rContent" cols="30" rows="10" placeholder="20자 이상 800자 이내로 작성해주세요."
 					     	 class="form-control form-control-sm" style="padding:10px;"></textarea> <span class="count"> <span id="ta_count_${row.pidx }">0 </span> / 800</span><br />
-					     	첨부파일 용량 : 이미지 파일 3개까지. 파일 1개당 2M, 총 6M 까지 가능합니다. <br/>
-					     	
+					     	<div class="text-center">첨부파일 용량 : 이미지 파일 3개까지. 파일 1개당 4M, 총 12M 까지 가능합니다. </div>
+					     	<div class="text-center mx-auto" style="margin-left: 140px !important;">
 					     	<c:forEach var="i" begin="1" end="3">
-					     	<input type="file" name="ofile${i }" id="ofile${i }" class="form-control form-control-sm imgfile" accept=".jpg, .png, .gif"  />
-					     	<label class="my-2 btn1" for="ofile${i }">+</label> <img src="" id="thumb${i }" />
+					     	<input type="file" name="ofile${i }" id="ofile${i }" accept=".jpg, .png, .gif" onChange="loadApplyImage(this);" />
+					     	<label class="my-2 btn1" for="ofile${i }">+</label> <span id="showImg_${i}" style="max-width: 100px; max-height: 100px;"></span>
 					     	</c:forEach>
-					     	
-							<br /><input type="checkbox" id="chk_${row.pidx }" /> 작성된 후기는 아뜰리에 홍보 콘텐츠로 사용될 수 있습니다. (필수)
-							<br /><button class="btn7" id="reviewBtn" onclick="submitReview(${row.pidx })">리뷰등록</button>
+					     	</div>
+							<div style="clear:both; margin-top:60px;" class="text-center"><input type="checkbox" id="chk_${row.pidx }" /> 작성된 후기는 아뜰리에 홍보 콘텐츠로 사용될 수 있습니다. (필수)</div>
+							<div class="text-center"><button class="btn8" id="reviewBtn" onclick="submitReview(${row.pidx })" >리뷰등록</button></div>
 					     </form>
 					     	</td> </tr>
 					     </c:if>
@@ -313,7 +348,6 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
         </div>
     </div>
     </div>
-<%@ include file="../include/footer.jsp" %>
-
+    
 </body>
 </html>
