@@ -183,6 +183,41 @@ public class MainController {
 		return "viewartist";
 	}
 	
+	@RequestMapping("/auction")
+	public String auction (Model model, HttpServletRequest req, ParameterDTO parameterDTO) {
+		
+		if(req.getParameter("sWord")!=null) {
+			parameterDTO.getSWord().clear();
+			for(String str : req.getParameter("sWord").split(" ")) {
+				System.out.println(str); parameterDTO.getSWord().add(str);}
+		}
+		
+		int ppmin = dao.minprice();
+		int ppmax = dao.maxprice();
+		
+		int totalCount = dao.totalCount(parameterDTO);
+		//페이징을 위한 설정값(하드코딩)
+		int pageSize = 9;//한 페이지당 게시물 수
+		int blockPage = 10;//한 블럭당 페이지 번호 수
+		/* 목록에 첫 진입시에는 페이지 번호가 없으므로 무조건 1로 설정하고, 파라미터로 전달된 페이지 번호가 있다면 받은 후 정수로 변경해서 설정한다. */
+		int pageNum = (req.getParameter("pageNum")==null || req.getParameter("pageNum").equals(""))? 1 : Integer.parseInt(req.getParameter("pageNum"));
+		
+		int start = (pageNum-1) * pageSize + 1; //현재 페이지에 출력한 게시물의 구간을 계산한다.
+		int end = pageNum * pageSize;
+		parameterDTO.setStart(start); //계산된 값은 DTO에 저장한다.
+		parameterDTO.setEnd(end);
+		List<ProductDTO> auclist = dao.selectAuction(parameterDTO); //데이터베이스에서 인출한 게시물의 목록을 Model객체에 저장한다.
+		model.addAttribute("auclist", auclist);
+		
+		//게시판 하단에 출력한 페이지번호를 String으로 반환받은 후 Model 객체에 저장한다.
+		String pagingImg = BoardPage.pagingImg(totalCount, pageSize, blockPage, pageNum, req.getContextPath());
+		model.addAttribute("pagingImg", pagingImg);
+		model.addAttribute("totalCount", auclist.size());
+		model.addAttribute("minPrice", ppmin);
+		model.addAttribute("maxPrice", ppmax);
+		return "auction";
+	}
+	
 	@RequestMapping("admin/test")
 	String testPage() {
 		return "testPage";

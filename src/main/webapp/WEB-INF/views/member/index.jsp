@@ -25,7 +25,8 @@ $( document ).ready( function() {
  span.red {float: right;}
  .bpc1 {position: relative; top: 15px;}
  .col-sm-2:nth-child(1) a, .col-sm-2:nth-child(2) a, .col-sm-2:nth-child(3) a {line-height: 50px;}
- #indexImgmask {display: inline-block; border-radius: 50%; width: 90px; height:90px; overflow:hidden; margin-top:15px;}
+ #indexImgmask {display: inline-block; border-radius: 50%; width: 90px; height:90px; overflow:hidden; margin-top:15px;
+ margin-left:15px;}
  #indexMypageProfileImage {width: 90px; vertical-align: top; }
  .btn10 {line-height: 30px; border:1px solid grey; text-align: center; box-sizing: border-box; padding:5px !important; }
  .btn10:hover {background-color: black; color: white;}
