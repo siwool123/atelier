@@ -39,9 +39,13 @@ public class ApplyController {
 	String apply(Principal principal, Model model, MemberDTO memberDTO, ApplyDTO applyDTO) {
 		try {
 			String user_id = principal.getName(); //로그인아이디 얻어온다.
-			applyDTO = adao.aview(dao.mview(user_id).getMidx());
 			memberDTO = dao.mview(user_id);
+			applyDTO = adao.aview(memberDTO.getMidx());
 			if (applyDTO!=null) {
+				/*
+				 * applyDTO.setA_intro(applyDTO.getA_intro().replace("\r\n","</br>"));
+				 * applyDTO.setA_history(applyDTO.getA_intro().replace("\r\n","</br>"));
+				 */
 				model.addAttribute("mdto", memberDTO);
 				model.addAttribute("apdto", applyDTO);
 				model.addAttribute("apresult","1");
@@ -76,16 +80,7 @@ public class ApplyController {
 					System.out.println("파일있음");
 				} else {
 					System.out.println("파일 없음. 잘못된 접근. 함수종료");
-					try {
-						String user_id = principal.getName(); //로그인아이디 얻어온다.
-						memberDTO = dao.mview(user_id);
-						model.addAttribute("mdto", memberDTO);
-						System.out.println(memberDTO);
-					}catch (Exception e){
-						System.out.println("작가신청 페이지 접속 실패");
-					}
-					model.addAttribute("applySuc","-1");
-					return "member/apply";
+					return "redirect:/member/apply";
 				}
 				System.out.println("3");
 				//파일명 확인을 위해 헤더값을 얻어온다. 
@@ -161,7 +156,8 @@ public class ApplyController {
 			e.printStackTrace();
 			System.out.println("업로드 실패");
 		}
-		return "member/apply";
+		
+		return "redirect:/member/apply";
 	}
 	
 }
