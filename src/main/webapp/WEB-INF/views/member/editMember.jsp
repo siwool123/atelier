@@ -18,6 +18,7 @@
 }
 .leftmenu li:nth-child(7) {background-color: black;}
 .leftmenu li:nth-child(7) a, .leftmenu li:nth-child(7) a i {color:white}
+.leftmenu li a i {margin-top:6px;}
 .leftmenu li a {line-height:30px !important;}
 .btn3, .btn4 {padding:0 6% !important;}
 .border li {line-height:40px;}
@@ -31,7 +32,6 @@ table.order tr th, table.order tr td {padding-left:20px;}
 ul.mb-5 li {line-height:40px;}
 </style>
 <script>
-//다음 주소 찾기 api
 function uploadProfile() {
 	var popupWidth = 600;
 	var popupHeight = 320;
