@@ -43,13 +43,12 @@ public class ArtistController {
         int midx = memberDTO.getMidx();
         
         ArtistDTO artistDTO = ardao.aview(midx);
-        System.out.println("aidx: "+artistDTO.getAidx());
         List<ProductDTO> aplist = ardao.aplist(midx);
         
         model.addAttribute("adto", artistDTO);
         model.addAttribute("aplist", aplist);
-        model.addAttribute("soldsum", ardao.solselect(artistDTO.getAidx()));
         model.addAttribute("likesum", ardao.likesum(artistDTO.getAidx()));
+        model.addAttribute("soldsum", ardao.solselect(artistDTO.getAidx()));
 		return "artist/profile";
 	}
 	
