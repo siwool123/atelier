@@ -225,7 +225,35 @@ public class MemberController {
 		return "redirect:/member/like";
 	}
 	
-	
+	@RequestMapping("/member/auction")
+	public String orderhistory (Principal principal, Model model, ParameterDTO parameterDTO, HttpServletRequest req) {
+		try {
+			Map<Object, Object> map = payService.memberIndex(principal);
+			model.addAttribute("map", map);
+			
+			int midx = dao.mview(principal.getName()).getMidx();
+			System.out.println("midx="+ midx);
+			
+			if(req.getParameter("sWord")!=null) {
+				parameterDTO.getSWord().clear();
+				for(String str : req.getParameter("sWord").split(" ")) {
+					System.out.println(str); parameterDTO.getSWord().add(str);}
+			}
+			
+			parameterDTO.setMidx(midx);
+			
+			List<OPjoinDTO> oplist = dao.opjoin(parameterDTO);
+			System.out.println("oplist="+ oplist);
+			
+			
+			model.addAttribute("oplist", oplist);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+         
+		return "member/auction";
+	}
 }
 
 

@@ -30,7 +30,7 @@ $(function () {
 				} else if(findPassMap.pwresetresult=="1"){
 					console.log("임시비번으로 회원정보변경 성공 : "+findPassMap);
 					$('#pwresetR').text("임시 비밀번호로 회원정보변경 성공");
-				}
+				}else if(findPassMap.noemail != null){ alert(findPassMap.noemail); }
 			}
 		})
 	})
@@ -57,8 +57,8 @@ $(function () {
 					$("#userFindPassNum").attr("class", "form-control is-valid");
 					$('#suc1').attr('class', 'text-center text-primary');
 					$('#idAndPass').html(
-								findPassCheckMap.m_name+"님의 비밀번호는 <br/>"+findPassCheckMap.pass+"<br/>입니다."
-							);
+							findPassCheckMap.m_name+"님의 비밀번호는 <br/>"+findPassCheckMap.pass+"<br/>입니다."
+						);
 				} else if(findPassCheckMap.findPassCheckSuc == "-1"){
 					$("#userFindPassNum").attr("class", "form-control is-invalid");
 					$("#passNumInvalidFeedback").text("임시 비밀번호를 발송해주세요.");

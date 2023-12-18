@@ -389,5 +389,29 @@ inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 	
 	<select id="aucmaxp">select max(aprice) from auction2</select>
 	
+	<insert id="auctionInsert" parameterType="com.edu.springboot.restboard.AuctionDTO">
+		insert into auction2 (bid_idx, pidx, midx, aprice, id) values 
+		(seq_auction2.nextval, #{pidx}, #{midx}, #{aprice}, #{id})
+	</insert>
 	
+	<select id="aucpjoin" resultType="com.edu.springboot.restboard.OPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select order2.o2idx, order1.oidx, order1.midx, order1.paymethod, order1.price as tprice, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, 
+ order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.owner, 
+order1.auction, order1.add_point, order1.minus_point, product.pidx, product.sfile, product.title, product.m_name, product.size1, product.size2, product.price, product.ridx
+from order2 inner join product on order2.pidx = product.pidx
+inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
+			<choose>
+				<when test="status != null and !status.isEmpty() and status.equals('aa')"> and order1.paydate is null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('bb')"> and order1.paydate is not null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('cc')"> and order1.paydate is not null and order1.shipdate is not null</when>
+				<when test="dmin!=null and !dmin.isEmpty() and dmax!=null and !dmax.isEmpty()">
+					 and order1.orderdate BETWEEN #{dmin} AND #{dmax}
+				</when>
+				<when test="sWord!=null and !sWord.isEmpty()">
+					<foreach collection="sWord" item="str" separator="or">
+						and product.title LIKE '%' || #{str} || '%' OR product.m_name LIKE '%' || #{str} || '%'
+					</foreach>
+				</when>
+			</choose>
+	</select>
 </mapper> 

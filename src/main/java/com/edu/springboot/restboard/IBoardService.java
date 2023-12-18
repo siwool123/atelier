@@ -151,4 +151,8 @@ public interface IBoardService {
 	//최고입찰가
 	public int aucmaxp(int pidx);
 	
+	//경매입찰하기
+	public int auctionInsert(AuctionDTO auctionDTO);
+	
+	
 }
