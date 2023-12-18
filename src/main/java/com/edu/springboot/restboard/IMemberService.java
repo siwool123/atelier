@@ -25,4 +25,6 @@ public interface IMemberService {
 	public int mpdelete(MemberDTO memberDTO);
 	//비번변경
 	public int mpedit(MemberDTO memberDTO);
+	//내공간 사진 업로드
+	public int mplupdate(MemberDTO memberDTO);
 }

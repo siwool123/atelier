@@ -98,7 +98,7 @@ $(document).ready( function() {
 <body>
 <%@ include file="./include/header.jsp" %>
 <div class="container-fluid">
-	<div class="swiper swiper-container">
+	<div class="swiper swiper-container sc1">
 	    <div class="swiper-wrapper" >
 	        <div class="swiper-slide" id="container" style="background:black; width:100vw; height:480px; overflow:hidden;">  
 
@@ -201,7 +201,8 @@ $(document).ready( function() {
                 <div class="mt-4">
                 <a href="./shop" class="btn1" id="total" style="padding:9px 83px; margin-bottom:-1px; ">전체</a><br/>
                 <a href="?sell=on" class="btn1" id="onsale" style="padding:9px 30px; ">판매중</a>
-                <a href="?sell=so" class="btn1" id="sold" style="padding:9px 20px; margin-left:-5px;">판매완료</a></div>
+                <a href="?sell=so" class="btn1" id="sold" style="padding:9px 20px; margin-left:-5px;">판매완료</a><br/>
+                </div>
 
                 <div class="headerL">FILTER BY PRICE</div>
                 <form name='psearchfrm'  action=''>

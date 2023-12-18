@@ -68,7 +68,7 @@ table tr th, table tr td {padding:30px;}
 		
 	</table>
 	
-	<a class="mx-auto btn1 p-3" href="/member/orderhistory" >주문내역 확인</a>
+	<a class="mx-auto btn1 p-3" href="/member/oview?oidx=${odto.oidx }" >주문내역 확인</a>
 </div>
 <%@ include file="../include/footer.jsp" %>
 </body>
