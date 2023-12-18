@@ -61,7 +61,6 @@ public class WebSecurityConfig {
 		logoutUrl : 로그아웃 위한 요청명
 		logoutSuccessUrl : 로그아웃후 이동할위치 		  */
 		
-		
 		http.formLogin(formLogin -> formLogin
 				.loginPage("/login") 		// default : /login
 				.loginProcessingUrl("/loginAction")
@@ -70,6 +69,17 @@ public class WebSecurityConfig {
 				.usernameParameter("my_id") 	// default : username
 				.passwordParameter("my_pass")	// default : password
 				.permitAll() );
+		
+//		http.formLogin(formLogin -> formLogin
+//				.loginPage("/login1") 		// default : /login
+//				.loginProcessingUrl("/loginAction1")
+////				.failureUrl("/error") 		// default : /login?error
+//				.failureHandler(myAuthFailureHandler)
+//				.usernameParameter("my_id") 	// default : username
+//				.passwordParameter("my_pass")	// default : password
+//				.permitAll() );
+		
+		
 		http.logout(logout -> logout
 				.logoutUrl("/logout")		// default : /logout
 				.logoutSuccessUrl("/")
