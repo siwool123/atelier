@@ -82,7 +82,7 @@ function sucFunc(resD){
 function sucFunc2(resD){
 	console.log('입찰참가 콜백데이터', resD);
 	var cart = $('.cart');
-	if(resD==1) {
+	if(resD==2) {
 		alert("입찰참가가 완료되었습니다.");
 		if(confirm("마이페이지 > 입찰내역 으로 이동하시겠습니까?")){window.location.href = '/member/auction';}
 		location.reload();
@@ -113,6 +113,7 @@ const countDownTimer = function(id, date){
 		var seconds = Math.floor((distDt % _minute) / _second);
 		
 		document.getElementById(id).innerHTML = days+'일 '+hours+'시간 '+minutes+'분 '+seconds+'초';
+		document.getElementById(id).style.color = 'red';
 	}
 	timer = setInterval(showRemaining, 1000);
 }
@@ -205,7 +206,7 @@ let currentUrl = window.document.location.href;
 				<tr> <th>시작가</th><td><span class="price2">${not empty pdto ? pdto.price : '0' }</span> 원</td> </tr>
 				<tr> <th>입찰시작일</th><td>${not empty pdto ? pdto.regidate : '' }</td> </tr>
 				<tr> <th>입찰종료일</th><td>${not empty pdto ? pdto.enddate : '' }</td> </tr>
-				<tr> <th>남은시간</th><td id="timeOut" style="color:red"></td> </tr>
+				<tr> <th>남은시간</th><td id="timeOut"></td> </tr>
 			</table>
 			<script>
 			//경매종료시간

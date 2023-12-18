@@ -19,9 +19,12 @@
 <script src="/js/atelier.js"></script>
 
 <script type="text/javascript">
-/* $( document ).ready( function() {
+$( document ).ready( function() {
  	
-    $('#point').focus(function () {
+	var amount = parseInt($('#fprice').text().replace(/,/g, ''));
+	$('input[name=oprice]').val(amount);
+	console.log($('input[name=oprice]').val());
+    /* $('#point').focus(function () {
         if ($(this).val() === '0') { $(this).val(''); }
     });
 
@@ -45,9 +48,17 @@
 	    $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
 	    $('input[name=oprice]').val(ffprice);
 	    console.log("최종가격", ffprice);
-	}); 
+	});  */
     
-}); */
+});
+
+var amount = parseInt(document.getElementById('fprice').textContent.replace(/,/g, ''));
+document.querySelector('input[name=oprice]').value = amount;
+console.log("oprice값 : "+document.querySelector('input[name=oprice]').value);
+
+var amount2 = parseInt(document.getElementById('futurepoint').textContent.replace(/,/g, ''));
+document.querySelector('input[name=futurepoint]').value = amount2;
+console.log("futurepoint값 : "+document.querySelector('input[name=futurepoint]').value);
 
 function deletepidx(pidx) {
 	if(confirm('정말로 삭제하시겠습니까?')) { 

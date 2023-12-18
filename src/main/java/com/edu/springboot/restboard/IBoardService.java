@@ -153,6 +153,11 @@ public interface IBoardService {
 	
 	//경매입찰하기
 	public int auctionInsert(AuctionDTO auctionDTO);
+	//입찰시 product테이블에 최대값 업뎃
+	public int updatepm(int pidx, int aprice);
+	
+	//경매내역가져오기
+	public List<AUPjoinDTO> aucpjoin2(ParameterDTO parameterDTO);
 	
 	
 }

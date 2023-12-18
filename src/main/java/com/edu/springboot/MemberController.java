@@ -27,6 +27,7 @@ import com.edu.springboot.restboard.ParameterDTO;
 import com.edu.springboot.restboard.PlikeDTO;
 import com.edu.springboot.restboard.PointDTO;
 import com.edu.springboot.pay.PayService;
+import com.edu.springboot.restboard.AUPjoinDTO;
 import com.edu.springboot.restboard.ApplyDTO;
 import com.edu.springboot.restboard.ArtistDTO;
 import com.edu.springboot.restboard.CartDTO;
@@ -231,25 +232,16 @@ public class MemberController {
 			Map<Object, Object> map = payService.memberIndex(principal);
 			model.addAttribute("map", map);
 			
-			int midx = dao.mview(principal.getName()).getMidx();
-			System.out.println("midx="+ midx);
+			parameterDTO.setId(principal.getName());
 			
-			if(req.getParameter("sWord")!=null) {
-				parameterDTO.getSWord().clear();
-				for(String str : req.getParameter("sWord").split(" ")) {
-					System.out.println(str); parameterDTO.getSWord().add(str);}
-			}
-			
-			parameterDTO.setMidx(midx);
-			
-			List<OPjoinDTO> oplist = dao.opjoin(parameterDTO);
-			System.out.println("oplist="+ oplist);
-			
-			
-			model.addAttribute("oplist", oplist);
+			List<AUPjoinDTO> auplist = dao2.aucpjoin2(parameterDTO);
+			System.out.println("auplist="+ auplist);
+			model.addAttribute("auplist", auplist);
+			model.addAttribute("user_id", principal.getName());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("입찰내역조회실패");
 		}
          
 		return "member/auction";

@@ -27,10 +27,11 @@ public class ParameterDTO {
 	private String auction;
 	
 	private String status;
+	private String aucstatus;
 	private String dmin;
 	private String dmax;
 
 	private String searchKeyword;
 	private String apply_idx;
-	
+	private String id;
 }

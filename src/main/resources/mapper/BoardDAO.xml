@@ -394,7 +394,7 @@ inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 		(seq_auction2.nextval, #{pidx}, #{midx}, #{aprice}, #{id})
 	</insert>
 	
-	<select id="aucpjoin" resultType="com.edu.springboot.restboard.OPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+<!-- 	<select id="aucpjoin" resultType="com.edu.springboot.restboard.OPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		select order2.o2idx, order1.oidx, order1.midx, order1.paymethod, order1.price as tprice, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, 
  order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.owner, 
 order1.auction, order1.add_point, order1.minus_point, product.pidx, product.sfile, product.title, product.m_name, product.size1, product.size2, product.price, product.ridx
@@ -413,5 +413,19 @@ inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 					</foreach>
 				</when>
 			</choose>
+	</select> -->
+	
+	<select id="aucpjoin2"  resultType="com.edu.springboot.restboard.AUPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select product.*, auction2.aprice, auction2.aucdate, auction2.id from product inner join auction2 on product.pidx = auction2.pidx where auction2.id=#{id}
+			<!-- <when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus eq 'aa')"> and product.enddate &lt; sysdate and auction2.aprice = product.maxprice</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus eq 'bb')"> and product.enddate &lt; sysdate and auction2.aprice != product.maxprice</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus eq 'cc')"> and product.enddate &gt; sysdate</when> -->
+			<if test="dmin!=null and !dmin.isEmpty() and dmax!=null and !dmax.isEmpty()">
+				 and auction2.aucdate BETWEEN #{dmin} AND #{dmax}
+			</if>
+			  order by auction2.aucdate desc
 	</select>
+	
+	<update id="updatepm"> update product set maxprice = #{param2} where pidx = #{param1} </update>
+	
 </mapper> 

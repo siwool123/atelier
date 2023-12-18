@@ -202,7 +202,7 @@ public class BoardRestController {
 	@PostMapping("/rest/auction")
 	public int auction(HttpServletRequest req, Model model, Principal principal, AuctionDTO auctionDTO) {
 		System.out.println("rest입찰호출함");
-		int result = 0;
+		int result = 0, result2=0;
 		int pidx = Integer.parseInt(req.getParameter("pidx"));
 		int aprice = Integer.parseInt(req.getParameter("aprice"));
 		MemberDTO mdto = dao.mview(principal.getName());
@@ -211,8 +211,9 @@ public class BoardRestController {
 		auctionDTO.setId(mdto.getId());
 		auctionDTO.setAprice(aprice);
 		result = dao.auctionInsert(auctionDTO);
+		result2 = dao.updatepm(pidx, aprice);
 		
-		System.out.println("입찰참가결과:"+result);
-		return result;
+		System.out.println("입찰참가결과:"+result+", 작품최대값반영결과:"+result2);
+		return result+result2;
 	}
 }

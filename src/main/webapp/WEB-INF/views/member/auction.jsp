@@ -35,16 +35,44 @@ function deletepidx(pidx) {
 	} 
 }
 
-let key = "${param.key}";
-if(key === "userinfo"){  $("#myreview-tab, #myreview, #userinfo-tab, #userinfo").toggleClass("active");
-}else if(key === "myreview"){ $("#userinfo-tab, #myreview-tab, #userinfo, #myreview").toggleClass("active");  }
+//카운트다운함수
+const countDownTimer = function(id, date){
+	var _vDate = new Date(date);
+	var _miliSecond = 100;
+	var _second = 1000;
+	var _minute = _second*60;
+	var _hour = _minute *60;
+	var _day = _hour*24;
+	var timer;
+	function showRemaining(){
+		var now = new Date();
+		var distDt = _vDate - now;
+		if(distDt<=0){
+			clearInterval(timer);
+			document.getElementById(id).innerHTML = '경매종료';
+			//setEndAuction(); //경매가 종료표시되는 요소를 변경시킴
+			$('.auction').prop('disabled', true);
+			return;
+		}
+		var days = Math.floor(distDt / _day);
+		var hours = Math.floor((distDt % _day) / _hour);
+		var minutes = Math.floor((distDt % _hour) / _minute);
+		var seconds = Math.floor((distDt % _minute) / _second);
+		
+		document.getElementById(id).innerHTML = days+'일 '+hours+'시간 '+minutes+'분 '+seconds+'초';
+		document.getElementById(id).style.color = 'red';
+	}
+	timer = setInterval(showRemaining, 1000);
+}
+
+
 </script>
 
 <style>
 @media (max-width: 600px) {
 }
-.leftmenu li:nth-child(2) {background-color: black;}
-.leftmenu li:nth-child(2) a, .leftmenu li:nth-child(2) a i {color:white}
+.leftmenu li:nth-child(3) {background-color: black;}
+.leftmenu li:nth-child(3) a, .leftmenu li:nth-child(3) a i {color:white}
 .leftmenu li a {line-height:30px !important;}
 .border li {line-height:40px;}
 input {margin-right:10px !important;}
@@ -71,6 +99,7 @@ label.btn1 {width: 50px; height: 50px; vertical-align: middle; cursor: pointer; 
 #thumb1, #thumb2, #thumb3 {max-width: 100px; max-height: 100px;}
 i.bi-star-fill {font-size:20px;}
 span.count {position: relative; top: -30px; float: right; right: 15px;}
+.btn12 {padding: 0 10px !important; position: relative; left: 15px;}
 </style>
 </head>
 <body>
@@ -80,107 +109,79 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
         <div class="col-sm-2"><%@ include file="../include/memberSidebar.jsp" %></div>
         
         <div class="col-sm-10" style="padding-left:50px;">
-			<div class="headerL2 mb-5" style="margin-top:10px;">참여경매 ${not empty auclist ? auclist.size() : "0" }</div>
+			<div class="headerL2 mb-5" style="margin-top:10px;">참여경매 ${not empty auplist ? auplist.size() : "0" }</div>
 			
-	  <!-- 탭 메뉴 -->
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="userinfo-tab" data-bs-toggle="tab" data-bs-target="#userinfo" type="button" role="tab" 
-          aria-controls="userinfo" aria-selected="true">주문내역 조회 ${not empty oplist ? oplist.size() : "0" }</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="myreview-tab" data-bs-toggle="tab" data-bs-target="#myreview" type="button" role="tab"
-            aria-controls="myreview" aria-selected="false">취소/반품 내역 0</button>
-        </li>
-      </ul>
-      
-      <!-- 내용 -->
-      <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="userinfo" role="tabpanel" aria-labelledby="userinfo-tab">
-
-			<ul class="border my-5" style="padding:20px 40px;">
-				<li><span class="circle">●</span>주문번호를 클릭하시면 해당 주문에 대한 상세내역을 확인하실 수 있습니다. </li>
-				<li><span class="circle">●</span>작품 포장 등으로 인하여 결제완료 후 배송까지 7일 이내가 소요됩니다.</li>
-				<li><span class="circle">●</span>발송 전에만 주문취소가 가능합니다. </li>
-				<li><span class="circle">●</span>아뜰리에에서 판매중인 작품은 모두 실제 원화로, 동일한 재고가 없어 교환이 불가능한 점 양해 부탁드립니다.</li>
-				<li><span class="circle">●</span>실제 상품이 온라인 상의 내용과 다른 경우, 작품에 하자가 있거나 운송중 파손이 발생한 경우, 반품이 가능합니다. </li>
-				<li><span class="circle">●</span>택배를 이용하여 아뜰리에 측으로 반품해 주시면 됩니다. 단순변심에 따른 반품은 불가합니다.</li>
-			</ul>
+			<div style="color:red">낙찰후 낙찰자에게 메일과 문자, 앱알림이 전송됩니다. 낙찰후 72시간 이내 미결제시 한달간 입찰이 제한됩니다.</div>
 			<div class="mt-5 param" style="height:80px;">
-				<a href="?status=aa" class="btn1" id="aa">입금확인전</a> 
-				<a href="?status=bb" class="btn1" id="bb">배송준비중</a> 
-				<a href="?status=cc" class="btn1" id="cc">발송완료</a> 
+				<a href="?aucstatus=aa" class="btn1" id="aa">낙찰완료</a> 
+				<a href="?aucstatus=bb" class="btn1" id="bb">경매종료</a> 
+				<a href="?aucstatus=cc" class="btn1" id="cc">경매중</a> 
 				<form action="" style="display:inline; float:right">
-				<input type="date" name="dmin" id="datepicker1"><!-- <i class="bi bi-calendar3"></i> --> ~ 
-				<input type="date" name="dmax" id="datepicker2"> <!-- <i class="bi bi-calendar3"></i> -->
-                <input type="text" name="sWord" style="width: 150px;" placeholder="작가 또는 작품명 검색" />
-                <button type="submit" id="search"> 검색 <i class="bi bi-search fs-5"></i></button>
+				<input type="date" name="dmin" id="datepicker1"> ~  <input type="date" name="dmax" id="datepicker2"> 
+                <button type="submit" id="search"> 조회 </button>
                 </form>
 			</div>
 			
 			 <table class="table table-hover table1">
 			   <thead class="table-secondary">
 			     <tr align="center" style="height:40px">
-			       <th width="10%">구분</th>
-			       <th>주문일자<br/>주문번호</th>
+			       <th>구분/상태</th>
 			       <th colspan="2">작품정보</th>
-			       <th>주문금액 (원)</th>
-			       <th>주문상태</th>
-			       <th>결제방식</th>
-			       <th>취소/반품</th>
+			       <th>마감일자/남은시간</th>
+			       <th>시작가(원)</th>
+			       <th>입찰최고가(원)</th>
+			       <th>내입찰가(원)</th>
 			     </tr>
 			   </thead>
 			   <tbody>
 			<c:choose> 
-				<c:when test="${ empty oplist }">
-				<tr><td colspan="8" align="center">주문한 작품이 없습니다.</td></tr>
+				<c:when test="${ empty auplist }">
+				<tr><td colspan="8" align="center">입찰한 내역이 없습니다.</td></tr>
 				</c:when>
 				<c:otherwise> <!-- 출력할 게시물이 있을때 -->
-					<c:forEach items="${ oplist }" var="row" varStatus="loop">
-					     <tr id="orderItem_${row.pidx}">
-					       <td align="center">${ row.auction==0 ? '구매' : '<span style="color:red">낙찰</span>' }</td>
-					       <td align="center">
-					       		${row.orderdate } <br/>
-						      <a href="oview?oidx=${row.oidx }" style="text-decoration: underline;">${row.oidx }</a> 
-					       </td>
+					<c:forEach items="${ auplist }" var="row" varStatus="loop">
+					     <tr id="orderItem_${ loop.index}">
+					       <td align="center" id="divide_${ loop.index}">${ row.enddate }</td>
+					       <script>
+					       var now = new Date();
+					       var dDate = new Date('${ row.enddate }');
+					       if(dDate<=now && ${row.aprice}==${row.maxprice}){
+					    	   $('#divide_'+${ loop.index}).html('<div>낙찰완료</div><button class="btn1 btn11">결제하기</button>');
+					    	   $('#divide_'+${ loop.index}).css('color', 'red');
+					       } 
+					       if(dDate<=now && ${row.aprice}!=${row.maxprice}){
+					    	   $('#divide_'+${ loop.index}).html('<div>경매종료</div>낙찰불발');
+					    	   $('#divide_'+${ loop.index}).css('color', '#c0c0c0');
+					       }
+					       if(dDate>now){
+					    	   $('#divide_'+${ loop.index}).html('<div>경매중</div><button class="btn1 btn12 mt-2">입찰가변경</button>');
+					    	   $('#divide_'+${ loop.index}).css('color', 'blue');
+					       }
+					       </script>
+					       
 					       <td align="center"><a href="/view?pidx=${ row.pidx }">
 					       <c:set var="imgsrc" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
    				 			<img src="${imgsrc}" alt="작품이미지" class="img1" />
 					       	</a></td>
-					       	<td><a href="view?pidx=${ row.pidx }"><b > ${ row.title }</b><br/>  ${row.m_name } <br />
+					       	<td align="left"><a href="view?pidx=${ row.pidx }"><b > ${ row.title }</b><br/>  ${row.m_name } <br />
 					       	${row.size1 } x ${row.size2 } cm					       	
 					       	</a></td>
+					       	<td align="center">${row.enddate } <br/><span id="timeOut_${ loop.index}">0</span> </td>
+					       	
+					       	<script>
+							//경매종료시간
+							var now = new Date();
+					       var dDate = new Date('${ row.enddate }');
+							if(dDate-now>0){
+								var endTime = '<c:out value="${row.enddate}" />';
+								console.log("endtime : "+endTime);
+								countDownTimer('timeOut_'+${ loop.index}, endTime);
+							}
+							</script>
+					       	
 					       <td align="right"><span class="price2">${row.price }</span></td>
-					       <td align="center" >
-					       	 <c:choose>
-						       	<c:when test="${ row.paydate==null and row.shipdate==null }"><span style="color:red;">입금확인전</span></c:when>
-						       	<c:when test="${ row.paydate!=null and row.shipdate==null }"><span style="color:red;">배송준비중</span></c:when>
-						       	<c:when test="${ row.paydate!=null and row.shipdate!=null }">
-							       	<button class="btn6" onclick="trackWindow(${row.t_num});" >배송조회</button> <br />
-							       	<c:choose>
-							       		<c:when test="${not empty row.ridx and row.ridx > 0}"><a href="/member/reviewL" class="btn7" style="position: relative; top: 5px;" >리뷰확인</a></c:when>
-							       		<c:otherwise><button class="btn7" id="showReview_${row.pidx }" onClick="reviewWindow(${row.pidx });" >리뷰작성</button></c:otherwise>
-							       	</c:choose>
-						       	
-						       	</c:when>
-						     </c:choose>
-					       </td>
-					       <td align="center" >
-					       	  <c:choose>
-						       	<c:when test="${ row.paymethod.equals('bank') }">무통장입금</c:when>
-						       	<c:when test="${ row.paymethod.equals('kakaopay') }">카카오페이</c:when>
-						       	<c:when test="${ row.paymethod.equals('tosspayments') }">토스페이먼츠</c:when>
-						       	<c:when test="${ row.paymethod.equals('html5_inicis') }">신용카드</c:when>
-						       </c:choose>
-					       </td>
-					       <td align="center">
-					       <c:set var="currentDate" value="<%= LocalDate.now() %>" />
-					       	  <c:choose>
-						       	<c:when test="${ row.shipdate==null }"><button class="btn6">주문취소</button></c:when>
-						       	<c:otherwise>
-						       	<button class="btn6" disabled > 반품</button></c:otherwise>
-						       </c:choose>
-					       </td>
+					       <td align="right"><span class="price2">${ not empty row.maxprice ? row.maxprice : row.aprice }</span></td>
+					       <td align="right"><span class="price2" style="color:red">${row.aprice }</span></td>
 					     </tr>
 					     
 					</c:forEach>
@@ -189,14 +190,6 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
 			   </tbody>
 			</table>    
         
-        </div>
-        <div class="tab-pane fade text-center p-5" id="myreview" role="tabpanel" aria-labelledby="myreview-tab">
-        취소 및 반품 내역이 없습니다.
-        
-        
-        </div>
-      </div>
-			
         </div>
     </div>
     </div>
