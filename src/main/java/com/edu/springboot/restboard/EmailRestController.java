@@ -63,7 +63,7 @@ public class EmailRestController {
 			memberDTO.setId(memberDTO.getId());
 			
 			int result = 0;
-			result = dao.mpedit(memberDTO); //임시비번으로 회원비번변경
+			result = dao.mpedit(memberDTO); //임시비번으로 회원비번변경  
 			System.out.println("임시비번으로 회원비번변경 성공 : "+result);
 			
 			findPassMap.put("pwresetresult", result+"");
