@@ -29,24 +29,27 @@ $( document ).ready( function() {
             }
 		});
 	}); 
-	$('.cart').click(function(){
+	$('.auction').click(function(){
  		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
+ 		
+ 		var maxPrice = parseInt($('#maxprice').text().replace(/,/g, ''))+10000;
+ 		if ($('#aprice').val() == '' || $('#aprice').val() < maxPrice) {
+ 		    alert('현재 최고입찰가 + 10000원 부터 입찰가능합니다.');
+ 		   $('#aprice').val(maxPrice);
+ 		    $('#aprice').focus(); return;
+ 		  }
+ 		
+ 		if(confirm('정말로 입찰에 참가하시겠습니까? \n 낙찰후 낙찰자에게 메일과 문자, 앱알림이 전송됩니다. \n 낙찰후 72시간 이내 미결제시 한달간 입찰이 제한됩니다.')) { 
  		$.ajax({
-			type : 'get', //전송방식
-			contentType : 'text/html;charset:utf-8', //컨텐츠타입
+			type : 'post', //전송방식
 			dataType : 'json', //콜백데이터 타입
-			url : '/rest/cart', 
-			data : {pidx : ${pdto.pidx}},
+			url : '/rest/auction', 
+			data : {pidx : ${pdto.pidx}, aprice : $('#aprice').val()},
 			success : sucFunc2,
 			error: function (errD) {console.log(errD.status+" : "+errD.statusText);
-				alert('장바구니 담기 실패');}
+				alert('입찰참가 실패');}
 		});
-	}); 
-	
-	$('.pay').click(function(){
- 		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
- 		var pidx = getParameterByName('pidx');
- 		window.location.href = '/member/paynow?pidx='+pidx;
+ 		}
 	}); 
 	
 	$('.thumb').click(function(){
@@ -61,6 +64,7 @@ $( document ).ready( function() {
 		});
 	});
 });
+
 function sucFunc(resD){
 	console.log('콜백데이터', resD);
 	var plike = $('.plike');
@@ -74,21 +78,16 @@ function sucFunc(resD){
 		alert("찜에서 삭제되었습니다.");
 	}else alert("찜 추가삭제가 작동하지 않습니다.");
 }
-function sucFunc2(resD){
-	console.log('장바구니 콜백데이터', resD);
-	var cart = $('.cart');
-	if(resD==1) {
-		alert("장바구니에 추가되었습니다.");
-		cart.text($(this).text() + ' 1');
-		if(confirm("장바구니로 이동하시겠습니까?")){window.location.href = '/member/cart';}
-		
-	}else if(resD==-1) { 
-		alert("장바구니에 동일 작품이 있습니다. ");
-		if(confirm("장바구니로 이동하시겠습니까?")){window.location.href = '/member/cart';}
-	
-	}else alert("장바구니가 작동하지 않습니다.");
-}
 
+function sucFunc2(resD){
+	console.log('입찰참가 콜백데이터', resD);
+	var cart = $('.cart');
+	if(resD==2) {
+		alert("입찰참가가 완료되었습니다.");
+		if(confirm("마이페이지 > 입찰내역 으로 이동하시겠습니까?")){window.location.href = '/member/auction';}
+		location.reload();
+	}else { alert("입찰참가 실패"); }
+}
 //카운트다운함수
 const countDownTimer = function(id, date){
 	var _vDate = new Date(date);
@@ -101,10 +100,11 @@ const countDownTimer = function(id, date){
 	function showRemaining(){
 		var now = new Date();
 		var distDt = _vDate - now;
-		if(distDt<0){
+		if(distDt<=0){
 			clearInterval(timer);
 			document.getElementById(id).innerHTML = '경매종료';
-			setEndAuction(); //경매가 종료표시되는 요소를 변경시킴
+			//setEndAuction(); //경매가 종료표시되는 요소를 변경시킴
+			$('.auction').prop('disabled', true);
 			return;
 		}
 		var days = Math.floor(distDt / _day);
@@ -113,33 +113,11 @@ const countDownTimer = function(id, date){
 		var seconds = Math.floor((distDt % _minute) / _second);
 		
 		document.getElementById(id).innerHTML = days+'일 '+hours+'시간 '+minutes+'분 '+seconds+'초';
+		document.getElementById(id).style.color = 'red';
 	}
 	timer = setInterval(showRemaining, 1000);
 }
 
-function handlePriceInput() {
-    var totalAmount = parseInt($('#tprice3').text().replace(/,/g, ''));
-    var maxPoint = parseInt($('#maxPoint').text()); // 최대 포인트 값
-    var pointUsed = parseInt($('#point').val());
-
-    // 최대 포인트를 초과하지 않도록 처리
-    if (pointUsed > maxPoint) {
-    	alert('적립하신 포인트를 초과합니다.');
-        $('#point').val(maxPoint); // 최대 포인트로 설정
-        pointUsed = maxPoint; // 사용된 포인트 값 갱신
-    }
-
-    var finalPrice = parseInt($('#tprice3').text().replace(/,/g, '')) - parseInt($('#point').val());
-	console.log($('input[name="point"]').val());
-    // #fprice와 #oprice 업데이트
-    $('#fprice').html(numberWithCommas(totalAmount - $('input[name="point"]').val()));
-    $('input[name=oprice]').val(totalAmount);
-    $('input[name=fprice]').val(totalAmount - parseInt($('#point').val()));
-
-    // #futurepoint 업데이트
-    $('#futurepoint').html(totalAmount * 0.01);
-    $('input[name=futurepoint]').html(totalAmount * 0.01);
-}
 </script> 
 
 <style>
@@ -156,7 +134,7 @@ function handlePriceInput() {
 .next, .prev {font-size:50px; color:black;}
 .carousel-control-next, .carousel-control-prev {width:6% !important;}
 .bi-zoom-in {opacity:0.5; position:relative; left: 80px; font-size: 30px; }
-.btn4 {height:40px; padding:0 30%;}
+.btn4 {height:40px; padding:0 30% !important;}
 </style>
 </head>
 <body>
@@ -221,14 +199,14 @@ let currentUrl = window.document.location.href;
     </div>
     </div>
 </div>
-<div class="container border-bottom py-5">
+<div class="container py-5">
 	<div class="row">
 		<div class="col-sm-6">
 			<table class="table table-borderless atable">
 				<tr> <th>시작가</th><td><span class="price2">${not empty pdto ? pdto.price : '0' }</span> 원</td> </tr>
 				<tr> <th>입찰시작일</th><td>${not empty pdto ? pdto.regidate : '' }</td> </tr>
 				<tr> <th>입찰종료일</th><td>${not empty pdto ? pdto.enddate : '' }</td> </tr>
-				<tr> <th>남은시간</th><td id="timeOut" style="color:red"></td> </tr>
+				<tr> <th>남은시간</th><td id="timeOut"></td> </tr>
 			</table>
 			<script>
 			//경매종료시간
@@ -240,34 +218,32 @@ let currentUrl = window.document.location.href;
 			</script>
 		</div>
 		<div class="col-sm-6">
-		<form action="/member/auctionProc" method="post" name="auctionFm" id="auctionFm">
 			<table class="table table-borderless atable">
-				<tr> <th>현재최고입찰가</th><td><span style="color:red;" class="price2">${not empty maxprice ? maxprice : pdto.price }</span> 원 / 현재 입찰자 ${not empty auclist ? auclist.size() : '0' } 명 </td> </tr>
+				<tr> <th>현재최고입찰가</th><td><span style="color:red;" class="price2" id="maxprice">${not empty maxprice ? maxprice : pdto.price }</span> 원 / 현재 입찰자 ${not empty auclist ? auclist.size() : '0' } 명 </td> </tr>
 				<tr> <th>추정가</th><td><span class="price2">${not empty pdto ? pdto.price*3 : '0' }</span> ~ <span class="price2">${not empty pdto ? pdto.price*6 : '0' }</span> 원</td> </tr>
 				<tr> <th>입찰단위</th><td> + 10,000 원</td> </tr>
-				<tr> <th>내입찰가</th><td><input type="number" name="aprice" id="aprice" step="10000" 
-				onkeyup="handlePriceInput();" 
+				<tr> <th>내입찰가</th><td><input type="number" name="aprice" id="aprice" step="10000"  
 				value="${not empty maxprice ? maxprice+10000 : pdto.price+10000 }" min="${not empty maxprice ? maxprice+10000 : pdto.price+10000 }" /> 원</td> </tr>
-				<tr> <th colspan="2"><button class="btn4 auction" ${pdto.sold == 1 ? 'disabled' : ''}>입찰하기</button>
+				<tr> <th colspan="2"><button class="btn4 auction" >입찰하기</button>
 				<input type="hidden" name="pidx" value="${pdto.pidx }" />
 				</th> </tr>
-			</table> </form>
+			</table> 
 		</div>
 	</div>
 </div>
 <div class="container">
-	<table class="table table-hover " >
-		<tr align="center" > <th>아이디</th> <th>입찰가</th> <th>일자</th> </tr>
+	<table class="table table-hover mx-auto" style="width:70%" >
+		<thead class="table-secondary"><tr align="center" > <th>아이디</th> <th>입찰가</th> <th>일자</th> </tr></thead><tbody>
 		<c:choose>
 		<c:when test="${empty auclist }"> <tr> <td colspan="3" align="center">입찰 내역이 없습니다.</td> </tr></c:when>
 		<c:otherwise>
 			<c:forEach items="${ auclist }" var="row" varStatus="loop">
-				<tr> <td>${row.id.substring(0, 3) }***************</td> 
-				<td><span class="price2">${row.aprice }</span> 원</td> <td>${row.aucdate }</td> </tr>
+				<tr> <td align="left" style="padding-left:30px;">${row.id.substring(0, 3) }***************</td> 
+				<td align="right"><span class="price2">${row.aprice }</span> 원</td> <td align="center">${row.aucdate }</td> </tr>
 			</c:forEach>
 		</c:otherwise>
 		</c:choose>
-	</table>
+	</tbody></table>
 </div>
     <div class="container my-5 py-5">
     <%-- <div>${user_id } 님 로그인을 환영합니다.</div> --%>

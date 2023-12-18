@@ -12,8 +12,11 @@ public interface IArtistService {
 	//작가 작품 전체 출력
 	public List<ProductDTO> aplist(int midx);
 	
-	//작가정보수정
-	public int aupdate(MemberDTO memberDTO);
+	//작가소개수정
+	public int aintroupdate(ArtistDTO artistDTO);
+	
+	//작가약력수정
+	public int ahistoryupdate(ArtistDTO artistDTO);
 
 	//작가별 판매 중 작품 갯수 조회
 	public int onselect(int aidx);

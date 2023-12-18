@@ -27,6 +27,7 @@ import com.edu.springboot.restboard.ParameterDTO;
 import com.edu.springboot.restboard.PlikeDTO;
 import com.edu.springboot.restboard.PointDTO;
 import com.edu.springboot.pay.PayService;
+import com.edu.springboot.restboard.AUPjoinDTO;
 import com.edu.springboot.restboard.ApplyDTO;
 import com.edu.springboot.restboard.ArtistDTO;
 import com.edu.springboot.restboard.CartDTO;
@@ -56,19 +57,21 @@ public class MemberController {
 	@Autowired
 	PayService payService;
 	
-	@RequestMapping("/member/index")
-	public String mindex (Principal principal, Model model) {
-
-		Map<Object, Object> map = payService.memberIndex(principal);
-        model.addAttribute("map", map);
-		return "member/index";
-	}
+//	@RequestMapping("/member/index")
+//	public String mindex (Principal principal, Model model) {
+//
+//		Map<Object, Object> map = payService.memberIndex(principal);
+//        model.addAttribute("map", map);
+//		return "member/index";
+//	}
 	
 	@RequestMapping("member/edit")
 	public String edit(Principal principal, Model model, MemberDTO memberDTO) {
 		
 		Map<Object, Object> map = payService.memberIndex(principal);
         model.addAttribute("map", map);
+        
+        
         
 		return "member/editMember";
 	}
@@ -225,7 +228,26 @@ public class MemberController {
 		return "redirect:/member/like";
 	}
 	
-	
+	@RequestMapping("/member/auction")
+	public String orderhistory (Principal principal, Model model, ParameterDTO parameterDTO, HttpServletRequest req) {
+		try {
+			Map<Object, Object> map = payService.memberIndex(principal);
+			model.addAttribute("map", map);
+			
+			parameterDTO.setId(principal.getName());
+			
+			List<AUPjoinDTO> auplist = dao2.aucpjoin2(parameterDTO);
+			System.out.println("auplist="+ auplist);
+			model.addAttribute("auplist", auplist);
+			model.addAttribute("user_id", principal.getName());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("입찰내역조회실패");
+		}
+         
+		return "member/auction";
+	}
 }
 
 

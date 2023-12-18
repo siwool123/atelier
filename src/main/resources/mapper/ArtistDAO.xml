@@ -13,9 +13,14 @@
 		select * from product where midx=#{param1}
 	</select>
 	
-	<!-- 작가정보수정 -->
-	<update id="aupdate" parameterType="com.edu.springboot.restboard.ArtistDTO">
-		update artist set a_intro=#{a_intro}, a_history=#{a_history}
+	<!-- 작가 소개 수정 -->
+	<update id="aintroupdate" parameterType="com.edu.springboot.restboard.ArtistDTO">
+		update artist set a_intro=#{a_intro} where aidx=#{aidx}
+	</update>
+	
+	<!-- 작가 소개 수정 -->
+	<update id="ahistoryupdate" parameterType="com.edu.springboot.restboard.ArtistDTO">
+		update artist set a_history=#{a_history} where aidx=#{aidx}
 	</update>
 
 	<!-- 작가별 판매 중 작품 갯수 조회 -->

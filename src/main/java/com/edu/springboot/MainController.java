@@ -43,7 +43,7 @@ public class MainController {
 		try {
 			String user_id = principal.getName(); //로그인아이디 얻어온다.
 			model.addAttribute("user_id", user_id); //아이디를 모델객체에 저장
-			if(user_id!=null) return "home";
+			//if(user_id!=null) return "home";
 			System.out.println("로그인에 성공했습니다.");
 		}catch (Exception e){
 			/* 최초접근시엔 로그인정보가 없으므로 널포인터 예외 발생하므로 예외처리해야한다. */
@@ -258,19 +258,26 @@ public class MainController {
 			rdto.setR_content(rdto.getR_content().replace("\r\n","</br>"));
 			model.addAttribute("rdto", rdto);
 			
+		}catch(Exception e) {
+			//e.printStackTrace();
+			System.out.println("리뷰 가져오기실패 ");
+		}
+		model.addAttribute("pdto", pdto);
+		model.addAttribute("adto", adto);
+		model.addAttribute("aplist", aplist);
+		model.addAttribute("user_id", user_id);
+		
+		try {
 			List<AuctionDTO> auclist = dao.auclist(pidx);
+			System.out.println("입찰자리스트갯수 : "+auclist.size());
 			model.addAttribute("auclist", auclist);
 			
 			int maxprice = dao.aucmaxp(pidx);
 			model.addAttribute("maxprice", maxprice);
 		}catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("리뷰또는 입찰자리스트 가져오기실패 ");
+			System.out.println("입찰리스트 가져오기실패 ");
 		}
-		model.addAttribute("pdto", pdto);
-		model.addAttribute("adto", adto);
-		model.addAttribute("aplist", aplist);
-		model.addAttribute("user_id", user_id);
 		
 		return "auctionView";
 	}

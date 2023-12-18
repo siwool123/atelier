@@ -198,4 +198,22 @@ public class BoardRestController {
 		System.out.println("리뷰좋아요추가결과:"+result);
 		return result;
 	}
+	
+	@PostMapping("/rest/auction")
+	public int auction(HttpServletRequest req, Model model, Principal principal, AuctionDTO auctionDTO) {
+		System.out.println("rest입찰호출함");
+		int result = 0, result2=0;
+		int pidx = Integer.parseInt(req.getParameter("pidx"));
+		int aprice = Integer.parseInt(req.getParameter("aprice"));
+		MemberDTO mdto = dao.mview(principal.getName());
+		auctionDTO.setPidx(pidx);
+		auctionDTO.setMidx(mdto.getMidx());
+		auctionDTO.setId(mdto.getId());
+		auctionDTO.setAprice(aprice);
+		result = dao.auctionInsert(auctionDTO);
+		result2 = dao.updatepm(pidx, aprice);
+		
+		System.out.println("입찰참가결과:"+result+", 작품최대값반영결과:"+result2);
+		return result+result2;
+	}
 }

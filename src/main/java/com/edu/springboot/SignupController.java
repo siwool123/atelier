@@ -189,6 +189,7 @@ public class SignupController {
 	//임시비번받기
 	@RequestMapping("/guest/resetPass")
 	public String findPass() {
+		
 		return "member/findPass";
 	}
 	

@@ -34,6 +34,7 @@ public interface IBoardService {
 	//내용보기
 	public ProductDTO pview(int pidx);
 	public ArtistDTO aview(int aidx);
+	public ArtistDTO aviewbym(int midx);
 	public ReviewDTO rview(int pidx);
 	public MemberDTO mview(String user_id);
 	public List<CartDTO> cview(int midx);
@@ -150,5 +151,14 @@ public interface IBoardService {
 	public List<AuctionDTO> auclist(int pidx);
 	//최고입찰가
 	public int aucmaxp(int pidx);
+	
+	//경매입찰하기
+	public int auctionInsert(AuctionDTO auctionDTO);
+	//입찰시 product테이블에 최대값 업뎃
+	public int updatepm(int pidx, int aprice);
+	
+	//경매내역가져오기
+	public List<AUPjoinDTO> aucpjoin2(ParameterDTO parameterDTO);
+	
 	
 }

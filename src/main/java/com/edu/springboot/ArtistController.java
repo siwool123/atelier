@@ -35,6 +35,7 @@ public class ArtistController {
 	//작가프로필
 	@RequestMapping("artist/profile")
 	public String artistProfile(Principal principal, Model model) {
+
 		Map<Object, Object> map = payService.memberIndex(principal);
         model.addAttribute("map", map);
         
@@ -43,12 +44,16 @@ public class ArtistController {
         int midx = memberDTO.getMidx();
         
         ArtistDTO artistDTO = ardao.aview(midx);
+        artistDTO.setA_intro(artistDTO.getA_intro().replace("\r\n","<br />"));
+        artistDTO.setA_history(artistDTO.getA_history().replace("\r\n","<br />"));
+        
         List<ProductDTO> aplist = ardao.aplist(midx);
         
+        model.addAttribute("mdto", memberDTO);
         model.addAttribute("adto", artistDTO);
         model.addAttribute("aplist", aplist);
-        model.addAttribute("likesum", ardao.likesum(artistDTO.getAidx()));
         model.addAttribute("soldsum", ardao.solselect(artistDTO.getAidx()));
+        model.addAttribute("likesum", ardao.likesum(artistDTO.getAidx()));
 		return "artist/profile";
 	}
 	

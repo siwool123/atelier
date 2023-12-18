@@ -65,7 +65,6 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			num = img.name.slice(-2);
 		}
 		
-		
 	    //기존 showImageDiv div태그를 삭제후 다시 만든다(이미지 두번 선택 방지)
 	   	document.getElementById("showImageDiv"+num).remove();
 	    //img태그가 담길 div 태그 새로 만들기
