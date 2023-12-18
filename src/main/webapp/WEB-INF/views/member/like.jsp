@@ -23,13 +23,8 @@
 	.mh {margin-top:20px !important;}
 }
 
-.leftmenu li:nth-child(6) {
-	background-color: black;
-}
-
-.leftmenu li:nth-child(6) a, .leftmenu li:nth-child(6) a i {
-	color: white
-}
+.leftmenu li:nth-child(6) { background-color: black; }
+.leftmenu li:nth-child(6) a, .leftmenu li:nth-child(6) a i { color: white }
 
 .leftmenu li a {
 	line-height: 30px !important;
@@ -82,7 +77,7 @@ table.order tr th, table.order tr td {
 	function placeVal(form) {
 		//이미지 용량 제한
 		let maxSize = 4 * 1024 * 1024; //* 4MB 사이즈 제한
-		let fileSize = form.placeImage.files[0].size; //업로드한 파일용량
+		let fileSize = form.placeImage.files[0].size; //업로드한 파일용량 
 		
 		if(fileSize > maxSize){
 			alert("파일첨부 사이즈는 4MB 이내로 가능합니다.");
@@ -94,9 +89,9 @@ table.order tr th, table.order tr td {
 	}
 	
 	//좋아요 삭제하기
-	function delLike() {
+	function deleteLike(pidx) {
 		if(confirm("해당 작품을 좋아요 목록에서 삭제하시겠습니까?")) {
-			location.href('/member/deleteLike.do');
+			location.href ='/member/deleteLike.do?pidx='+pidx;
 		}
 	}
 	
@@ -243,9 +238,10 @@ table.order tr th, table.order tr td {
 								<c:forEach items="${ plist }" var="row" varStatus="loop">
 									<div class="swiper-slide arttile2">
 										<input type="checkbox" name="likeImgChk" id="likeImgChk${loop.index}" class="ms-3 my-3" onChange="loadChkImg(this);" style="width: 30px; height: 30px;" />
-										<i class="bi bi-x-lg mt-4 me-3" id="delLike${loop.index }" style="font-size: 25px; float: right; cursor: pointer;" onclick="delLike()"></i>
+										<i class="bi bi-x-lg mt-4 me-3" id="delLike${loop.index }" style="font-size: 25px; float: right; cursor: pointer;" onclick="deleteLike(${row.pidx });"></i>
 										<div class="image">
-											<a href="./view?pidx=${row.pidx }"> <c:choose>
+											<a href="./view?pidx=${row.pidx }">
+												<c:choose>
 													<c:when test="${row.sfile.length()>40 }">
 														<img id="likeImg${loop.index}" src="${row.sfile }" alt="" />
 													</c:when>

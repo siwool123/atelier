@@ -263,7 +263,7 @@ public class MainController {
 			model.addAttribute("maxprice", maxprice);
 		}catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("리뷰또는 입찰자리스트 가져오기실패");
+			System.out.println("리뷰또는 입찰자리스트 가져오기실패 ");
 		}
 		model.addAttribute("pdto", pdto);
 		model.addAttribute("adto", adto);

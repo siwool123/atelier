@@ -245,7 +245,7 @@ let currentUrl = window.document.location.href;
 				<tr> <th>현재최고입찰가</th><td><span style="color:red;" class="price2">${not empty maxprice ? maxprice : pdto.price }</span> 원 / 현재 입찰자 ${not empty auclist ? auclist.size() : '0' } 명 </td> </tr>
 				<tr> <th>추정가</th><td><span class="price2">${not empty pdto ? pdto.price*3 : '0' }</span> ~ <span class="price2">${not empty pdto ? pdto.price*6 : '0' }</span> 원</td> </tr>
 				<tr> <th>입찰단위</th><td> + 10,000 원</td> </tr>
-				<tr> <th>내입찰가</th><td><input type="number" name="aprice" step="10000" 
+				<tr> <th>내입찰가</th><td><input type="number" name="aprice" id="aprice" step="10000" 
 				onkeyup="handlePriceInput();" 
 				value="${not empty maxprice ? maxprice+10000 : pdto.price+10000 }" min="${not empty maxprice ? maxprice+10000 : pdto.price+10000 }" /> 원</td> </tr>
 				<tr> <th colspan="2"><button class="btn4 auction" ${pdto.sold == 1 ? 'disabled' : ''}>입찰하기</button>
