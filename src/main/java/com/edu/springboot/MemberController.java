@@ -103,11 +103,23 @@ public class MemberController {
 	@RequestMapping("/member/point")
 	public String point(Principal principal, Model model) {
 		
-		Map<Object, Object> map = payService.memberIndex(principal);
+        int midx = dao2.mview(principal.getName()).getMidx();
+        List<PointDTO> polist = dao2.pointlist(midx);
+        
+        int psum = 0, msum=0;
+        for(PointDTO podto : polist) {
+        	psum += podto.getAdd_point();
+        	msum += podto.getMinus_point();
+        }
+        int total = psum-msum;
+        int result = dao2.mpoint(total);
+        System.out.println(total+", 총포인트, 멤버테이블반영결과 : "+result);
+        
+        model.addAttribute("polist", polist);
+        model.addAttribute("total", total);
+        
+        Map<Object, Object> map = payService.memberIndex(principal);
         model.addAttribute("map", map);
-        
-        int midx = dao.mview(principal.getName()).getMidx();
-        
         
 		return "member/point";
 	}

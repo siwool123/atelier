@@ -287,73 +287,7 @@ ul.border { list-style-type: disc !important;  }
     </div>
 <%@ include file="../include/footer.jsp" %>
 
-
-<script>
-/* function requestPay2(paymethod) {
-	
-	if($('input[name="m_name"]').val()=='') {
-		alert('수령인 이름을 입력해 주세요');
-		$('input[name="m_name"]').focus(); return;
-	}
-	if ($('input[name="phone"]').val()=='') {
-		alert('수령인 휴대폰 번호를 입력해 주세요');
-		$('input[name="phone"]').focus(); return;
-	}
-	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
-		alert('수령하실 주소를 입력해 주세요'); return;
-	}
-	if ($('input[name="msg2"]').val() == '') {
-		alert('배송메세지를 입력해 주세요'); 
-		$('input[name="msg2"]').focus(); return;
-	}
-	$('input[name="paymethod"]').val(paymethod);
-	
-	var IMP = window.IMP; // 생략 가능
-	IMP.init("imp76555372"); // 예: imp00000000
-	
-	console.log($('#titleList').val(), $('#titleList').val());
-	var pg1 = '', pg2 = '';
-  //IMP.request_pay(param, callback) 결제창 호출
-  if(paymethod=='kakao'){var pg1 = 'kakaopay', pg2 = 'TC0ONETIME'; }
-  if(paymethod=='toss'){var pg1 = 'tosspayments', pg2 = 'tosstest'; }
-  if(paymethod=='card'){var pg1 = 'html5_inicis', pg2 = 'INIBillTst'; }
-  IMP.request_pay({ // param
-      pg: pg1, //결제대행사 설정에 따라 다르며 공식문서 참고
-      pay_method: "card", //결제방법 설정에 따라 다르며 공식문서 참고
-      merchant_uid: "0001", //주문(db에서 불러옴) 고유번호
-      item_name : "test",
-      name : "test",
-      amount: $('input[name="oprice"]').val(),
-      buyer_email: "",
-      buyer_name: $('input[name="m_name"]').val(),
-      buyer_tel: $('input[name="phone"]').val(),
-      buyer_addr: $('input[name="zip"]').val()+$('input[name="addr1"]').val()+$('input[name="addr2"]').val(),
-      //buyer_postcode: "01181"
-  }, function (rsp) { // callback
-      if (rsp.success) {
-    	  console.log(rsp.imp_uid);
-    	// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우 // jQuery로 HTTP 요청
-          jQuery.ajax({
-            url: "/payment/proceed", 
-            method: "POST",
-	    	data : $('#orderFm').serialize() + "&imp_uid=" + rsp.imp_uid,
-    		 success : function(data){
-    			 if(data.cnt > 0){ 
-    				 console.log(data);
-    				 alert('주문 및 결제가 성공적으로 처리되었습니다.');
-    			 }else{  alert(data.msg)  }
-    		 }, 
-    		 error : function (e){  alert("에러")  }
-          })
-      } else {
-    	  var msg = '결제에 실패하였습니다. 에러내용 : ' + rsp.error_msg;
-          alert(msg);
-      }
-  });
-}  */
-</script> 
 </body>
-
 </html>
  
  

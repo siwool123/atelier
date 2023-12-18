@@ -16,8 +16,8 @@
 <style>
 @media (max-width: 600px) {
 }
-.leftmenu li:nth-child(6) {background-color: black;}
-.leftmenu li:nth-child(6) a, .leftmenu li:nth-child(7) a i {color:white}
+.leftmenu li:nth-child(7) {background-color: black;}
+.leftmenu li:nth-child(7) a, .leftmenu li:nth-child(7) a i {color:white}
 .leftmenu li a {line-height:30px !important;}
 .btn3, .btn4 {padding:0 6% !important;}
 .border li {line-height:40px;}
@@ -90,12 +90,12 @@ table.order tr th, table.order tr td {padding-left:20px;}
 		//작가 소개 글자수 검증
 		if(form.a_intro.value.length<80 || form.a_intro.value.length>800) {
 			alert('작가 소개는 80자 이상, 800자 이내로 작성해주세요.');
-			return false;
+			form.a_intro.focus(); return false;
 		}
 		//작가 약력 글자수 검증
 		if(form.a_history.value.length<80 || form.a_intro.value.length>800) {
 			alert('작가 약력은 80자 이상, 800자 이내로 작성해주세요.');
-			return false;
+			form.a_history.focus(); return false;
 		}
 		// 이미지 10개 검증
 		for(var i=1; i<=10; i++) {

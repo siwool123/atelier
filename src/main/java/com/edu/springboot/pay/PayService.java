@@ -1,5 +1,6 @@
 package com.edu.springboot.pay;
 
+import java.io.File;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 
 import com.edu.springboot.restboard.IBoardService;
 import com.edu.springboot.restboard.MemberDTO;
@@ -20,7 +22,9 @@ import com.edu.springboot.restboard.PointDTO;
 import com.edu.springboot.restboard.ProductDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Part;
 import lombok.RequiredArgsConstructor;
+import utils.MyFunctions;
 
 @Service
 @Transactional
@@ -91,11 +95,15 @@ public class PayService {
 		
 		
 		resPoint1 = dao.memberPoint(minusPoint-addPoint, memberDTO.getMidx()); //멤버테이블에 포인트사용.적립 반영
-		
+		int pidx = Integer.parseInt(req.getParameter("pidxList").substring(0, 4));
 		pointDTO.setMidx(memberDTO.getMidx());
 		pointDTO.setMinus_point(minusPoint);
 		pointDTO.setAdd_point(addPoint);
 		pointDTO.setOidx(dao.orderNum(memberDTO.getMidx()));
+		pointDTO.setPidx(pidx);
+		ProductDTO pdto = dao.pview(pidx);
+		pointDTO.setTitle(pdto.getTitle());
+		pointDTO.setM_name(pdto.getM_name());
 		
 		piresult = dao.pinsert(pointDTO);  //포인트테이블에 포인트사용/적립 내용 입력
 		
@@ -127,13 +135,44 @@ public class PayService {
         List<OrderDTO> nslist = dao.notShipped(memberDTO.getMidx());
        System.out.println("입금전 건수 : "+nplist.size() + ", 배송전건수 : "+nslist.size());
         
+       List<PointDTO> polist = dao.pointlist(memberDTO.getMidx());
+       int psum = 0, msum=0;
+       for(PointDTO podto : polist) {
+       	psum += podto.getAdd_point();
+       	msum += podto.getMinus_point();
+       }
+       int total = psum-msum;
+       int result = dao.mpoint(total);
+       System.out.println(total+", 총포인트, 멤버테이블반영결과 : "+result);
+       
        map.put("mdto", memberDTO);
        map.put("olist", olist);
        map.put("orderSum", sum);
        map.put("nplistSize", nplist.size());
        map.put("nslistSize", nslist.size());
+       map.put("totalPoint", total);
        
        return map;
     }
     
+    public String uploadFile (String uploadDir, HttpServletRequest req, Part part) {
+    	
+    	String savedFileName = "";
+    	try {
+			System.out.println("물리적경로:"+uploadDir);
+			
+			String[] phArr = part.getHeader("content-disposition").split("filename="); //헤더값에서 파일명 추출을 위해 문자열을 split()한다. 
+			String originalFileName = phArr[1].trim().replace("\"", "");  //따옴표를 제거한 후 원본파일명을 추출한다. 
+			savedFileName = MyFunctions.renameFile(uploadDir, originalFileName);
+			 
+			if (!savedFileName.isEmpty()) {	 part.write(uploadDir+ File.separator +savedFileName); } //전송된 파일이 있다면 서버에 저장한다.
+			System.out.println("파일 업로드 성공 / 저장된 파일 이름 : "+savedFileName);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("리뷰업로드 실패");
+		}
+       
+       return savedFileName;
+    }
 }

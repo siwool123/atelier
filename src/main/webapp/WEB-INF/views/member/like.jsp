@@ -17,13 +17,17 @@
 <!-- 레프트메뉴 등... -->
 <style>
 @media ( max-width : 600px) {
+	.arttile2 {width: 50% !important;}
+	#placeBack {width:100% !important; height:auto !important}
+	.placebtn {display:block !important; float:none !important; top:0 !important;}
+	.mh {margin-top:20px !important;}
 }
 
-.leftmenu li:nth-child(5) {
+.leftmenu li:nth-child(6) {
 	background-color: black;
 }
 
-.leftmenu li:nth-child(5) a, .leftmenu li:nth-child(7) a i {
+.leftmenu li:nth-child(6) a, .leftmenu li:nth-child(6) a i {
 	color: white
 }
 
@@ -190,7 +194,7 @@ table.order tr th, table.order tr td {
 	<div class="row my-5">
 		<div class="col-sm-2"><%@ include file="../include/memberSidebar.jsp"%></div>
 		<div class="col-sm-10" style="padding-left: 50px;">
-			<div class="headerL2 mb-4" style="margin-top: 10px;">내공간에찜</div>
+			<div class="headerL2 mb-4 mh" style="margin-top: 10px;">내공간에찜</div>
 			<p>내 공간의 사진을 올려서 미술작품과 어울리는지 미리 체험해보세요.</p>
 			<p>작품을 걸고 싶은 벽의 정면에서 찍은 사진을 올려주세요.</p>
 			<p style="color: red;">* 파일첨부 사이즈는 4MB 이내로 가능합니다.</p>
@@ -206,7 +210,7 @@ table.order tr th, table.order tr td {
 						</div>
 					</c:when>
 					<c:otherwise>
-						<div class="text-end my-4">
+						<div class="text-end my-4 placebtn" style="display: inline; float: right; position: relative; top: -100px;">
 							<label class="btn1" for="placeImage" style="width: 50px; height: 50px; display: inline-block; vertical-align: middle; cursor: pointer;">+</label>
 							<span class="ms-3">내공간 이미지 변경하기</span>
 						</div>
@@ -225,16 +229,16 @@ table.order tr th, table.order tr td {
 			<p>찜한작품을 선택하면 내공간 이미지 위에 작품이 올라갑니다.</p>
 			<p>작품 이미지를 적절한 위치로 움직여 내공간과 조화를 확인하세요.</p>
 
-			<div class="my-5" id="show_data">
+			<div class="mb-5" id="show_data">
 				<c:choose>
 					<c:when test="${ empty plist }">
 						<div class="text-center">등록된 작품이 없습니다.</div>
 					</c:when>
 					<c:otherwise>
 						<div class="varrow" style="position: relative; display: inline; float: right; top: -100px;">
-							<i class="bi bi-chevron-left slbtn" style="font-size: 50px;"></i> <i class="bi bi-chevron-right slbtn" style="font-size: 50px;"></i>
+							<i class="bi bi-chevron-left slbtn" style="font-size: 40px;"></i> <i class="bi bi-chevron-right slbtn" style="font-size: 40px;"></i>
 						</div>
-						<div class="swiper swiper-container sc3">
+						<div class="swiper swiper-container sc3" style="position:relative; top:-30px">
 							<div class="swiper-wrapper" style="height: auto !important;">
 								<c:forEach items="${ plist }" var="row" varStatus="loop">
 									<div class="swiper-slide arttile2">

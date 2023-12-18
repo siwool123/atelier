@@ -202,10 +202,7 @@ $(document).ready( function() {
                 <a href="./shop" class="btn1" id="total" style="padding:9px 83px; margin-bottom:-1px; ">전체</a><br/>
                 <a href="?sell=on" class="btn1" id="onsale" style="padding:9px 30px; ">판매중</a>
                 <a href="?sell=so" class="btn1" id="sold" style="padding:9px 20px; margin-left:-5px;">판매완료</a><br/>
-                <a href="?auction=na" class="btn1" id="nauction" style="padding:9px 36px; ">판매</a>
-                <a href="?auction=au" class="btn1" id="auction" style="padding:9px 33px; margin-left:-5px;">경매</a>
                 </div>
-
 
                 <div class="headerL">FILTER BY PRICE</div>
                 <form name='psearchfrm'  action=''>

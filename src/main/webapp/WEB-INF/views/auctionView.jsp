@@ -5,13 +5,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Atelier</title>
-<script src="./js/atelier.js"></script> 
-<link href="./css/atelier.css" rel="stylesheet" type="text/css" />
+<script src="/js/atelier.js"></script> 
+<link href="/css/atelier.css" rel="stylesheet" type="text/css" />
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script type="text/javascript">
 
 $( document ).ready( function() {
-	$('#navbarNavAltMarkup div a:first').addClass( 'active' );
+	$('#navbarNavAltMarkup div a:eq(1)').addClass( 'active' );
  	$('#kakaotalk-sharing-btn').click(function(){$(this).removeClass('active');});
  	
 	$('.plike').click(function(){
@@ -88,13 +88,64 @@ function sucFunc2(resD){
 	
 	}else alert("장바구니가 작동하지 않습니다.");
 }
+
+//카운트다운함수
+const countDownTimer = function(id, date){
+	var _vDate = new Date(date);
+	var _miliSecond = 100;
+	var _second = 1000;
+	var _minute = _second*60;
+	var _hour = _minute *60;
+	var _day = _hour*24;
+	var timer;
+	function showRemaining(){
+		var now = new Date();
+		var distDt = _vDate - now;
+		if(distDt<0){
+			clearInterval(timer);
+			document.getElementById(id).innerHTML = '경매종료';
+			setEndAuction(); //경매가 종료표시되는 요소를 변경시킴
+			return;
+		}
+		var days = Math.floor(distDt / _day);
+		var hours = Math.floor((distDt % _day) / _hour);
+		var minutes = Math.floor((distDt % _hour) / _minute);
+		var seconds = Math.floor((distDt % _minute) / _second);
+		
+		document.getElementById(id).innerHTML = days+'일 '+hours+'시간 '+minutes+'분 '+seconds+'초';
+	}
+	timer = setInterval(showRemaining, 1000);
+}
+
+function handlePriceInput() {
+    var totalAmount = parseInt($('#tprice3').text().replace(/,/g, ''));
+    var maxPoint = parseInt($('#maxPoint').text()); // 최대 포인트 값
+    var pointUsed = parseInt($('#point').val());
+
+    // 최대 포인트를 초과하지 않도록 처리
+    if (pointUsed > maxPoint) {
+    	alert('적립하신 포인트를 초과합니다.');
+        $('#point').val(maxPoint); // 최대 포인트로 설정
+        pointUsed = maxPoint; // 사용된 포인트 값 갱신
+    }
+
+    var finalPrice = parseInt($('#tprice3').text().replace(/,/g, '')) - parseInt($('#point').val());
+	console.log($('input[name="point"]').val());
+    // #fprice와 #oprice 업데이트
+    $('#fprice').html(numberWithCommas(totalAmount - $('input[name="point"]').val()));
+    $('input[name=oprice]').val(totalAmount);
+    $('input[name=fprice]').val(totalAmount - parseInt($('#point').val()));
+
+    // #futurepoint 업데이트
+    $('#futurepoint').html(totalAmount * 0.01);
+    $('input[name=futurepoint]').html(totalAmount * 0.01);
+}
 </script> 
 
 <style>
-th {color:#c5c5c5 !important;}
+.ptable th {color:#c5c5c5 !important;}
 @media (max-width: 600px) {
-  .cart {padding:15px 30px !important;}
-  .pay {padding:15px 44px !important}
+  .auction {padding:15px 44px !important}
   .d-block {height: auto !important;  width: 100% !important;}
 }
 .modal {--bs-modal-width: 96% !important}
@@ -105,6 +156,7 @@ th {color:#c5c5c5 !important;}
 .next, .prev {font-size:50px; color:black;}
 .carousel-control-next, .carousel-control-prev {width:6% !important;}
 .bi-zoom-in {opacity:0.5; position:relative; left: 80px; font-size: 30px; }
+.btn4 {height:40px; padding:0 30%;}
 </style>
 </head>
 <body>
@@ -123,23 +175,8 @@ th {color:#c5c5c5 !important;}
         	</c:if>
         </div></div>
         <div class="col-sm-6">
-            <div class="border-bottom fs-5 fw-bolder pb-3 vtitle"> ${not empty pdto ? pdto.title : "등록된 정보가 없습니다."}</div> 
-            <c:choose>
-            	<c:when test="${not empty pdto and pdto.sold==1 }"><div class="fw-bolder py-3 fs-5" style="color:#af0000;">● SOLD</div></c:when>
-            	<c:otherwise><div class="price fw-bolder py-3 fs-5" style="color: #C98A00;">￦ <span class="price2 fs-5">${not empty pdto ? pdto.price : "등록된 정보가 없습니다." }</span></div></c:otherwise>
-            </c:choose>
-            <table class="table table-borderless ptable">
-                <tr><th style="line-height:35px;">ARTIST</th><td>${not empty pdto ? pdto.m_name : "등록된 정보가 없습니다." } <a href="./vartist?aidx=${not empty pdto ? pdto.aidx : '' }" class="btn1 ml-5 abtn" > 작가정보</a></td></tr>
-                <tr><th>TYPE</th><td>${not empty pdto ? pdto.p_type : "등록된 정보가 없습니다." }</td></tr>
-                <tr><th>SIZE</th><td>${not empty pdto ? pdto.size1 : "0" } X ${not empty pdto ? pdto.size2 : "0" } CM</td></tr>
-                <tr><th>FRAMED</th><td>
-                    <c:choose>
-                        <c:when test="${not empty pdto and pdto.framed == 1 }">YES</c:when>
-                        <c:otherwise>NO </c:otherwise>
-                 	</c:choose>
-                </td></tr>
-                <tr><th>YEAR</th><td class="year">${not empty pdto ? pdto.regidate : "등록된 정보가 없습니다." }</td></tr>
-            </table>
+            <div class="border-bottom fs-5 fw-bolder pb-3 vtitle mb-3"> ${not empty pdto ? pdto.title : "등록된 정보가 없습니다."}
+            <span style="float:right">
             <i class="bi bi-heart-fill fs-3 plike"></i> &nbsp;<span style="color:red;" class="plkcnt">${pdto.p_like}</span>
             
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js" integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4" crossorigin="anonymous"></script>
@@ -166,12 +203,71 @@ let currentUrl = window.document.location.href;
     },
   });
 </script>
-            <div class="mt-4" style="display: flex; align-items: center;">
-            <button class="btn3 cart" ${pdto.sold == 1 ? 'disabled' : ''} style="margin-right:10px;"><i class="bi bi-bag"></i>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
-			<button class="btn4 pay" ${pdto.sold == 1 ? 'disabled' : ''}><i class="bi bi-credit-card-2-back"></i>&nbsp;&nbsp;&nbsp;PAY NOW</button></div>
+            </span> </div> 
+            <table class="table table-borderless ptable">
+                <tr><th>ARTIST</th><td>${not empty pdto ? pdto.m_name : "등록된 정보가 없습니다." } <a href="./vartist?aidx=${not empty pdto ? pdto.aidx : '' }" class="btn1 ml-5 abtn" > 작가정보</a></td></tr>
+                <tr><th>TYPE</th><td>${not empty pdto ? pdto.p_type : "등록된 정보가 없습니다." }</td></tr>
+                <tr><th>SIZE</th><td>${not empty pdto ? pdto.size1 : "0" } X ${not empty pdto ? pdto.size2 : "0" } CM</td></tr>
+                <tr><th>FRAMED</th><td>
+                    <c:choose>
+                        <c:when test="${not empty pdto and pdto.framed == 1 }">YES</c:when>
+                        <c:otherwise>NO </c:otherwise>
+                 	</c:choose>
+                </td></tr>
+                <tr><th>YEAR</th><td class="year">${not empty pdto ? pdto.regidate : "등록된 정보가 없습니다." }</td></tr>
+            </table>
+			
         </div>
     </div>
     </div>
+</div>
+<div class="container border-bottom py-5">
+	<div class="row">
+		<div class="col-sm-6">
+			<table class="table table-borderless atable">
+				<tr> <th>시작가</th><td><span class="price2">${not empty pdto ? pdto.price : '0' }</span> 원</td> </tr>
+				<tr> <th>입찰시작일</th><td>${not empty pdto ? pdto.regidate : '' }</td> </tr>
+				<tr> <th>입찰종료일</th><td>${not empty pdto ? pdto.enddate : '' }</td> </tr>
+				<tr> <th>남은시간</th><td id="timeOut" style="color:red"></td> </tr>
+			</table>
+			<script>
+			//경매종료시간
+			if(${not empty pdto.enddate}){
+				var endTime = `<c:out value="${pdto.enddate}" />`;
+				console.log("endtime : "+endTime);
+				countDownTimer('timeOut', endTime);
+			}
+			</script>
+		</div>
+		<div class="col-sm-6">
+		<form action="/member/auctionProc" method="post" name="auctionFm" id="auctionFm">
+			<table class="table table-borderless atable">
+				<tr> <th>현재최고입찰가</th><td><span style="color:red;" class="price2">${not empty maxprice ? maxprice : pdto.price }</span> 원 / 현재 입찰자 ${not empty auclist ? auclist.size() : '0' } 명 </td> </tr>
+				<tr> <th>추정가</th><td><span class="price2">${not empty pdto ? pdto.price*3 : '0' }</span> ~ <span class="price2">${not empty pdto ? pdto.price*6 : '0' }</span> 원</td> </tr>
+				<tr> <th>입찰단위</th><td> + 10,000 원</td> </tr>
+				<tr> <th>내입찰가</th><td><input type="number" name="aprice" step="10000" 
+				onkeyup="handlePriceInput();" 
+				value="${not empty maxprice ? maxprice+10000 : pdto.price+10000 }" min="${not empty maxprice ? maxprice+10000 : pdto.price+10000 }" /> 원</td> </tr>
+				<tr> <th colspan="2"><button class="btn4 auction" ${pdto.sold == 1 ? 'disabled' : ''}>입찰하기</button>
+				<input type="hidden" name="pidx" value="${pdto.pidx }" />
+				</th> </tr>
+			</table> </form>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<table class="table table-hover " >
+		<tr align="center" > <th>아이디</th> <th>입찰가</th> <th>일자</th> </tr>
+		<c:choose>
+		<c:when test="${empty auclist }"> <tr> <td colspan="3" align="center">입찰 내역이 없습니다.</td> </tr></c:when>
+		<c:otherwise>
+			<c:forEach items="${ auclist }" var="row" varStatus="loop">
+				<tr> <td>${row.id.substring(0, 3) }***************</td> 
+				<td><span class="price2">${row.aprice }</span> 원</td> <td>${row.aucdate }</td> </tr>
+			</c:forEach>
+		</c:otherwise>
+		</c:choose>
+	</table>
 </div>
     <div class="container my-5 py-5">
     <%-- <div>${user_id } 님 로그인을 환영합니다.</div> --%>

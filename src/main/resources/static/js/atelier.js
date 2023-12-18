@@ -393,7 +393,7 @@ $( document ).ready( function() {
         window.location.href = cUrl + separator + plValue;
     });
 	
-	if (window.location.pathname.endsWith("/shop")) {
+	if (window.location.pathname.endsWith("/shop") || window.location.pathname.endsWith("/auction")  || window.location.pathname.endsWith("/")) {
 		$('.btn1').removeClass('active'); $('.btn1').parent('li').removeClass('active');
         $('#total').addClass('active');
         
@@ -431,6 +431,9 @@ $( document ).ready( function() {
 	activeByParam2('orderby', '22', '#low');
 	activeByParam2('orderby', '33', '#high');
 
+	 activeByParam('status', 'aa', '#aa');
+	activeByParam('status', 'bb', '#bb');
+	activeByParam('status', 'cc', '#cc');
 	/*$('.orderby li a').click( function(){
 		$('.orderby li a').removeClass('active');
 		$('.orderby li').removeClass('active');
@@ -652,4 +655,65 @@ $( document ).ready( function() {
           })*/
       } else { alert('결제에 실패하였습니다. 에러내용 : ' + rsp.error_msg);  }
   });
+}
+
+function trackWindow(tnum) {
+	var popupWidth = 500;
+	var popupHeight = 900;
+
+	var popupX = Math.round(window.screenX + (window.outerWidth / 2) - (popupWidth / 2));
+	var popupY = Math.round(window.screenY + (window.outerHeight / 2) - (popupHeight / 2));
+
+	window.open('/member/trackWindow?tnum='+tnum, 'track', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupX + ', top=' + popupY);
+}
+
+function reviewWindow(pidx) {
+	var popupWidth = 900;
+	var popupHeight = 760;
+
+	var popupX = Math.round(window.screenX + (window.outerWidth / 2) - (popupWidth / 2));
+	var popupY = Math.round(window.screenY + (window.outerHeight / 2) - (popupHeight / 2));
+
+	window.open('/member/reviewW?pidx='+pidx, 'review', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupX + ', top=' + popupY);
+}
+
+function reviewE(pidx) {
+	var popupWidth = 900;
+	var popupHeight = 900;
+
+	var popupX = Math.round(window.screenX + (window.outerWidth / 2) - (popupWidth / 2));
+	var popupY = Math.round(window.screenY + (window.outerHeight / 2) - (popupHeight / 2));
+
+	window.open('/member/reviewE?pidx='+pidx, 'reviewE', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupX + ', top=' + popupY);
+}
+
+//이미지 선택시 바로 이미지 띄우기
+ function loadApplyImage(img) {
+ 	/* 파일용량 제한*/
+ 	let maxSize = 4 * 1024 * 1024; //* 4MB 사이즈 제한
+ 	let fileSize = img.files[0].size; //업로드한 파일용량
+ 	
+ 	if(fileSize > maxSize){
+ 		alert("파일첨부 사이즈는 4MB 이내로 가능합니다.");
+ 		$(img).val(''); //업로드한 파일 제거
+ 		return; 
+ 	}
+ 	
+     var file = img.files[0]; //선택된 파일 가져오기
+ 	//이미지 태그 name 값 마지막 부분(숫자로 되어있음)을 잘라 num이라는 변수로 선언한다.
+ 	let num = img.name.slice(-1);
+ 	
+ 	var showImgSpan = document.getElementById('showImg_'+num);
+     //새로운 img 태그 만들기(img태그는 뷰에서 foreach로 만들어지지 않기 때문에 num을 붙일 필요없다.)
+ 	var selectedApplyImage = document.createElement("img");
+     //이미지 source 가져오기
+ 	selectedApplyImage.src = URL.createObjectURL(file);
+     //이미지 크기 조정
+ 	selectedApplyImage.setAttribute('style', 'max-width: 100px; max-height: 100px;');
+     //이미지를 showImageDiv에 추가
+ 	showImgSpan.appendChild(selectedApplyImage);
+ }
+ function toggleDiv(divId) {
+   var div = document.getElementById(divId);
+   div.style.display = (div.style.display === 'block') ? 'none' : 'block';
 }

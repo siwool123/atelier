@@ -12,4 +12,8 @@ public class PointDTO {
 	private Date point_date;
 	private String oidx;
 	private int minus_point;
+	private int pidx;
+	private int ridx;
+	private String title;
+	private String m_name;
 }

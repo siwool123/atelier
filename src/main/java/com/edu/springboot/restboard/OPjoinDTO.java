@@ -37,4 +37,5 @@ public class OPjoinDTO {
 	
 	private int size1;
 	private int size2;
+	private int ridx;
 }

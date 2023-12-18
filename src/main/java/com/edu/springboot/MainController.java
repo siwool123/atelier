@@ -19,6 +19,7 @@ import com.edu.springboot.restboard.ProductDTO;
 import com.edu.springboot.restboard.ReviewDTO;
 import com.edu.springboot.restboard.ParameterDTO;
 import com.edu.springboot.restboard.ArtistDTO;
+import com.edu.springboot.restboard.AuctionDTO;
 import com.edu.springboot.restboard.CartDTO;
 import com.edu.springboot.restboard.IBoardService;
 import com.edu.springboot.restboard.MemberDTO;
@@ -97,7 +98,7 @@ public class MainController {
 	}
 	
 	@RequestMapping(value={"/view", "/member/view"})
-	public String view (@RequestParam int pidx, Model model, Principal principal, ParameterDTO parameterDTO) {
+	public String view (@RequestParam int pidx, Model model, Principal principal) {
 		
 		String user_id = null;
 		if(principal != null) {user_id = principal.getName();}
@@ -113,13 +114,18 @@ public class MainController {
 		artistDTO.setA_history(artistDTO.getA_history().replaceAll("\n", "<br/>"));
 		artistDTO.setA_intro(artistDTO.getA_intro().replaceAll("\n", "<br/>"));
 		
-		parameterDTO.setAidx(aidx);
 		List<ProductDTO> aplist = dao.selectbya(aidx);
-		ReviewDTO reviewDTO = dao.rview(pidx);
+		try {
+			ReviewDTO rdto = dao.rview(pidx);
+			rdto.setR_content(rdto.getR_content().replace("\r\n","</br>"));
+			model.addAttribute("rdto", rdto);
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("리뷰가져오기실패");
+		}
 		
 		model.addAttribute("pdto", productDTO);
 		model.addAttribute("adto", artistDTO);
-		model.addAttribute("rdto", reviewDTO);
 		model.addAttribute("aplist", aplist);
 		model.addAttribute("user_id", user_id);
 		
@@ -127,7 +133,11 @@ public class MainController {
 	}
 	
 	@RequestMapping("/vartist")
-	public String view (@RequestParam int aidx, Model model, ParameterDTO parameterDTO, HttpServletRequest req) {
+	public String view (@RequestParam int aidx, Model model, ParameterDTO parameterDTO, 
+			HttpServletRequest req, Principal principal) {
+		String user_id = "";
+		try { user_id = principal.getName();
+		}catch(Exception e) { System.out.println("로그인전입니다.2"); }
 		
 		int pageSize = 8;//한 페이지당 게시물 수
 		int blockPage = 20;//한 블럭당 페이지 번호 수
@@ -147,7 +157,10 @@ public class MainController {
 		
 		List<ReviewDTO> rlist = dao.rvlistbya(parameterDTO);
 		int rstarsum = 0, staravg = 0;
-		for(ReviewDTO rdto:rlist) {rstarsum += rdto.getStar();}
+		for(ReviewDTO rdto:rlist) {
+			rstarsum += rdto.getStar();
+			rdto.setR_content(rdto.getR_content().replace("\r\n","</br>"));
+		}
 		if(rlist.size()!=0) {staravg = rstarsum/rlist.size();}
 		model.addAttribute("staravg", staravg);
 		
@@ -179,6 +192,7 @@ public class MainController {
 		
 		model.addAttribute("soldsum", soldsum);
 		model.addAttribute("likesum", likesum);
+		model.addAttribute("user_id", user_id);
 		
 		return "viewartist";
 	}
@@ -186,36 +200,77 @@ public class MainController {
 	@RequestMapping("/auction")
 	public String auction (Model model, HttpServletRequest req, ParameterDTO parameterDTO) {
 		
-		if(req.getParameter("sWord")!=null) {
-			parameterDTO.getSWord().clear();
-			for(String str : req.getParameter("sWord").split(" ")) {
-				System.out.println(str); parameterDTO.getSWord().add(str);}
-		}
-		
-		int ppmin = dao.minprice();
-		int ppmax = dao.maxprice();
-		
-		int totalCount = dao.totalCount(parameterDTO);
-		//페이징을 위한 설정값(하드코딩)
 		int pageSize = 9;//한 페이지당 게시물 수
 		int blockPage = 10;//한 블럭당 페이지 번호 수
-		/* 목록에 첫 진입시에는 페이지 번호가 없으므로 무조건 1로 설정하고, 파라미터로 전달된 페이지 번호가 있다면 받은 후 정수로 변경해서 설정한다. */
 		int pageNum = (req.getParameter("pageNum")==null || req.getParameter("pageNum").equals(""))? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
 		int start = (pageNum-1) * pageSize + 1; //현재 페이지에 출력한 게시물의 구간을 계산한다.
 		int end = pageNum * pageSize;
 		parameterDTO.setStart(start); //계산된 값은 DTO에 저장한다.
 		parameterDTO.setEnd(end);
-		List<ProductDTO> auclist = dao.selectAuction(parameterDTO); //데이터베이스에서 인출한 게시물의 목록을 Model객체에 저장한다.
-		model.addAttribute("auclist", auclist);
+		
+		if(req.getParameter("sWord")!=null) {
+			parameterDTO.getSWord().clear();
+			for(String str : req.getParameter("sWord").split(" ")) {
+				System.out.println(str); parameterDTO.getSWord().add(str);}
+		}
+		
+		List<ProductDTO> aplist = dao.selAuction(parameterDTO); //데이터베이스에서 인출한 게시물의 목록을 Model객체에 저장한다.
+		System.out.println("경매리스트불러오기성공 : "+aplist + "리스트갯수 : "+aplist.size());
+		
+		int apmin = dao.aminprice();
+		int apmax = dao.amaxprice();
+		int totalCount = dao.atotalCount(parameterDTO);
 		
 		//게시판 하단에 출력한 페이지번호를 String으로 반환받은 후 Model 객체에 저장한다.
 		String pagingImg = BoardPage.pagingImg(totalCount, pageSize, blockPage, pageNum, req.getContextPath());
 		model.addAttribute("pagingImg", pagingImg);
-		model.addAttribute("totalCount", auclist.size());
-		model.addAttribute("minPrice", ppmin);
-		model.addAttribute("maxPrice", ppmax);
+		
+		model.addAttribute("aplist", aplist);
+		model.addAttribute("totalCount",totalCount);
+		model.addAttribute("minPrice", apmin);
+		model.addAttribute("maxPrice", apmax);
+		
 		return "auction";
+	}
+	
+	@RequestMapping("/auction/view")
+	public String auctionView (@RequestParam int pidx, Model model, Principal principal) {
+		
+		String user_id = null;
+		if(principal != null) {user_id = principal.getName();}
+		System.out.println(user_id);
+		
+		ProductDTO pdto = dao.pview(pidx);
+		int aidx = pdto.getAidx();
+		ArtistDTO adto = dao.aview(aidx);
+		
+		pdto.setP_like(dao.plikecount(pidx));
+		pdto.setP_intro(pdto.getP_intro().replaceAll("\n", "<br/>"));
+		adto.setA_history(adto.getA_history().replaceAll("\n", "<br/>"));
+		adto.setA_intro(adto.getA_intro().replaceAll("\n", "<br/>"));
+		
+		List<ProductDTO> aplist = dao.selectbya(aidx);
+		try {
+			ReviewDTO rdto = dao.rview(pidx);
+			rdto.setR_content(rdto.getR_content().replace("\r\n","</br>"));
+			model.addAttribute("rdto", rdto);
+			
+			List<AuctionDTO> auclist = dao.auclist(pidx);
+			model.addAttribute("auclist", auclist);
+			
+			int maxprice = dao.aucmaxp(pidx);
+			model.addAttribute("maxprice", maxprice);
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("리뷰또는 입찰자리스트 가져오기실패");
+		}
+		model.addAttribute("pdto", pdto);
+		model.addAttribute("adto", adto);
+		model.addAttribute("aplist", aplist);
+		model.addAttribute("user_id", user_id);
+		
+		return "auctionView";
 	}
 	
 	@RequestMapping("admin/test")

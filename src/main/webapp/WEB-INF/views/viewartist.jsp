@@ -66,6 +66,23 @@ $( document ).ready( function() {
 	$('#soldbtn').click(function(){
 		$('#sold3 ul li.page-item:first').trigger('click');
 	});
+	
+	$('.thumb').click(function(){
+		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
+		
+		alert("리뷰 도움돼요 1 증가");
+		$(this).css({'background-color':'red', 'color':'white'});
+		// 클릭된 버튼에 가까운 input[name="pidx"] 값을 가져오기
+	    var pidxValue = $(this).closest('.row').find('input[name="pidx"]').val();
+	    var thumbVal = $(this).closest('.row').find('.thumb2');
+	    console.log('pidxValue:', pidxValue);
+	    
+		let params = { pidx : pidxValue };
+		$.post('/rest/thumbplus', params, function(resD){
+			console.log('콜백데이터', resD);
+			thumbVal.html(parseInt(thumbVal.text())+1);
+		});
+	});
 });
 </script> 
 <style>
@@ -82,11 +99,26 @@ th {color:#c5c5c5 !important;}
 .atable tbody tr th i {margin-right:10px;} 
 .page-item {padding:10px 16px !important; border:1px solid #ededed; margin-left:-1px !important;}
 .page-item:hover {background-color:grey;}
+.rimg img {max-width:200px; max-height:200px; margin-right:15px; margin-left: -30px;}
+.rpage ul li.page-item {padding:0 !important; border:none !important;}
+@media (max-width: 600px) {
+  .d-block {height: auto !important;  width: 100% !important;}
+  .thumb {position: relative !important; top: -100px !important; right: 50px !important;}
+  .mname {margin-top:20px;}
+}
+.modal {--bs-modal-width: 96% !important}
+.bi-star-fill {font-size:20px;}
+.img2 {max-width:200px; max-height:200px; margin-right:15px; margin-left:-30px}
+.d-block {height:800px;}
+.next, .prev {font-size:50px; color:black;}
+.carousel-control-next, .carousel-control-prev {width:6% !important;}
+.bi-zoom-in {opacity:0.5; position:relative; left: 80px; font-size: 30px; }
+.headerL3 {padding-top:50px !important;}
 </style>
 </head>
 <body>
 <%@ include file="./include/header.jsp" %>
-  <div class="container">
+  <div class="container mb-5">
     <div class="row py-5">
         <div class="col-sm-6">
        		<div class="text-center aprofile" style="margin-right:80px;">
@@ -141,41 +173,91 @@ th {color:#c5c5c5 !important;}
 		<c:otherwise> 
 		    <c:forEach items="${ rlist }" var="row" varStatus="loop">  
 		    	
-		    <div class="row">	
-		    <div class="col-sm-3">
-               <div class="image"><a href="./view?pidx=${row.pidx }"> 
+		    <div class="row border-bottom pb-5">	
+		    <div class="col-sm-2">
+               <a href="./view?pidx=${row.pidx }"> 
                  <c:set var="imageSource" value="${row.psfile.length() > 40 ? row.psfile : './uploads/' + row.psfile}" />
-   				 <img src="${imageSource}" alt="작품이미지" style="width:80%;" />
-               </a></div>
-               <div class="title mb-2 fw-bolder">${row.title }</div>
-               <div class="artist"><i class="fa-solid fa-user" style="color:#dddddd"></i>&nbsp;&nbsp;${row.a_name }</div>
-               <div class="price mt-1" style="color:#af0000;">● SOLD</div>
+   				 <img src="${imageSource}" alt="작품이미지" style="width:50%;" />
+               </a>
+               <div class="title mt-4 fw-bolder">${row.title }</div>
+               <div class="artist"><i class="fa-solid fa-user" style="color:#dddddd"></i>&nbsp;&nbsp;${row.a_name }
+               <br />${row.size1 } x ${row.size2 } cm </div>
+               <div class="price mt-1 fw-bolder" style="color:#af0000;">● SOLD</div>
 		    </div>
-		    <div class="col-sm-1"> <i class="bi bi-person-circle bpc2"></i></div>
-            <div class="col-sm-8">
-                <b>${row.m_name}</b> <span>${row.r_date}</span> 
+		    <div class="col-sm-1">
+		    	<c:choose>
+		    		<c:when test="${not empty row.profiles }"><img src="/uploads/${row.profiles }" alt="작성자프로필" style="width:50px; border-radius:50%" /></c:when>
+		    		<c:otherwise><i class="bi bi-person-circle bpc2" style="font-size:50px;"></i></c:otherwise>
+		    	</c:choose>
+		    </div>
+            <div class="col-sm-9">
+                <div style="display: inline; float: left;" class="mb-4 mname"><b>${row.m_name}</b> <span class="mx-5">${row.r_date}</span> 
                 <span>
                 <c:forEach var="i" begin="1" end="${row.star}"><i class="bi bi-star-fill starActive"></i></c:forEach>
                 <c:forEach var="i" begin="1" end="${5-row.star}"><i class="bi bi-star-fill"></i></c:forEach>
-                </span> 
-                <i class="bi bi-heart-fill fs-4"></i><span>도움돼요</span><span style="color: red;">${row.r_like }</span><br/>
-                <div class="my-3">${row.r_content}</div>
+                </span> </div>
+                
+                <span style="color: red; float:right; border-radius: 30px;" class="thumb border py-1 px-4 btn"
+                type="button" >리뷰가 도움이 되었나요? <i class="bi bi-hand-thumbs-up fs-3 mx-3"></i> <span class="thumb2">${row.r_like }</span></span>
+                <%-- <button class="report ms-3">신고&nbsp; ${row.report }</button> --%>
+                <input type="hidden" name="pidx" id="pidx"  value="${row.pidx }" />
+                
+                <div class="my-5" style="clear:both">${row.r_content}</div>
                 <div class="rimg">
-                <c:if test="${row.sfile1 !=null }"><img src="./uploads/${ row.sfile1 }" style="max-width:300px" /></c:if>
-                <c:if test="${row.sfile2 !=null }"><img src="./uploads/${ row.sfile2 }" style="max-width:300px" /></c:if>
-                <c:if test="${row.sfile3 !=null }"><img src="./uploads/${ row.sfile3 }" style="max-width:300px" /></c:if>
+                <i class="bi bi-zoom-in"></i><img src="./uploads/${ row.sfile1 }" alt="리뷰이미지1" data-bs-toggle="modal" data-bs-target="#modal_${row.pidx}" />
+                <c:if test="${row.sfile2 !=null }"><i class="bi bi-zoom-in"></i><img src="./uploads/${ row.sfile2 }" alt="리뷰이미지2" data-bs-toggle="modal" data-bs-target="#modal_${row.pidx }" /></c:if>
+                <c:if test="${row.sfile3 !=null }"><i class="bi bi-zoom-in"></i><img src="./uploads/${ row.sfile3 }" alt="리뷰이미지3" data-bs-toggle="modal" data-bs-target="#modal_${row.pidx }" /></c:if>
                 </div>
+                
+                <div class="modal" id="modal_${row.pidx}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="border-radius:0 !important;">
+        <h4 class="modal-title fw-bolder">리뷰 상세 이미지 </h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center" style="height:88vh">
+          <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+              </div>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="/uploads/${row.sfile1 }" class="d-block mx-auto" alt="..."> </div>
+                <c:if test="${row.sfile2 !=null }"><div class="carousel-item">
+                  <img src="/uploads/${row.sfile2 }" class="d-block mx-auto" alt="..."> </div></c:if>
+                <c:if test="${row.sfile3 !=null }"><div class="carousel-item">
+                  <img src="/uploads/${row.sfile3 }" class="d-block mx-auto" alt="..."> </div></c:if>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                  <i class="bi bi-chevron-left prev"></i>
+                  <!-- <span class="carousel-control-prev-icon" aria-hidden="true"></span> -->
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                  <i class="bi bi-chevron-right next"></i> 
+                  <!-- <span class="carousel-control-next-icon" aria-hidden="true"></span> -->
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
             </div>
 		    </div>
 		    	
 		    </c:forEach>        
 		</c:otherwise>    
 	  </c:choose>
-		 ${not empty pagingImgr ? pagingImgr : "" }
+		<div class="rpage my-5"> ${not empty pagingImgr ? pagingImgr : "" }</div>
 	
 	</div>
   
 </div>
 <%@ include file="./include/footer.jsp" %>
+
 </body>
 </html>

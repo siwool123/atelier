@@ -17,14 +17,16 @@ public interface IBoardService {
 	public int minprice();
 	public int maxprice();
 	
+	public int aminprice();
+	public int amaxprice();
+	
 	public List<ProductDTO> pselectall();
 	
 	//게시판 목록(페이징 기능 추가)
 	public List<ProductDTO> selectProduct(ParameterDTO parameterDTO);
 	public List<ProductDTO> selectbya(int aidx);
 	
-	//경매작품목록(페이징기능)
-	public List<ProductDTO> selectAuction(ParameterDTO parameterDTO);
+	
 	
 	//게시물 검색
 	public ArrayList<ProductDTO> search(ParameterDTO parameterDTO);
@@ -106,5 +108,47 @@ public interface IBoardService {
 	
 	//리뷰작성
 	public int rinsert(ReviewDTO reviewDTO);
+	
+	//리뷰작성시 포인트지급
+	public int rPoint(PointDTO pointDTO);
+	public int rPointM(int midx);
+	
+	//작품dto에 리뷰설정
+	public int setreview(int pidx, int ridx);
+	//작품dto에 리뷰설정취소
+	public int setreview2(int pidx);
+	
+	//리뷰리스트조회
+	public List<ReviewDTO> reviewL(ParameterDTO parameterDTO);
+	//리뷰1개조회
+	public ReviewDTO vreview(int pidx);
+	
+	//리뷰삭제
+	public int delReview(int pidx);
+	//리뷰번호찾기
+	public int maxRnum();
+	//리뷰포인트삭제
+	public int delRpoint(int ridx);
+	//회원테이블에반영
+	public int delRpointM(int midx);
+	//리뷰수정
+	public int rupdate(ReviewDTO reviewDTO);
+	//리뷰좋아요추가
+	public int rlikeplus(int pidx);
+	
+	//포인트내역조회
+	public List<PointDTO> pointlist(int midx);
+	//멤버포인트 업데이트
+	public int mpoint(int point);
+	
+	//경매작품목록(페이징기능)
+	public List<ProductDTO> selAuction(ParameterDTO parameterDTO);
+	//경매작품총갯수
+	public int atotalCount(ParameterDTO parameterDTO);
+	
+	//입찰자리스트불러오기
+	public List<AuctionDTO> auclist(int pidx);
+	//최고입찰가
+	public int aucmaxp(int pidx);
 	
 }

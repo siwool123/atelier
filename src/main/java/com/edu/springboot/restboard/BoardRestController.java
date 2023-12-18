@@ -1,5 +1,6 @@
 package com.edu.springboot.restboard;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -159,40 +161,41 @@ public class BoardRestController {
 		return result;
 	}
 	
-	@Autowired
-	PayService payService;
-	
-	@PostMapping("/pay/proceed")
-	public Map<Object, Object> orderProc(Principal principal, Model model, HttpSession session, HttpServletRequest req, OrderDTO orderDTO, PointDTO pointDTO) {
-		
-		System.out.println("페이주문처리rest호출됨");
+	@PostMapping("/member/delReview")
+	public int delRevew(HttpServletRequest req, Model model, Principal principal) {
 		MemberDTO mdto = dao.mview(principal.getName());
-		orderDTO = payService.orderProc(principal, req, orderDTO, pointDTO);
-		
-		Map<Object, Object> map = new HashMap<>();
-		if (orderDTO != null) {
-			map.put("cnt", 1); // orderDTO의 고유 no값 가져오기
-			String order_no = dao.orderNum(mdto.getMidx());
-			System.out.println(order_no);
-			
-			// oderDTO 내용을 ajax로 넘기기
-			map.put("no", order_no);
-			map.put("products", req.getParameter("pidxList"));
-			map.put("name", mdto.getM_name());
-			map.put("phone", mdto.getPhone());
-			map.put("price", orderDTO.getPrice());
-			map.put("addr", orderDTO.getR_address());
-			map.put("paymethod", orderDTO.getPaymethod());
-			map.put("user_id", principal.getName());
-			
-			session.setAttribute("odto", orderDTO);
-			session.setAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
-		} else {
-			map.put("cnt", 0);
-			map.put("msg", "주문을 실패했습니다. 다시 시도해주세요.");
+		int result = 0, result2=0, result3=0, result4=0;
+		int pidx = Integer.parseInt(req.getParameter("pidx"));
+		ReviewDTO rdto = dao.rview(pidx);
+		result = dao.delReview(pidx);
+		result2 = dao.delRpoint(rdto.getRidx());
+		result3 = dao.delRpointM(mdto.getMidx());
+		result4 = dao.setreview2(pidx);
+		try {
+			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
+			//기존파일삭제
+			File file = new File( uploadDir + File.separator + rdto.getSfile1() );
+			if(file.exists())	file.delete();
+			File file2 = new File( uploadDir + File.separator + rdto.getSfile2() );
+			if(file2.exists())	file2.delete();
+			File file3 = new File( uploadDir + File.separator + rdto.getSfile3() );
+			if(file3.exists())	file3.delete();
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("리뷰의 첨부파일 삭제 실패");
 		}
 		
-		return map;
+		System.out.println("리뷰삭제결과:"+result+"포인트차감결과 : "+result2+" : "+result3+", product테이블ridx제거 : "+result4);
+		return result+result2+result3+result4;
 	}
 	
+	@PostMapping("/rest/thumbplus")
+	public int thumbplus(HttpServletRequest req, Model model, Principal principal) {
+		int result = 0;
+		int pidx = Integer.parseInt(req.getParameter("pidx"));
+		result = dao.rlikeplus(pidx);
+		
+		System.out.println("리뷰좋아요추가결과:"+result);
+		return result;
+	}
 }

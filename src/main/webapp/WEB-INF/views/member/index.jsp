@@ -52,7 +52,7 @@ $( document ).ready( function() {
                     <tr><th style="color: black; font-weight: bolder;">  ${map.mdto.m_name } 님</th><td style="padding:0 !important">
                     <a class="btn10" style="position: relative; right: 8px;" href="/member/edit">정보수정</a></td></tr>
                     <tr><th>총 주문</th><td align="right"><span class="price2">${map.orderSum}</span> 원 <br />(${ not empty map.olist ? map.olist.size() : "0" } 건)</td></tr>
-                    <tr><th>총 포인트</th><td> <span id="point" class="price2"> ${map.mdto.total_point }</span> P</td></tr>
+                    <tr><th>총 포인트</th><td> <span id="point" class="price2"> ${map.totalPoint }</span> P</td></tr>
                 </table>
             </div>
             <div class="col-sm-2">
@@ -73,7 +73,7 @@ $( document ).ready( function() {
                 <table class="table table-borderless mtable">
                    <tr><th> <a href="member/order">취소</a></th><td>0</td></tr>
                     <tr><th><a href="member/order">반품</a></th><td>0</td></tr>
-                    <tr><th><a href="member/point">포인트</a></th><td><span class="price2"> ${map.mdto.total_point }</span> P</td></tr>
+                    <tr><th><a href="member/point">포인트</a></th><td><span class="price2"> ${map.totalPoint }</span> P</td></tr>
                 </table>
             </div>
         </div>
