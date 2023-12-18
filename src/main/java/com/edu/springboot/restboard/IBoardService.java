@@ -34,6 +34,7 @@ public interface IBoardService {
 	//내용보기
 	public ProductDTO pview(int pidx);
 	public ArtistDTO aview(int aidx);
+	public ArtistDTO aviewbym(int midx);
 	public ReviewDTO rview(int pidx);
 	public MemberDTO mview(String user_id);
 	public List<CartDTO> cview(int midx);

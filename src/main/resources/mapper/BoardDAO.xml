@@ -201,6 +201,10 @@
 	<select id="aview" resultType="com.edu.springboot.restboard.ArtistDTO">
 		SELECT * FROM artist WHERE aidx = #{param1}
 	</select>
+	<select id="aviewbym" resultType="com.edu.springboot.restboard.ArtistDTO">
+		SELECT * FROM artist WHERE midx = #{param1}
+	</select>
+	
 	<select id="rview" resultType="com.edu.springboot.restboard.ReviewDTO">
 		SELECT * FROM review WHERE pidx = #{param1}
 	</select>

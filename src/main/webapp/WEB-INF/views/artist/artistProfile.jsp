@@ -15,6 +15,7 @@ input {margin-right:10px !important;}
 table.order tr th {background-color:#ededed;}
 table.order tr th, table.order tr td {padding-left:20px;}
 .headerL4 {border-left:5px solid black; font-weight:900; letter-spacing: 0.2em; padding-left: 23px; margin-top:100px; font-size: 16px;}
+.bi-star-fill {font-size:20px;}
 </style>
 
 <%@ include file="artistIndex.jsp" %>
@@ -32,7 +33,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			            	<c:when test="${not empty adto.profiles }"><img src="./uploads/${adto.profiles }" alt="작가프로필이미지" style="width:90%" /></c:when>
 			            	<c:otherwise><i class="bi bi-person-circle bpc1"></i></c:otherwise>
 			            </c:choose>
-			            <div>
+			            <div style="position: relative; top: 30px;">
 			                <c:forEach var="i" begin="1" end="${not empty staravg ? staravg : 0}"><i class="bi bi-star-fill starActive"></i></c:forEach>
 			                <c:forEach var="i" begin="1" end="${not empty staravg ? 5-staravg : 5}"><i class="bi bi-star-fill"></i></c:forEach>
 		                </div> <!-- 작가의 판매완료된작품이 받은 리뷰의 별점 평균 -->
@@ -49,7 +50,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 		       		<div class="headerL2" style="clear: both;">작가소개</div>
 			        <div class="headerL3"> ${not empty adto ? adto.a_intro : "등록 정보가 없습니다." } </div>
 		       	</div>
-		        <div class="col-sm-6">
+		        <div class="col-sm-6" style="padding-left:30px;">
 		            <div class="headerL2" style="margin-top:10px !important;">작가이력</div>
 				        <div class="headerL3"> ${not empty adto ? adto.a_history : "등록 정보가 없습니다." } </div>
 		        </div>

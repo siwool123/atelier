@@ -57,19 +57,21 @@ public class MemberController {
 	@Autowired
 	PayService payService;
 	
-	@RequestMapping("/member/index")
-	public String mindex (Principal principal, Model model) {
-
-		Map<Object, Object> map = payService.memberIndex(principal);
-        model.addAttribute("map", map);
-		return "member/index";
-	}
+//	@RequestMapping("/member/index")
+//	public String mindex (Principal principal, Model model) {
+//
+//		Map<Object, Object> map = payService.memberIndex(principal);
+//        model.addAttribute("map", map);
+//		return "member/index";
+//	}
 	
 	@RequestMapping("member/edit")
 	public String edit(Principal principal, Model model, MemberDTO memberDTO) {
 		
 		Map<Object, Object> map = payService.memberIndex(principal);
         model.addAttribute("map", map);
+        
+        
         
 		return "member/editMember";
 	}

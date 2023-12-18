@@ -9,8 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.edu.springboot.pay.PayService;
+import com.edu.springboot.restboard.ArtistDTO;
 import com.edu.springboot.restboard.IBoardService;
 import com.edu.springboot.restboard.IMemberService;
+import com.edu.springboot.restboard.MemberDTO;
 
 @Controller
 public class ArtistController {
@@ -25,9 +27,19 @@ public class ArtistController {
 	PayService payService;
 
 	//작가프로필
-	@RequestMapping("artist/artistProfile")
+	@RequestMapping("artist/profile")
 	public String artistProfile(Principal principal, Model model) {
 		
+		Map<Object, Object> map = payService.memberIndex(principal);
+        model.addAttribute("map", map);
+        
+        MemberDTO mdto = dao2.mview(principal.getName());
+        ArtistDTO adto = dao2.aviewbym(mdto.getMidx());
+        adto.setA_intro(adto.getA_intro().replace("\r\n","<br />"));
+        adto.setA_history(adto.getA_history().replace("\r\n","<br />"));
+        
+        model.addAttribute("adto", adto);
+        model.addAttribute("mdto", mdto);
 		return "artist/artistProfile";
 	}
 	
