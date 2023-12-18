@@ -1,6 +1,7 @@
 package com.edu.springboot;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.edu.springboot.pay.PayService;
+import com.edu.springboot.restboard.ArtistDTO;
+import com.edu.springboot.restboard.IArtistService;
 import com.edu.springboot.restboard.IBoardService;
 import com.edu.springboot.restboard.IMemberService;
+import com.edu.springboot.restboard.MemberDTO;
+import com.edu.springboot.restboard.ProductDTO;
 
 @Controller
 public class ArtistController {
@@ -23,12 +28,29 @@ public class ArtistController {
 	
 	@Autowired
 	PayService payService;
+	
+	@Autowired
+	IArtistService ardao;
 
 	//작가프로필
-	@RequestMapping("artist/artistProfile")
+	@RequestMapping("artist/profile")
 	public String artistProfile(Principal principal, Model model) {
-		
-		return "artist/artistProfile";
+		Map<Object, Object> map = payService.memberIndex(principal);
+        model.addAttribute("map", map);
+        
+        String id = principal.getName();
+        MemberDTO memberDTO = dao.mview(id);
+        int midx = memberDTO.getMidx();
+        
+        ArtistDTO artistDTO = ardao.aview(midx);
+        System.out.println("aidx: "+artistDTO.getAidx());
+        List<ProductDTO> aplist = ardao.aplist(midx);
+        
+        model.addAttribute("adto", artistDTO);
+        model.addAttribute("aplist", aplist);
+        model.addAttribute("soldsum", ardao.solselect(artistDTO.getAidx()));
+        model.addAttribute("likesum", ardao.likesum(artistDTO.getAidx()));
+		return "artist/profile";
 	}
 	
 	//판매작품등록

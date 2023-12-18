@@ -32,7 +32,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			            	<c:when test="${not empty adto.profiles }"><img src="./uploads/${adto.profiles }" alt="작가프로필이미지" style="width:90%" /></c:when>
 			            	<c:otherwise><i class="bi bi-person-circle bpc1"></i></c:otherwise>
 			            </c:choose>
-			            <div>
+			            <div class="mt-5">
 			                <c:forEach var="i" begin="1" end="${not empty staravg ? staravg : 0}"><i class="bi bi-star-fill starActive"></i></c:forEach>
 			                <c:forEach var="i" begin="1" end="${not empty staravg ? 5-staravg : 5}"><i class="bi bi-star-fill"></i></c:forEach>
 		                </div> <!-- 작가의 판매완료된작품이 받은 리뷰의 별점 평균 -->

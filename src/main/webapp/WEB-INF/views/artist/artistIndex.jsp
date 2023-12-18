@@ -57,7 +57,7 @@ $( document ).ready( function() {
                 <table class="table table-borderless mtable">
                     <tr><th style="color: black; font-weight: bolder;">  ${map.mdto.m_name } 님</th><td style="padding:0 !important">
                     <a class="btn10" style="position: relative; right: 8px;" href="/member/edit">정보수정</a></td></tr>
-                    <tr><th>총 주문</th><td align="right"><span class="price2">${map.orderSum}</span> 원 <br />(${ not empty map.olist ? map.olist.size() : "0" } 건)</td></tr>
+                    <tr><th>총 판매</th><td align="right"><span class="price2">${map.orderSum}</span> 원 <br />(${ not empty map.olist ? map.olist.size() : "0" } 건)</td></tr>
                     <tr><th>총 포인트</th><td> <span id="point" class="price2"> ${map.mdto.total_point }</span> P</td></tr>
                 </table>
             </div>
