@@ -14,6 +14,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.edu.springboot.restboard.ProductDTO;
 import com.edu.springboot.restboard.ReviewDTO;
@@ -46,6 +47,7 @@ public class MainController {
 		}catch (Exception e){
 			/* 최초접근시엔 로그인정보가 없으므로 널포인터 예외 발생하므로 예외처리해야한다. */
 			System.out.println("로그인 전입니다.");
+			e.printStackTrace();
 		} 
 		return "auth/login";
 	}

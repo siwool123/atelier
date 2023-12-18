@@ -14,11 +14,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.springboot.restboard.InfoDTO;
 import com.edu.springboot.restboard.MemberDTO;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
@@ -71,6 +73,38 @@ public class SmsController {
         System.out.println("sc numStr을 infoDTO smsContent에 저장 : "+infoDTO.getSmsContent());
         System.out.println(response);
         return response ;
+        } catch (Exception e) {
+        	System.out.println("휴대폰번호 형식 또는 문자발송 서비스 api키 또는 addmessage에 문제가 있음");
+        	return null;
+        }
+    }
+    
+    @RequestMapping("/rest/send-one1.api")
+    public String sendOne(HttpServletRequest req) {
+    	
+        Message message = new Message();
+        
+        // 4자리 난수 생성
+        Random rand  = new Random();
+        String numStr = "";
+        for(int i=0; i<4; i++) {
+            String ran = Integer.toString(rand.nextInt(10));
+            numStr+=ran;
+        }
+        
+        // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
+        message.setFrom("01052558591");
+        message.setTo(req.getParameter("phone").toString());
+        message.setText("atelier 휴대폰 인증번호 : "+numStr);
+        // 형식에 맞지 않는 번호를 입력하면 nurigo 예외로 인해 화이트 라벨이 출력된다.
+        // 이를 막기위한 예외처리로 null을 반환하여 아무런 반응이 없도록 한다.
+        try {
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+
+//        infoDTO.setSmsContent(numStr);
+//        System.out.println("sc numStr을 infoDTO smsContent에 저장 : "+infoDTO.getSmsContent());
+        System.out.println(response);
+        return numStr ;
         } catch (Exception e) {
         	System.out.println("휴대폰번호 형식 또는 문자발송 서비스 api키 또는 addmessage에 문제가 있음");
         	return null;

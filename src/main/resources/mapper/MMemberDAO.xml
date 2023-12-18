@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.edu.springboot.member.Imember2Service">
+
+	<!-- 일반회원     -->
+
+	<select id="seletMember"
+		resultType="com.edu.springboot.member.Member2DTO">
+		select * from member
+			<if test="searchWord != null">
+			where ${searchField} = #{searchWord}
+		</if>	
+	</select>
+	
+	<select id="seletMember1"
+		resultType="com.edu.springboot.member.Member2DTO">
+		select * from member
+			<if test="searchWord != null">
+			where id = #{my_id} and pass = #{my_pass}
+		</if>	
+	</select>
+	
+	<insert id="insertMemberr"
+		parameterType="com.edu.springboot.member.Member2DTO">
+		insert into member (midx, id, pass, m_name, phone, zip, addr1, addr2)
+			values (seq_member.nextval , #{id},#{pass}, #{m_name}, #{phone}, #{zip}, #{addr1}, #{addr2})
+	</insert>
+	
+	<insert id="insertPProduct"
+		parameterType="com.edu.springboot.member.ProductDTO">
+		insert into product (title, pidx, aidx, size2, size1, p_type, price, p_intro, framed, sfile, midx, m_name)
+			values (#{title}, seq_product , #{aidx},#{size2}, #{size1}, #{p_type}, #{price}, 
+				#{p_intro}, #{framed}, #{sfile}, #{midx}, #{m_name})
+	</insert>
+	
+	
+	<insert id="insertOrder11"
+		parameterType="com.edu.springboot.member.Order11DTO">
+		insert into order1 
+			(oidx, midx, paymethod, price, RECEIVER, R_PHONE, R_ADDRESS, MESSAGE, 
+			APINUM, AUCTION, pidx,ADD_POINT, MINUS_POINT)
+			values 
+			(seq_oder1.nextval , #{oidx},#{midx}, #{paymethod}, #{price}, #{RECEIVER}, #{R_ADDRESS}, #{MESSAGE},
+				#{APINUM},#{AUCTION},#{pidx},#{ADD_POINT},#{MINUS_POINT})
+	</insert>
+	
+	<select id="selectOrder11oidx"
+		resultType="com.edu.springboot.member.Order11DTO">
+		select * from order1 where pidx like '%'||#{pidx}||'%'
+	</select>
+	
+	<insert id="insertOrder12">
+		insert into order2
+			(o2idx, OIDX, pidx, aidx, price, midx)
+			values 
+			(seq_order2.nextval, #{oidx}, #{pidx}, #{aidx}, #{price}, #{midx})
+	</insert>
+	
+	
+	<select id="seletCart"
+		resultType="com.edu.springboot.member.CartDTO">
+		select cart.*, product.* from cart full join product on cart.pidx = product.pidx
+			<if test="midx != null">
+				where cart.midx = #{midx} and product.sold = 0
+			</if>	
+	</select>
+	
+	<select id="seletCartp"
+		resultType="int">
+		select product.price from cart full join product on cart.pidx = product.pidx
+			<if test="midx != null">
+				where midx = #{midx} 
+				<if test="buy != null">
+					and buy = #{buy}
+				</if>
+			</if>	
+	</select>
+	
+	<insert id="insertCart"
+		parameterType="com.edu.springboot.member.CartDTO">
+		insert into cart (cidx ,midx, pidx)
+			values (seq_cart.nextval , #{midx}, #{pidx})
+	</insert>
+	
+	<!-- <update id="updateCartp">
+		update cart set buy = #{buy} where cidx = #{cidx}
+	</update> -->
+	
+	<insert id="deleteCart">
+		delete from cart
+			where cidx = #{cidx}
+	</insert>
+	
+	<update id="updateMprofile">
+		update member set profiles = #{profiles} where midx = #{midx}
+	</update>
+	
+	<select id="getMImage" resultType="String">
+		select profiles  from member where midx = #{midx}
+	</select>
+	
+	<select id="getMImageL" 
+	parameterType="com.edu.springboot.member.ApplyDTO"
+	resultType="com.edu.springboot.member.ApplyDTO">
+		select * from apply 
+		<if test="midx != null">
+			where midx = #{midx} 
+		</if>
+		<!-- <if test="applys1 != null or applys2 != null or applys3 != null or applys4 != null or applys5 != null
+		or applys6 != null or applys7 != null or applys8 != null or applys9 != null or applys10 != null ">
+		and
+		</if> -->
+	</select>
+	
+	<select id="likeCart" 
+		parameterType="com.edu.springboot.member.P_likeDTO"
+		resultType="com.edu.springboot.member.P_likeDTO">
+		select *  from p_like 
+		<choose>
+			<when test="lidx != null">
+				where lidx = #{lidx}
+			</when>
+			<when test="pidx != null">
+				<if test="lidx == null">
+					where
+				</if>
+				pidx = #{pidx}
+			</when>
+			<when test="aidx != null">
+				<if test="lidx == null and pidx == null">
+					where
+				</if>
+				aidx  = #{aidx}
+			</when>
+			<when test="midx != null">
+				<if test="lidx == null and pidx == null and aidx == null">
+					where
+				</if>
+				midx= #{midx}
+			</when>
+		</choose>
+</select>
+	
+	
+	
+	<!-- 미술품     -->
+	
+	<select id="seletProduct"
+		parameterType="com.edu.springboot.member.ProductDTO"
+		resultType="com.edu.springboot.member.ProductDTO">
+		select * from product
+		
+		<if test="sWord.size() >0 || price.size() > 0 || title.size() >0">
+			where
+		</if>
+		
+		<if test="sWord.size() > 0">
+			<foreach collection="sField" separator="and" index="qqqq" item="field">
+				${field}
+				<foreach collection="sWord" index="wwww" open="=" item="word"> 
+					<if test="qqqq == wwww">
+						#{word}
+					</if>
+				</foreach>
+			</foreach>
+		</if>
+		
+		
+		<if test="title.size() > 0">
+			<if test="sWord.size() > 0">
+				and
+			</if>
+			title like
+			<foreach collection="title" item="tttt" open="'%'||" close="||'%'" separator="||'%'||">
+				#{tttt}
+			</foreach>
+			or m_name like
+			<foreach collection="title" item="tttt" open="'%'||" close="||'%'" separator="||'%'||" >
+				#{tttt}
+			</foreach>
+		</if>
+		
+		<if test="price.size() > 0">
+			<if test="sWord.size() > 0 || title.size() > 0">
+				and
+			</if>
+			price between
+			<foreach collection="price" separator="and" item="pppp">
+				#{pppp}
+			</foreach>
+		</if>
+		
+		
+		<if test="size2.size() > 0">
+			<if test="sWord.size() > 0 || title.size() > 0 || price.size() > 0">
+				and
+			</if>
+			<foreach collection="size2" separator="and" item="s2" index="vvvv">
+				<choose>
+					<when test="size2.size() == 1">
+						size2 &lt;= #{s2}
+					</when>
+					<otherwise>
+						<if test="vvvv = 0">
+							size2 &gt; #{s2}
+						</if>
+						<if test="vvvv = 1">
+							size2 &lt;= #{s2}
+						</if>
+					</otherwise>
+				</choose>
+				
+			</foreach>
+		</if>
+		
+		<!-- <if test="!searchWord.isEmpty()">
+			where
+			<foreach collection="searchField" item="sffff" index="index1" separator="and">
+				${sffff}
+				<foreach collection="searchWord" item="item" open="=">
+					 #{item}
+				</foreach>
+			</foreach>
+		</if> -->	
+	</select>
+	
+	<!-- 최고가 최저가 -->
+	<select id="price" resultType="int">
+		select Tb.* from (
+	    	select price from product order by price ${order} ) Tb
+	    where rownum = 1
+	</select>
+	
+	<!-- 아티스트 -->
+	<select id="artistL"
+		resultType="com.edu.springboot.member.Artist2DTO">
+		select * from artist
+		<if test="artist != ''">
+			where m_name = #{artist}
+		</if>
+	</select>
+	
+	
+	<insert id="applyArtist"
+		parameterType="list">
+		insert into apply (apply_idx, midx, a_intro, a_history, apply1, apply2, apply3, apply4, apply5,
+			apply6, apply7, apply8, apply9, apply10)
+			values (seq_apply.nextval , #{midx},#{a_intro}, #{a_history},
+			
+			<foreach collection="apply" item="ap" separator=",">
+				#{ap}
+			</foreach>
+			
+			)
+	</insert>
+	
+	
+	<insert id="insertlike">
+		insert into p_like (lidx, pidx, aidx, midx) values (like_seq.nextval, #{pidx}, #{aidx}, #{midx})
+	</insert>
+	
+	<delete id="removelike">
+		delete from p_like where lidx = #{lidx}
+	</delete>
+	
+</mapper>
