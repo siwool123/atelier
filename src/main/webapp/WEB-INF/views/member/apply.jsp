@@ -108,8 +108,8 @@ $(function(){
 		<div class="col-sm-10" style="padding-left:50px;">
 			
 			<div class="headerL2 mb-5" style="margin-top:10px;">작가신청</div>
-			<c:choose>
-			<c:when test="${modelScope.apresult == '0'}">
+		<c:choose>
+			<c:when test="${apresult == 0}">
 			<p>심사용 포트폴리오 작품 이미지를 10개를 첨부하고 작가소개 및 약력을 작성하셔야 작가신청이 가능합니다.</p>
 			<p>작가소개 및 약력은 작가의 작품을 판매용으로 등록시 적용되오니 신중하게 작성하시기 바랍니다.</p>
 			
@@ -146,7 +146,7 @@ $(function(){
 				<div class="headerL4 mb-5" style="margin-top:10px;">포트폴리오</div>
 				<c:forEach begin="0" end="9" varStatus="loop">
 					<c:set var="applyIndex" value="${'apply' + loop.index}" />
-					<img src="/uploads/${modelScope.apdto[applyIndex]}"/>
+					<img src="/uploads/${apdto[applyIndex]}"/>
 				</c:forEach>
 				<div class="headerL4 mb-5" style="margin-top:10px;">작가소개</div>
 			</div>
@@ -155,8 +155,7 @@ $(function(){
 				<div class="headerL4 mb-5" style="margin-top:10px;">작가이력</div>
 			</div>
 			</c:otherwise>
-			</c:choose>
-			
+		</c:choose>
 		</div>
     </div>
   </div>

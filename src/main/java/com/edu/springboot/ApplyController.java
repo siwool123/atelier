@@ -42,10 +42,12 @@ public class ApplyController {
 			applyDTO = adao.aview(dao.mview(user_id).getMidx());
 			memberDTO = dao.mview(user_id);
 			if (applyDTO!=null) {
+				System.out.println("applyDTO is not null");
 				model.addAttribute("mdto", memberDTO);
 				model.addAttribute("apdto", applyDTO);
 				model.addAttribute("apresult","1");
 			} else {
+				System.out.println("applyDTO is null");
 				model.addAttribute("mdto", memberDTO);
 				model.addAttribute("apresult","0");
 			}
