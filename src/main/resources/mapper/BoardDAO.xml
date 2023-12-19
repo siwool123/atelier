@@ -201,6 +201,10 @@
 	<select id="aview" resultType="com.edu.springboot.restboard.ArtistDTO">
 		SELECT * FROM artist WHERE aidx = #{param1}
 	</select>
+	<select id="aviewbym" resultType="com.edu.springboot.restboard.ArtistDTO">
+		SELECT * FROM artist WHERE midx = #{param1}
+	</select>
+	
 	<select id="rview" resultType="com.edu.springboot.restboard.ReviewDTO">
 		SELECT * FROM review WHERE pidx = #{param1}
 	</select>
@@ -208,6 +212,9 @@
 		SELECT * FROM member WHERE id = #{param1}
 	</select>
 	
+	<select id="mview2" resultType="com.edu.springboot.restboard.MemberDTO">
+		SELECT * FROM member WHERE midx = #{param1}
+	</select>
 	
 	<insert id="write" >
 		INSERT INTO product (pidx, title, content, id) VALUES (seq_product.nextval, #{title}, #{content}, #{id})
@@ -227,12 +234,26 @@
 				SELECT * FROM review WHERE aidx = #{aidx}
 			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
 	</select>
+	<select id="rvlistbya2" resultType="com.edu.springboot.restboard.ReviewDTO">
+		SELECT * FROM review WHERE aidx = #{param1}
+	</select>
 	
 	<select id="productsbyas" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT * FROM product WHERE aidx=#{aidx} AND sold=#{sold}
 			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="productsbyas2" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM product WHERE aidx=#{aidx} AND auction=#{auction}
+		<choose>
+			<when test="status != null and !status.isEmpty() and status.equals('aa')"> and sold = 0</when>
+			<when test="status != null and !status.isEmpty() and status.equals('bb')"> and sold = 1</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('aa')"> and enddate &gt; sysdate</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('bb')"> and enddate &lt; sysdate and maxprice is null</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('cc')"> and enddate &lt; sysdate and maxprice is not null</when>
+		</choose>
 	</select>
 	
 	<select id="cartview" resultType="com.edu.springboot.restboard.CartDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
@@ -392,6 +413,58 @@ inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 	</select>
 	
 	<select id="aucmaxp">select max(aprice) from auction2</select>
+	
+	<insert id="auctionInsert" parameterType="com.edu.springboot.restboard.AuctionDTO">
+		insert into auction2 (bid_idx, pidx, midx, aprice, id) values 
+		(seq_auction2.nextval, #{pidx}, #{midx}, #{aprice}, #{id})
+	</insert>
+	
+<!-- 	<select id="aucpjoin" resultType="com.edu.springboot.restboard.OPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select order2.o2idx, order1.oidx, order1.midx, order1.paymethod, order1.price as tprice, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, 
+ order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.owner, 
+order1.auction, order1.add_point, order1.minus_point, product.pidx, product.sfile, product.title, product.m_name, product.size1, product.size2, product.price, product.ridx
+from order2 inner join product on order2.pidx = product.pidx
+inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
+			<choose>
+				<when test="status != null and !status.isEmpty() and status.equals('aa')"> and order1.paydate is null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('bb')"> and order1.paydate is not null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('cc')"> and order1.paydate is not null and order1.shipdate is not null</when>
+				<when test="dmin!=null and !dmin.isEmpty() and dmax!=null and !dmax.isEmpty()">
+					 and order1.orderdate BETWEEN #{dmin} AND #{dmax}
+				</when>
+				<when test="sWord!=null and !sWord.isEmpty()">
+					<foreach collection="sWord" item="str" separator="or">
+						and product.title LIKE '%' || #{str} || '%' OR product.m_name LIKE '%' || #{str} || '%'
+					</foreach>
+				</when>
+			</choose>
+	</select> -->
+	
+	<select id="aucpjoin2"  resultType="com.edu.springboot.restboard.AUPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select product.*, auction2.aprice, auction2.aucdate, auction2.id from product inner join auction2 on product.pidx = auction2.pidx where auction2.id=#{id}
+			<!-- <when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus eq 'aa')"> and product.enddate &lt; sysdate and auction2.aprice = product.maxprice</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus eq 'bb')"> and product.enddate &lt; sysdate and auction2.aprice != product.maxprice</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus eq 'cc')"> and product.enddate &gt; sysdate</when> -->
+			<if test="dmin!=null and !dmin.isEmpty() and dmax!=null and !dmax.isEmpty()">
+				 and auction2.aucdate BETWEEN #{dmin} AND #{dmax}
+			</if>
+			  order by auction2.aucdate desc
+	</select>
+	
+	<update id="updatepm"> update product set maxprice = #{param2} where pidx = #{param1} </update>
+	
+	<select id="selProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM product where auction=#{auction} 
+		<choose>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> and sold = 1</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> and sold = 0</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('aa')"> and enddate &gt; sysdate</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('bb')"> and enddate &lt; sysdate and maxprice is null</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('cc')"> and enddate &lt; sysdate and maxprice is not null</when>
+		</choose>
+	</select>
+	
+	<delete id="delProduct">delete from product where pidx=#{param1}</delete>
 	
 	
 </mapper> 

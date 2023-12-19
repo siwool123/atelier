@@ -6,8 +6,14 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.edu.springboot.restboard.Order2DTO;
+
 @Mapper
 public interface Imember2Service {
+	
+	/// 작품 판매 중 상태로 업데이트
+	public List<Order2DTO> selector2(@Param("sField") String sField,  @Param("sWord") String sWord);
+	
 	
 	/// 작품 판매 중 상태로 업데이트
 	public void updatePro(@Param("pidx") String pidx );

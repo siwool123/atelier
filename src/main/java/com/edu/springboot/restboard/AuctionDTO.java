@@ -16,4 +16,6 @@ public class AuctionDTO {
 	private int aprice;
 	private Date aucdate;
 	private String id;
+	private Date penaltydate;
+	private Date paydate;
 }

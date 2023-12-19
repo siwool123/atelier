@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.springboot.pay.PayService;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -28,6 +27,9 @@ public class BoardRestController {
 
 	@Autowired
 	IBoardService dao;
+	
+	@Autowired
+	EmailSending email;
 	
 	/* board테이블의 레코들르 각 페이지별로 구분해서 배열형태로 출력한다.
 	 * 페이지 번호가 없는 경우 1페이지의 내용을 출력한다. */
@@ -196,6 +198,41 @@ public class BoardRestController {
 		result = dao.rlikeplus(pidx);
 		
 		System.out.println("리뷰좋아요추가결과:"+result);
+		return result;
+	}
+	
+	@PostMapping("/rest/auction")
+	public int auction(HttpServletRequest req, Model model, Principal principal, AuctionDTO auctionDTO) {
+		System.out.println("rest입찰호출함");
+		int result = 0, result2=0;
+		int pidx = Integer.parseInt(req.getParameter("pidx"));
+		int aprice = Integer.parseInt(req.getParameter("aprice"));
+		MemberDTO mdto = dao.mview(principal.getName());
+		auctionDTO.setPidx(pidx);
+		auctionDTO.setMidx(mdto.getMidx());
+		auctionDTO.setId(mdto.getId());
+		auctionDTO.setAprice(aprice);
+		result = dao.auctionInsert(auctionDTO);
+		result2 = dao.updatepm(pidx, aprice);
+		
+		System.out.println("입찰참가결과:"+result+", 작품최대값반영결과:"+result2);
+		return result+result2;
+	}
+	
+	@PostMapping("/rest/delProduct")
+	public int delProduct(HttpServletRequest req, Model model, InfoDTO infoDTO, Principal principal) {
+		int result = 0;
+		int pidx = Integer.parseInt(req.getParameter("pidx"));
+		String delReason = req.getParameter("delReason");
+		ProductDTO pdto = dao.pview(pidx);
+		result = dao.delProduct(pidx);
+		System.out.println("작품 작품 삭제결과:"+result);
+		
+		//작품삭제에 대해 해당작가에게 메일로 공지
+		ArtistDTO adto = dao.aview(pdto.getAidx()); 
+		MemberDTO mdto = dao.mview2(adto.getMidx());
+		email.delProductMail(infoDTO, mdto.getId(), pdto.getTitle(), delReason);
+		
 		return result;
 	}
 }

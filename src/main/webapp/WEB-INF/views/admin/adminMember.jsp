@@ -148,9 +148,9 @@ function memberDelete(midx){
 <script src="../js/datatables-demo.js"></script>
 <script type="text/javascript">
 $( document ).ready( function() {
-	$('#navbarNavAltMarkup div a:first').removeClass( 'active' );
-	$('ul.navbar-nav li').removeClass( 'active' );
-	$('ul.navbar-nav li:eq(5)').addClass( 'active' );
-	
+	$('ul.sidebar li').removeClass( 'active' );
+	$('ul.sidebar li a').removeClass( 'active' );
+	$('ul.sidebar li:eq(1)').addClass( 'active' );
+	$('ul.sidebar li:eq(1) a').addClass( 'active' );
 });
 </script>

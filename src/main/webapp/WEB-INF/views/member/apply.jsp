@@ -43,7 +43,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 
 <script>
 	//이미지 선택시 바로 이미지 띄우기
-	function loadApplyImage(img) {
+	function loadApplyImg(img) {
 		/* 파일용량 제한*/
 		let maxSize = 4 * 1024 * 1024; //* 4MB 사이즈 제한
 		let fileSize = img.files[0].size; //업로드한 파일용량
@@ -65,7 +65,6 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			num = img.name.slice(-2);
 		}
 		
-		
 	    //기존 showImageDiv div태그를 삭제후 다시 만든다(이미지 두번 선택 방지)
 	   	document.getElementById("showImageDiv"+num).remove();
 	    //img태그가 담길 div 태그 새로 만들기
@@ -75,7 +74,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 	    //div(fordiv) 태그에 div(showImageDiv) 태그 추가(prepend)
 	    document.getElementById('forDiv'+num).prepend(showImageDiv);
 	    
-	    //새로운 img 태그 만들기(img태그는 뷰에서 foreach로 만들어지지 않기 때문에 num을 붙일 필요없다.)
+	    //새로운 img 태그 만들기
 		var selectedApplyImage = document.createElement("img");
 	    //이미지 source 가져오기
 		selectedApplyImage.src = URL.createObjectURL(file);
@@ -153,7 +152,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 					<c:forEach begin="0" end="9" step="1" varStatus="loop">
 					<div class="my-4 col-4 mx-auto" style="width: 210px; height: 120px; display: inline-block;">
 						<input type="file" id= "inputApply${loop.index+1}" name="inputApply${loop.index+1}"
-							onChange="loadApplyImage(this);" style="position: absolute; width: 0; height: 0; padding: 0; overflow: hidden; border: 0;" />
+							onChange="loadApplyImg(this);" style="position: absolute; width: 0; height: 0; padding: 0; overflow: hidden; border: 0;" />
 						<label class="my-2 btn1" for="inputApply${loop.index+1}" style="width: 50px; height: 50px; display: inline-block; vertical-align: middle;cursor: pointer;">+</label>
 						<div class="ms-3" id="forDiv${loop.index+1}" style="max-width: 100px; max-height: 100px; display: inline-block;">
 							<div id="showImageDiv${loop.index+1}" style="max-width: 100px; max-height: 100px;"></div>

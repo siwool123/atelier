@@ -43,16 +43,20 @@ public class PayService {
 		orderDTO.setMidx(memberDTO.getMidx());
 		orderDTO.setPaymethod(paymethod);
 		orderDTO.setPrice(Integer.parseInt(req.getParameter("oprice")));
+		System.out.println("oprice값출력 : " + req.getParameter("oprice"));
+		
 		orderDTO.setReceiver(req.getParameter("m_name"));
 		orderDTO.setR_phone(req.getParameter("phone"));
 		orderDTO.setPidx(req.getParameter("pidxList"));
 		orderDTO.setAdd_point(setsold);
 		
 		int minusPoint = Integer.parseInt(req.getParameter("point"));
-		int addPoint = Integer.parseInt(req.getParameter("futurepoint"));
+		//int addPoint = Integer.parseInt(req.getParameter("futurepoint"));
+		//System.out.println("futurepoint값출력"+req.getParameter("futurepoint"));
+		int addPoint = minusPoint + Integer.parseInt(req.getParameter("oprice"));
 		
 		orderDTO.setMinus_point(minusPoint);
-		orderDTO.setAdd_point(addPoint);
+		orderDTO.setAdd_point((int)(addPoint*0.01));
 		
 		String address = req.getParameter("zip") +" | "+ req.getParameter("addr1") +" | "+ req.getParameter("addr2");
 		orderDTO.setR_address(address);

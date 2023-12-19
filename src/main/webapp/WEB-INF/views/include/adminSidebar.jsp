@@ -16,6 +16,15 @@
 
             <hr class="sidebar-divider">
             
+            <li class="nav-item"><a class="nav-link memmber" href="/admin/member"><i class="fas fa-fw fa-table"></i> <span>회원관리</span></a></li>
+            <li class="nav-item"><a class="nav-link apply" href="/admin/artistApply"><i class="fas fa-fw fa-table"></i> <span>작가신청관리</span></a></li>
+            <li class="nav-item"><a class="nav-link artist" href="/admin/artist"><i class="fas fa-fw fa-table"></i> <span>작가관리</span></a></li>
+            <li class="nav-item"><a class="nav-link artist" href="/admin/saleproduct"><i class="fas fa-fw fa-table"></i> <span>판매작품관리</span></a></li>
+            <li class="nav-item"><a class="nav-link artist" href="/admin/aucproduct"><i class="fas fa-fw fa-table"></i> <span>경매작품관리</span></a></li>
+            
+            <hr class="sidebar-divider d-none d-md-block">
+            
+            
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i> <span>Pages</span></a>
@@ -31,12 +40,14 @@
             
             <hr class="sidebar-divider d-none d-md-block">
             
+
             <li class="nav-item"><a class="nav-link" href="/admin/member"><i class="fas fa-fw fa-table"></i> <span>회원관리</span><span class="badge badge-danger rounded-pill">0+</span></a></li>
             <li class="nav-item"><a class="nav-link" href="/admin/artist"><i class="fas fa-fw fa-table"></i> <span>아티스트관리</span><span class="badge badge-danger rounded-pill">0+</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="/admin/pay"><i class="fas fa-fw fa-table"></i> <span>결제관리</span><span class="badge badge-danger rounded-pill">0+</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="/admin/adminPay"><i class="fas fa-fw fa-table"></i> <span>결제관리</span><span class="badge badge-danger rounded-pill">0+</span></a></li>
             
             <hr class="sidebar-divider d-none d-md-block">
             
+
             <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="margin:100px 10px 0 0 !important">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">

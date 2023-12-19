@@ -402,8 +402,6 @@ $( document ).ready( function() {
     }
     activeByParam('sell', 'on', '#onsale');
 	activeByParam('sell', 'so', '#sold');
-	activeByParam('auction', 'na', '#nauction');
-	activeByParam('auction', 'au', '#auction');
 	
     activeByParam('ori', 'sq', '#square');
 	activeByParam('ori', 'la', '#landscape');
@@ -434,6 +432,10 @@ $( document ).ready( function() {
 	 activeByParam('status', 'aa', '#aa');
 	activeByParam('status', 'bb', '#bb');
 	activeByParam('status', 'cc', '#cc');
+	
+	activeByParam('aucstatus', 'aa', '#aa');
+	activeByParam('aucstatus', 'bb', '#bb');
+	activeByParam('aucstatus', 'cc', '#cc');
 	/*$('.orderby li a').click( function(){
 		$('.orderby li a').removeClass('active');
 		$('.orderby li').removeClass('active');

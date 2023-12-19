@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -110,8 +111,12 @@ public class adminPayCon {
 //		adminPayDTO.setOidx(olist11.);
 	}
 	
-	@RequestMapping("/admin/proupdate")
-	public void proupdate(String pidx) {
+	
+	
+	@PostMapping("/admin/proupdate")
+	public String proupdate(String pidx) {
+		System.out.println("메시");
 		daao.updatePro(pidx);
+		return "redirect:/admin/adminPay";
 	}
 }

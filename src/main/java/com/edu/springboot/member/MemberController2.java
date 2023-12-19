@@ -74,9 +74,10 @@ public class MemberController2 {
 ////		dao.insertMemberr(member2dto);
 //	}
 	
-	@PostMapping("/rest/insertPProduct.do")
+	@RequestMapping("/rest/insertPProduct.do")
 	   public ResponseEntity<String> insertPProduct(
 			   @RequestParam("sfile") MultipartFile file, HttpServletRequest req, ProductDTO productDTO) {
+		System.out.println("호날두두두");
 	      try {
 	         String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();// 변경 필요
 //	         String uploadDir = "/PProjectLogin/src/main/resources/static/uploads/";
@@ -85,12 +86,13 @@ public class MemberController2 {
 	         productDTO.setAidx(req.getParameter("aidx"));
 	         productDTO.setSize2(req.getParameter("size2"));
 	         productDTO.setSize1(req.getParameter("size1"));
+	         productDTO.setTheme(req.getParameter("theme"));
 	         productDTO.setP_type(req.getParameter("p_type"));
 	         productDTO.setPrice(req.getParameter("price"));
 	         productDTO.setP_intro(req.getParameter("p_intro"));
 	         productDTO.setFramed(req.getParameter("p_framed"));
-	         productDTO.setM_name(req.getParameter("m_name"));
 	         productDTO.setMidx(req.getParameter("midx"));
+	         productDTO.setM_name(req.getParameter("m_name"));
 	         
 	         System.out.println("물리적 경로 : " + uploadDir);
 
@@ -105,15 +107,14 @@ public class MemberController2 {
 //	        	     File ddd = new File(uploadDir + File.separator + qq );
 //	        	     ddd.delete();
 //	        	 }
-	        	 productDTO.setSfile(uniqueFileName);
 //	        	 member2dto.setProfileo(uniqueFileName);
 //	        	 dao.updateMprofile(uniqueFileName, req.getParameter("midx"));
 	        	 
 	        	 File destFile = new File(uploadDir, uniqueFileName);
+	        	 productDTO.setSfile(uniqueFileName);
 
-	            System.out.println(uniqueFileName);
-	            System.out.println(destFile);
 	            file.transferTo(destFile);
+	            dao.insertPProduct(productDTO);
 
 	            System.out.println("파일 업로드 성공");
 	            // 파일 업로드 성공에 대한 응답을 클라이언트에게 전송할 수 있음

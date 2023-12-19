@@ -65,7 +65,7 @@ public class SmsController {
         message.setTo(memberDTO.getPhone());
         message.setText("atelier 휴대폰 인증번호 : "+numStr);
         // 형식에 맞지 않는 번호를 입력하면 nurigo 예외로 인해 화이트 라벨이 출력된다.
-        // 이를 막기위한 예외처리로 null을 반환하여 아무런 반응이 없도록 한다.
+        // 이를 막기위한 예외처리로 null을 반환하여 아무런 반응이 없도록 한다. 
         try {
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
 

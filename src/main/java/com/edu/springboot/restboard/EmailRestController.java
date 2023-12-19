@@ -46,8 +46,11 @@ public class EmailRestController {
 		HashMap<String, String> findPassMap = new HashMap<String, String>();
 		
 		MemberDTO memberDTO = dao.mview(req.getParameter("id"));
-		if (memberDTO == null) { System.out.println("아이디 입력 안하거나 가입한 회원이 아닙니다.");
+		if (memberDTO == null) { 
+			System.out.println("아이디 입력 안하거나 가입한 회원이 아닙니다.");
+			findPassMap.put("noemail", "아이디 입력 안하거나 가입한 회원이 아닙니다.");
 			return findPassMap;
+			
 		} else { System.out.println("아이디 조회 성공");
 		
 			email.findPassEmailSender(infoDTO, memberDTO); //아이디가 존재할 경우 이메일을 발송한다.
@@ -60,7 +63,7 @@ public class EmailRestController {
 			memberDTO.setId(memberDTO.getId());
 			
 			int result = 0;
-			result = dao.mpedit(memberDTO); //임시비번으로 회원비번변경
+			result = dao.mpedit(memberDTO); //임시비번으로 회원비번변경  
 			System.out.println("임시비번으로 회원비번변경 성공 : "+result);
 			
 			findPassMap.put("pwresetresult", result+"");

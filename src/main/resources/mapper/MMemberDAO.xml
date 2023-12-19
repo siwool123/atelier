@@ -6,6 +6,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.edu.springboot.member.Imember2Service">
 
+
+<!-- order2select -->
+
+	<select id="selector2"
+		resultType="com.edu.springboot.restboard.Order2DTO">
+		select * from order2 where ${sField} = #{sWord}
+	</select>
+
 	<!-- 작품 판매 중 상태로 업데이트 -->
 
 <update id="updatePro">
@@ -45,8 +53,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="insertPProduct"
 		parameterType="com.edu.springboot.member.ProductDTO">
-		insert into product (title, pidx, aidx, size2, size1, p_type, price, p_intro, framed, sfile, midx, m_name)
-			values (#{title}, seq_product , #{aidx},#{size2}, #{size1}, #{p_type}, #{price}, 
+		insert into product (title,pidx, aidx, size2, size1, p_type, theme, price, p_intro, framed, sfile, midx, m_name)
+			values (#{title}, seq_product , #{aidx},#{size2}, #{size1},#{p_type}, #{theme},#{price}, 
 				#{p_intro}, #{framed}, #{sfile}, #{midx}, #{m_name})
 	</insert>
 	

@@ -25,19 +25,23 @@ table.dataTable {border-collapse:collapse !important;}
 <%@ include file="../include/header.jsp" %>
 
 <script>
-function updatePidx(pidx) {
+/* function updatePidx(pidx) {
+	alert("호날두");
     // enabled를 0으로 변경한다.
     let fm = document.stateChange;
     if (fm) {
+    	alert("호날두12112");
         fm.method = "post";
+        alert(pidx);
         fm.pidx.value = pidx;
+        alert(fm.pidx.value);
         fm.action = "/admin/proupdate";
         if (confirm("작품을 판매상태로 바꾸겠습니까?"))
             fm.submit();
     } else {
         console.error("Form element not found");
     }
-}
+} */
 /*
 function memberDelete(midx){
 	//delete 한다. 
@@ -59,9 +63,6 @@ function memberDelete(midx){
 	<div id="wrapper">
 	
 	<%@ include file="../include/adminSidebar.jsp" %>
-							<form name="stateChange">
-								<input type="hidden" name="pidx" />
-							</form>
 
                 <div class="container-fluid p-5">
                     <h3 class="mb-3 text-gray-800 fw-bolder">아티스트 신청관리</h3>
@@ -69,14 +70,7 @@ function memberDelete(midx){
                     	${error }
                     </p>
                     
-                    <div>
-<button type="button" class="btn btn-warning" 
-	onclick="location.href='?sField=authority&searchKeyword=ROLE_USER';">일반회원</button>                    		
-<button type="button" class="btn btn-info" 
-	onclick="location.href='?sField=authority&searchKeyword=ROLE_ARTIST';">작가회원</button>
-<button type="button" class="btn btn-dark" 
-	onclick="location.href='?sField=enabled&searchKeyword=0';">탈퇴회원</button>
-                    </div>
+                    
                             <div class="table-responsive">
                                 <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
                                
@@ -149,12 +143,11 @@ function memberDelete(midx){
                                             <c:choose>
 				<c:when test="${ row.state eq '-1' }">
 					<td>
-<button type="button" class="btn btn-secondary" onclick="updatePidx('${row.pidx}');">구매취소</button>
+						구매취소
 					</td>
 				</c:when>
 				<c:when test="${ row.state eq '0' }">
 					<td>
-					<button type="button" class="btn btn-danger" onclick="updatePidx('${ row.pidx }');">영구삭제</button>	
 
 					</td>
 				</c:when>

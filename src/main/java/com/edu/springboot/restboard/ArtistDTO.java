@@ -13,4 +13,14 @@ public class ArtistDTO {
 	private String a_history;
 	private int subscriber;
 	private java.sql.Date regidate;
+	
+	private String account;
+	private String bank;
+	private String owner;
+	
+	private int totalpcnt;
+	private int soldcnt;
+	private int sales;
+	private int tlike;
+	
 }

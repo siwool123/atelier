@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.edu.springboot.restboard.IBoardService;
+import com.edu.springboot.restboard.Order2DTO;
 import com.edu.springboot.restboard.OrderDTO;
 
 @EnableScheduling
@@ -36,12 +38,7 @@ public class SchedulerApplication {
 	
 	@Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
 	public void scheduledFixe() throws InterruptedException{
-		
-//		Date currentDate = new Date();
-//		int subtractDays = 1;
-//		Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(currentDate);
-//        calendar.add(Calendar.DAY_OF_MONTH, -subtractDays);
+
 		LocalDate currentDate = LocalDate.now();
         LocalDate oneDayAgo = currentDate.minusDays(1);
 		
@@ -49,11 +46,15 @@ public class SchedulerApplication {
 		for(OrderDTO od: olist11) {
 			LocalDate orderDate = od.getOrderdate().toLocalDate();
 			if(od.getPaymethod().equalsIgnoreCase("bank")  && orderDate.isBefore(oneDayAgo)) {
+				List<Order2DTO> o2 = daao.selector2("oidx", od.getOidx().toString());
 				
 				daao.updateOrder1(od.getOidx(), "-1");
+				
+				for(Order2DTO o1 : o2) {
+					daao.updatePro(Integer.toString(o1.getPidx()));					
+				}
 			}
 		}
-		System.out.println("호날두");
 //		Thread.sleep(0);
 	}
 

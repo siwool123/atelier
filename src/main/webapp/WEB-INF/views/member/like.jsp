@@ -224,7 +224,7 @@ table.order tr th, table.order tr td {
 			<p>찜한작품을 선택하면 내공간 이미지 위에 작품이 올라갑니다.</p>
 			<p>작품 이미지를 적절한 위치로 움직여 내공간과 조화를 확인하세요.</p>
 
-			<div class="mb-5" id="show_data">
+			<div class="my-5" id="show_data">
 				<c:choose>
 					<c:when test="${ empty plist }">
 						<div class="text-center">등록된 작품이 없습니다.</div>
