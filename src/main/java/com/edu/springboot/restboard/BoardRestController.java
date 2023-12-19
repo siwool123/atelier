@@ -235,4 +235,15 @@ public class BoardRestController {
 		
 		return result;
 	}
+	
+	@PostMapping("/rest/aucmsg")
+	public int aucmsg(HttpServletRequest req, Model model, InfoDTO infoDTO, Principal principal) {
+		int result = 0;
+		int midx = Integer.parseInt(req.getParameter("midx"));
+		int pidx = Integer.parseInt(req.getParameter("pidx"));
+		MemberDTO mdto = dao.mview2(midx);
+		ProductDTO pdto = dao.pview(pidx);
+		
+		return result;
+	}
 }

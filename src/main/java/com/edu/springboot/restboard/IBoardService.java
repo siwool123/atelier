@@ -171,4 +171,7 @@ public interface IBoardService {
 	
 	//경매작품의 입찰자리스트불러오기
 	public List<AMjoinDTO> amjoin(int pidx);
+	
+	//경매작품의 최고입찰자 정보가져오기
+	public AMjoinDTO amjoin2(int pidx);
 }

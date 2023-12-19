@@ -21,6 +21,7 @@ import com.edu.springboot.restboard.ArtistDTO;
 import com.edu.springboot.restboard.EmailSending;
 import com.edu.springboot.restboard.IAdminService;
 import com.edu.springboot.restboard.IBoardService;
+import com.edu.springboot.restboard.InfoDTO;
 import com.edu.springboot.restboard.MemberDTO;
 import com.edu.springboot.restboard.ParameterDTO;
 import com.edu.springboot.restboard.ProductDTO;
@@ -38,6 +39,9 @@ public class AdminController {
 	
 	@Autowired
 	IBoardService dao2;
+	
+	@Autowired
+	EmailSending email;
 	
 	//관리자 로그인 페이지
 	@RequestMapping("/admin")
@@ -261,8 +265,16 @@ public class AdminController {
 		model.addAttribute("pdto", pdto);
 		
 		List<AMjoinDTO> amlist = dao2.amjoin(pidx);
+		AMjoinDTO amdto = dao2.amjoin2(pidx);
 		
 		model.addAttribute("amlist", amlist);
+		model.addAttribute("amdto", amdto);
 		return "admin/aucpview";
 	}
+	
+	@PostMapping("/admin/aucmailsend.do")
+	public String aucmailsend(InfoDTO infoDTO) {
+		email.aucmsg(infoDTO);
+		return "redirect:/admin/aucpview";
+	}	
 }

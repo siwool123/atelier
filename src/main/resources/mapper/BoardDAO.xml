@@ -462,5 +462,11 @@ inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 	
 	<delete id="delProduct">delete from product where pidx=#{param1}</delete>
 	
-	<select id="amjoin" resultType="com.edu.springboot.restboard.AMjoinDTO" >select * from auction2 inner join member on auction2.midx=member.midx where auction2.pidx=#{param1} </select>
+	<select id="amjoin" resultType="com.edu.springboot.restboard.AMjoinDTO" >
+	select * from auction2 inner join member on auction2.midx=member.midx 
+	where auction2.pidx=#{param1} order by auction2.aprice desc </select>
+	
+	<select id="amjoin2" resultType="com.edu.springboot.restboard.AMjoinDTO" >
+	select * from (select * from auction2 inner join member on auction2.midx=member.midx 
+	where auction2.pidx=#{param1} order by auction2.aprice desc) where rownum=1 </select>
 </mapper> 
