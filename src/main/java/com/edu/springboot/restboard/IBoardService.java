@@ -87,6 +87,8 @@ public interface IBoardService {
 	//회원번호로 주문리스트 조회
 	public List<OrderDTO> olist(int midx);
 	
+	public List<OrderDTO> olist11();
+	
 	//입금전 건수 조회
 	public List<OrderDTO> notPaid(int midx); 
 	//배송전 건수 조회
