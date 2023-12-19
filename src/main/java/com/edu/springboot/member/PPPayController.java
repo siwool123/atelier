@@ -49,13 +49,13 @@ public class PPPayController {
     		daao.delCart(Integer.parseInt(order11dto.getPidxList().get(i))); 
     		resultDelCart++;
     	}
-    	resPoint1 = daao.minusPoint(Integer.parseInt(order11dto.getMinus_point()) ,Integer.parseInt(order11dto.getMidx()));
+    	//resPoint1 = daao.minusPoint(Integer.parseInt(order11dto.getMinus_point()) ,Integer.parseInt(order11dto.getMidx()));
     	
     	pointDTO.setMidx(Integer.parseInt(order11dto.getMidx()) );
 		pointDTO.setMinus_point(Integer.parseInt(order11dto.getMinus_point()));
 		pointDTO.setOidx(daao.orderNum(Integer.parseInt(o2oidx)));
 		pointDTO.setAdd_point(Integer.parseInt(order11dto.getAdd_point()));
-		piresult = daao.pminsert(pointDTO);
+		//piresult = daao.pminsert(pointDTO);
 		
 		if(resulto1<=0 || resPoint1<=0 || piresult<=0 || 
 				setsold<order11dto.getPidxList().size() || resultDelCart<order11dto.getPidxList().size()||

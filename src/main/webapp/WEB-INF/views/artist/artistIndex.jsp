@@ -17,7 +17,7 @@
 
 <script>
 $( document ).ready( function() {
-	$('#navbarNavAltMarkup div a:eq(4)').addClass( 'active' );
+	$('#navbarNavAltMarkup div a:eq(5)').addClass( 'active' );
 });
 </script>
 <style>

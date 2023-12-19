@@ -41,25 +41,24 @@ public class ArtistController {
         
         try {
         String id = principal.getName();
-         MemberDTO memberDTO = dao.mview(id);
-         int midx = memberDTO.getMidx();
-         
-         ArtistDTO adto = ardao.aview(midx);
-         adto.setA_history(adto.getA_history().replaceAll("\n", "<br/>"));
-         adto.setA_intro(adto.getA_intro().replaceAll("\n", "<br/>"));
-         
-         System.out.println("aidx: "+adto.getAidx());
-         List<ProductDTO> aplist = ardao.aplist(midx);
-         
-         model.addAttribute("adto", adto);
-         model.addAttribute("aplist", aplist);
-         model.addAttribute("soldsum", ardao.solselect(adto.getAidx()));
-         model.addAttribute("likesum", ardao.likesum(adto.getAidx()));
+        MemberDTO memberDTO = dao.mview(id);
+        int midx = memberDTO.getMidx();
+        
+        ArtistDTO artistDTO = ardao.aview(midx);
+        artistDTO.setA_intro(artistDTO.getA_intro().replaceAll("\n", "<br/>"));
+        artistDTO.setA_history(artistDTO.getA_history().replaceAll("\n", "<br/>"));
+        
+        List<ProductDTO> aplist = ardao.aplist(midx);
+        
+        model.addAttribute("mdto", memberDTO);
+        model.addAttribute("adto", artistDTO);
+        model.addAttribute("aplist", aplist);
+        model.addAttribute("soldsum", ardao.solselect(artistDTO.getAidx()));
+        model.addAttribute("likesum", ardao.likesum(artistDTO.getAidx()));
         }catch(Exception e) {
         	e.printStackTrace();
         	System.out.println("작가정보조회실패");
         }
-               
 		return "artist/profile";
 	}
 	

@@ -13,9 +13,14 @@
 		select * from product where midx=#{param1}
 	</select>
 	
-	<!-- 작가정보수정 -->
-	<update id="aupdate" parameterType="com.edu.springboot.restboard.ArtistDTO">
-		update artist set a_intro=#{a_intro}, a_history=#{a_history}
+	<!-- 작가 소개 수정 -->
+	<update id="aintroupdate" parameterType="com.edu.springboot.restboard.ArtistDTO">
+		update artist set a_intro=#{a_intro} where aidx=#{aidx}
+	</update>
+	
+	<!-- 작가 소개 수정 -->
+	<update id="ahistoryupdate" parameterType="com.edu.springboot.restboard.ArtistDTO">
+		update artist set a_history=#{a_history} where aidx=#{aidx}
 	</update>
 
 	<!-- 작가별 판매 중 작품 갯수 조회 -->
@@ -29,8 +34,7 @@
 	</select>
 	
 	<!-- 작가별 판매된 작품들의 총가격 합산 -->
-	<select id="sumselect" parameterType="com.edu.springboot.restboard.ProductDTO"
-		resultType="int">
+	<select id="sumselect">
 		select sum(price) from product where aidx=#{param1} and sold=0
 	</select>
 	
@@ -47,9 +51,8 @@
 	</select>
 	
 	<!-- 작가별 배송전 상품의 갯수 -->
-	<select id="shipsselect" parameterType="com.edu.springboot.restboard.ArtistDTO"
-		resultType="int">
-		select count(*) from shipment inner join order2 on shipment.oidx = order2.oidx where shipment.shipped = 0 and order2.aidx = #{param1}	
+	<select id="shipsselect" parameterType="com.edu.springboot.restboard.ArtistDTO" >
+		select count(*) from shipment inner join order2 on shipment.oidx = order2.oidx where shipment.shipped = 0 and order2.aidx = #{param1}
 	</select>
 	
 	<!-- 작가별 받은 좋아요 갯수의 합 -->
