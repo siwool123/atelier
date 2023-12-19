@@ -17,6 +17,8 @@ public interface IAdminService {
 	public int artistTotalCount(ParameterDTO parameterDTO);
 	public ArrayList<ApplyDTO> artistList(ParameterDTO parameterDTO);
 	public ApplyDTO artistView(ParameterDTO parameterDTO);
+	public int artistPassChange(ParameterDTO parameterDTO);
+	public int artistNewInsert(ApplyDTO applyDTO);
 	
 	//작가관리
 	public List<ArtistDTO> alist2();

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.edu.springboot.restboard.ApplyDTO;
 import com.edu.springboot.restboard.ArtistDTO;
@@ -142,8 +143,39 @@ public class AdminController {
 	@RequestMapping("/admin/artistApplyView")
 	public String adminArtistView(Model model, ParameterDTO parameterDTO) {
 		
-		model.addAttribute("row", dao.artistView(parameterDTO));
+		ApplyDTO applyDTO = dao.artistView(parameterDTO);
+		if(applyDTO.getPass()==null) {
+			model.addAttribute("checkedX", "checked");
+		}
+		else {
+			if(applyDTO.getPass().equals("1"))
+				model.addAttribute("checked1", "checked");
+			else if(applyDTO.getPass().equals("0"))
+				model.addAttribute("checked0", "checked");	
+		}
+		
+		model.addAttribute("row", applyDTO);
 		return "admin/artistApplyView";
+	}
+
+	@RequestMapping("/admin/artistPassChange")
+	@ResponseBody
+	public String artistPassChange(ParameterDTO parameterDTO) {
+		String retValue = "success";
+		
+		int result = dao.artistPassChange(parameterDTO);
+		if(result==0)
+			retValue = "fail";
+		
+		//합격이라면 artist테이블에 insert
+		if(parameterDTO.getPass().equals("1")) {
+			//신청정보 불러오기
+			ApplyDTO applyDTO = dao.artistView(parameterDTO);
+			System.out.println("applyDTO="+ applyDTO);
+			dao.artistNewInsert(applyDTO);
+		}
+		
+		return retValue;
 	}
 		
 	//아티스트 관리 목록

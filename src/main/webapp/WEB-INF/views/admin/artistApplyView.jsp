@@ -11,6 +11,7 @@
 <link href="../css/sb-admin-2.min.css" rel="stylesheet" type="text/css">
 <link href="../css/all.min.css" rel="stylesheet" type="text/css">
 <link href="../css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
 .no-gutters {padding:0 10px !important;}
 table.dataTable {border-collapse:collapse !important;}
@@ -23,30 +24,47 @@ table.dataTable {border-collapse:collapse !important;}
 <%@ include file="../include/header.jsp" %>
 
 <script>
-function memberLeave(midx){
-	//enabled를 0으로 변경한다.
-	let fm = document.stateChange;
-	fm.method = "post";
-	fm.midx.value = midx;
-	fm.action = "/admin/memberLeave";
-	if(confirm("강제탈퇴 처리하시겠습니까?"))
-		fm.submit();
-}
-function memberDelete(midx){
-	//delete 한다. 
-	let fm = document.stateChange;
-	fm.method = "post";
-	fm.midx.value = midx;
-	fm.action = "/admin/memberDelete";
-	if(confirm("영구삭제 처리하시겠습니까?"))
-		fm.submit();
+function stateUpdate(aIdx, pVal){
+	console.log(aIdx, pVal);
+	let params = {apply_idx : aIdx, pass : pVal};
+	let str = '합격';
+	if(pVal==0)
+		str = '불합격';
+	
+	if(confirm(str+'으로 처리할까요? 완료후에는 되돌릴 수 없습니다.')){
+		$.ajax({
+			url : '/admin/artistPassChange',  
+			type : 'get', 
+			data : params,
+			dataType : "text", 
+			success : function(resData){
+				console.log(resData);
+				if(resData=='success'){
+					alert('상태가 업데이트 되었습니다.');
+					if(pVal==0)
+						$('#stateBtn').html('<button type="button" class="btn btn-dark">불합격</button>');
+					else
+						$('#stateBtn').html('<button type="button" class="btn btn-info">합격</button>');
+				}
+				else{
+					alert('업데이트 중 오류가 발생하였습니다.');
+				}
+			},		 
+			error : function(errData){ 
+				console.log(errData.state, errData.statusText); 
+			},
+		});
+	}
+	else{
+		event.preventDefault();
+	}
 }
 </script>
 <style>
 .portImg{max-width:50px;margin-right:5px;}
 </style>
 <form name="stateChange">
-	<input type="hidden" name="midx" />
+	<input type="hidden" name="pass" />
 </form>
 	<div id="wrapper">
 	
@@ -87,8 +105,42 @@ function memberDelete(midx){
 <c:if test="${ not empty row.apply10 }"><img src="/uploads/${ row.apply10 }" class="portImg" /></c:if>                                            
                                 		</td>
                                 	</tr>
+                                	<tr>
+                                		<td>작가소개</td>
+                                		<td>${row.a_intro}</td>
+                                	</tr>
+                                	<tr>
+                                		<td>작가연혁</td>
+                                		<td>${row.a_history}</td>
+                                	</tr>
+                                	<tr>
+                                		<td>작가심사</td>
+                                		<td id='stateBtn'>
+<c:choose>
+	<c:when test="${checkedX eq 'checked' }">
+		<label><input type="radio" name="pass" value="x" onclick="" ${checkedX } />심사중</label>
+		&nbsp;&nbsp;
+		<label><input type="radio" name="pass" value="1" onclick="stateUpdate('${param.apply_idx}', '1');" ${checked1 } />합격</label>
+		&nbsp;&nbsp;
+		<label><input type="radio" name="pass" value="0" onclick="stateUpdate('${param.apply_idx}', '0');" ${checked0 } />불합격</label>
+	</c:when>
+	<c:otherwise>
+		<c:if test="${checked1 eq 'checked' }">
+			<button type="button" class="btn btn-info" onclick="alert('합격입니다^^;');">합격</button>
+		</c:if>
+		<c:if test="${checked0 eq 'checked' }">
+			<button type="button" class="btn btn-dark" onclick="alert('불합격입니다ㅜㅜ');">불합격</button>
+		</c:if>
+	</c:otherwise>
+</c:choose>                                		
+	
+                                		</td>
+                                	</tr>
                                 </tbody>
                                 </table>
+                                <div>
+                               		<button type="button" class="btn btn-secondary" onclick="location.href='/admin/artistApply';">목록보기</button> 
+                                </div>
                             </div>
 
                 </div>
