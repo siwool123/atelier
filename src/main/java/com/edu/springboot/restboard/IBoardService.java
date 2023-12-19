@@ -169,5 +169,6 @@ public interface IBoardService {
 	//작품삭제(관리자기능)
 	public int delProduct(int pidx);
 	
-	
+	//경매작품의 입찰자리스트불러오기
+	public List<AMjoinDTO> amjoin(int pidx);
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.edu.springboot.restboard.AMjoinDTO;
 import com.edu.springboot.restboard.ApplyDTO;
 import com.edu.springboot.restboard.ArtistDTO;
 import com.edu.springboot.restboard.EmailSending;
@@ -250,5 +251,18 @@ public class AdminController {
 		List<ProductDTO> auclist = dao2.selProduct(parameterDTO);
 		model.addAttribute("auclist", auclist);
 		return "admin/aucproduct";
+	}
+	
+	//경매작품상세보기
+	@RequestMapping("/admin/aucproduct/view")
+	public String aucpview(Model model, HttpServletRequest req) {
+		int pidx = Integer.parseInt(req.getParameter("pidx"));
+		ProductDTO pdto = dao2.pview(pidx);
+		model.addAttribute("pdto", pdto);
+		
+		List<AMjoinDTO> amlist = dao2.amjoin(pidx);
+		
+		model.addAttribute("amlist", amlist);
+		return "admin/aucpview";
 	}
 }

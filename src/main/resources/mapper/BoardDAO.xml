@@ -50,8 +50,8 @@
 		</choose>
 	</select>
 
-	<select id="selectProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
-		<!-- select * from product -->
+	<select id="selectProduct" resultType="com.edu.springboot.restboard.ProductDTO" 
+	parameterType="com.edu.springboot.restboard.ParameterDTO">
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT * FROM product where auction=0 
@@ -462,5 +462,5 @@ inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 	
 	<delete id="delProduct">delete from product where pidx=#{param1}</delete>
 	
-	
+	<select id="amjoin" resultType="com.edu.springboot.restboard.AMjoinDTO" >select * from auction2 inner join member on auction2.midx=member.midx where auction2.pidx=#{param1} </select>
 </mapper> 

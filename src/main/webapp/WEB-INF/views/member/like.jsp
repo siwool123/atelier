@@ -73,7 +73,6 @@ table.order tr th, table.order tr td {
 <link href="./css/atelier.css" rel="stylesheet" type="text/css" />
 
 <script>
-	
 	function placeVal(form) {
 		//이미지 용량 제한
 		let maxSize = 4 * 1024 * 1024; //* 4MB 사이즈 제한
@@ -97,20 +96,15 @@ table.order tr th, table.order tr td {
 	
 	//이미지 선택시 내공간에 띄우기
 	function loadChkImg(chk) {
-		
 		console.log(chk.id);
 		console.log(chk.checked);
-		
 		/*이미지 태그 name 값 마지막 부분(숫자로 되어있음)을 잘라 num이라는 변수로 선언한다.
 		이하 div태그 들에도 num을 붙여 뷰에서 foreach로 생성한 엘리먼트들에 각각 대응한다.*/ 
 		let num = chk.id.slice(-1);
-		
 		//체크박스가 활성화된 경우
 		if(chk.checked==true) {
-			
 			//이미지가 들어갈 박스 불러오기
 			let placeBack = document.getElementById('placeBack');
-			
 		 	//새로운 img 태그 만들기
 			var selectedImg = document.createElement("img");
 		    //이미지 src 가져오기
@@ -121,7 +115,6 @@ table.order tr th, table.order tr td {
 			selectedImg.setAttribute('style', 'max-width: 150px; box-shadow: 2px 2px 4px #333; z-index:99;');
 		    //이미지를 placeBack Div에 추가
 			placeBack.append(selectedImg);
-		    
 		    //새로운 input 태그 만들기
 		    var imgWidth = document.createElement("input");
 		    //id 및 속성 부여
@@ -131,11 +124,9 @@ table.order tr th, table.order tr td {
 		    imgWidth.setAttribute('placeholder', ''+num+'번째 이미지의 가로 크기(픽셀)');
 		    imgWidth.setAttribute('style', 'magin: 0 auto;')
 		    imgWidth.setAttribute('class', 'm-2')
-		    
 		    var inputDiv = document.getElementById('inputDiv');
 		    //inputDiv 자식으로 input 추가
 		    inputDiv.append(imgWidth);
-			
 		} else {
 			//체크박스가 비활성화된 경우 이미지 삭제
 			document.getElementById('selImg'+num).remove();
@@ -147,17 +138,14 @@ table.order tr th, table.order tr td {
 			document.getElementById('selImg'+num).setAttribute('style','max-width: '+event.target.value+'; box-shadow: 2px 2px 4px #333; z-index:99;')
 		})
 		
-		
 		// 드래그 셀렉션 막기
 		const draggableElement = document.getElementById('selImg'+num);
 		draggableElement.addEventListener('mousedown', function(event) {
 		    event.preventDefault(); // 드래그 기본 동작 막기
 		});
 		
-		
 		//draggable 기능
 		const draggable = document.getElementById('selImg'+num);
-		
 		let isDragging = false;
 		let offsetX, offsetY;
 		
@@ -166,20 +154,15 @@ table.order tr th, table.order tr td {
 			offsetX = event.offsetX;
 			offsetY = event.offsetY;
 		});
-		
 		draggable.addEventListener('mousemove', function(event) {
 			if (isDragging) {
 				draggable.style.position = 'absolute';
 				draggable.style.left = (event.clientX - offsetX) + 'px';
 				draggable.style.top = (event.clientY - offsetY) + 'px';
 			}
-			
 		});
-		
 		draggable.addEventListener('mouseup', function(event) {
-			if (isDragging) {
-				isDragging = false;
-			}
+			if (isDragging) { isDragging = false; }
 		});
 	}
 </script>

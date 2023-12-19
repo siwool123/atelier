@@ -130,15 +130,6 @@ public class MemberController {
 	
 	@RequestMapping("member/like")
 	public String like(Principal principal, Model model, HttpServletRequest req, ParameterDTO parameterDTO, MemberDTO memberDTO) {
-		System.out.println(parameterDTO);
-		if(req.getParameter("sWord")!=null) {
-			parameterDTO.getSWord().clear();
-			for(String str : req.getParameter("sWord").split(" ")) {
-				System.out.println(str); parameterDTO.getSWord().add(str);}
-			}
-		int ppmin = dao2.minprice();
-		int ppmax = dao2.maxprice();
-		System.out.println(parameterDTO);
 		int totalCount = dao2.totalLikeCount(dao.mview(principal.getName()).getMidx());
 		//페이징을 위한 설정값(하드코딩)
 		//int pageSize = 3;//한 페이지당 게시물 수
