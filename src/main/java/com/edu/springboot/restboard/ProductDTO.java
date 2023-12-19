@@ -28,6 +28,7 @@ public class ProductDTO {
 	private String m_name;
 	private String material;
 	private int ridx;
+	private String bgimg;
 	
 	private Date enddate;
 }

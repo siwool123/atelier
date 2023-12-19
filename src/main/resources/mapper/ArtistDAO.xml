@@ -59,4 +59,9 @@
 	<select id="likesum" resultType="int">
 		select count(*) from p_like where aidx=#{param1}
 	</select>
+	
+	<insert id="prodinsert" parameterType="com.edu.springboot.restboard.ProductDTO">
+		Insert into product (TITLE,PIDX,AIDX,SIZE2,SIZE1,THEME,P_TYPE,PRICE,P_INTRO,FRAMED,SFILE,MIDX,M_NAME,BGIMG,enddate)
+    		values (#{title}, seq_product.nextval, #{aidx}, #{size2}, #{size1}, #{theme}, #{p_type}, #{price}, #{p_intro}, #{framed}, #{sfile}, #{midx}, #{m_name}, #{bgimg},#{enddate})
+	</insert>
 </mapper> 

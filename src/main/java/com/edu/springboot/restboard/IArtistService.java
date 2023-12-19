@@ -41,4 +41,7 @@ public interface IArtistService {
 	//작가별 좋아요 받은 상품 갯수의 합
 	public int likesum(int aidx);
 	
+	//판매 작품 등록
+	public int prodinsert(ProductDTO productDTO);
+	
 }

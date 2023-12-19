@@ -39,4 +39,5 @@ public class ArtistRestController {
 		editResult = ardao.ahistoryupdate(adto);
 		return editResult;
 	}
+	
 }
