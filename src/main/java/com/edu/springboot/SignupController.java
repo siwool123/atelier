@@ -171,7 +171,7 @@ public class SignupController {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String securePw = encoder.encode(memberDTO.getPass());
 		System.out.println(securePw);
-		memberDTO.setPass(securePw); //암호화하여 저장 
+		memberDTO.setPass(securePw); //암호화하여 저장  
 		
 		result = dao.minsert(memberDTO);
 		
