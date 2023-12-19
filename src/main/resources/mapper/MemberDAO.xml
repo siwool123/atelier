@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.edu.springboot.restboard.IMemberService">
+	
+	<!-- 회원 목록 출력 -->
+	<select id="mlist" resultType="com.edu.springboot.restboard.MemberDTO"> 
+		select * from member order by regidate desc
+	</select>
+	
+	<!-- 회원 등록 -->
+	<insert id="minsert" parameterType="com.edu.springboot.restboard.MemberDTO"> 
+		insert into member (id, pass, m_name, phone, zip, addr1, addr2, midx) values 
+			(#{id}, #{pass}, #{m_name}, #{phone}, #{zip}, #{addr1}, #{addr2}, seq_member.nextval)
+	</insert> 
+	
+	<!-- 회원 정보 인출 -->
+	<select id="mview" resultType="com.edu.springboot.restboard.MemberDTO">
+		select * from member where id=#{param1}
+	</select>
+	
+	<!-- 회원 정보 수정 -->
+	<update id="mupdate" parameterType="com.edu.springboot.restboard.MemberDTO"> 
+		update member set pass=#{pass}, m_name=#{m_name}, zip=#{zip}, addr1=#{addr1}, addr2=#{addr2}
+		where id=#{id}
+	</update> 
+	
+	<!-- 프로필 사진 수정 -->
+	<update id="mpupdate" parameterType="com.edu.springboot.restboard.MemberDTO">
+		update member set profiles=#{profiles}
+		where id = #{id}
+	</update>
+	
+	<!-- 프로필 사진 삭제 -->
+	<update id="mpdelete" parameterType="com.edu.springboot.restboard.MemberDTO">
+		update member set profiles='null'
+		where id = #{id}
+	</update>
+	
+	<!-- 회원 탈퇴 -->
+	<update id="leave"> update member set enabled=0 where id=#{param1} </update>
+	
+	<!-- 회원삭제 -->
+	<delete id="mdelete"  parameterType="com.edu.springboot.restboard.MemberDTO"> 
+		delete from member where id=#{id}
+	</delete>
+	
+	<!-- 비번변경 -->
+	<update id="mpedit" parameterType="com.edu.springboot.restboard.MemberDTO"> 
+		update member set pass=#{pass} where id=#{id} 
+	</update>
+	
+	<!-- 프로필 업로드 -->
+	<update id="uploadProfile" parameterType="com.edu.springboot.restboard.MemberDTO">
+		update member set profiles=#{profiles} where id=#{id}
+	</update>
+	
+	<!-- 작가신청 사진 업로드 -->
+	<update id="aaupdate" parameterType="com.edu.springboot.restboard.ApplyDTO">
+		update apply set apply1=#{apply1} where id=#{id}
+	</update>
+	
+	<!-- 프로필 업로드 -->
+	<update id="mplupdate" parameterType="com.edu.springboot.restboard.MemberDTO">
+		update member set places=#{places} where id=#{id}
+	</update>
+	
+</mapper>
