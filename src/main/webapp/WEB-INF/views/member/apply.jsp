@@ -112,8 +112,8 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			$('#ta_count').html($(this).val().length);
 			if($(this).val().length>800){
 				alert("작가 소개는 800자 이내로 입력해주세요.");
-				$(this).val($(this).val().substring(0,80));
-				$('#ta_count').html("80");
+				$(this).val($(this).val().substring(0,800));
+				$('#ta_count').html("800");
 				$(this).focus(); 
 			}
 		});

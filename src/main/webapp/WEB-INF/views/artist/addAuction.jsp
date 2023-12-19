@@ -156,6 +156,17 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function addProdValidate(form) {
+	/* if(form.enddate.value=="") {
+		alert('경매 종료일을 선택해주세요.');
+		form.enddate.focus(); return false;
+	}
+	let now = new Date();
+	let dDate = new Date(form.enddate.value);
+	console.log(now+dDate);
+	if(dDate - now > 30) {alert('경매 종료일은 현재로부터 30일 이전까지만 설정 가능합니다.') return false;}
+	if(dDate < now) {alert('경매 종료일이 현재보다 과거입니다.') return false; 
+	
+	} */
 	//작가 소개 글자수 검증
 	if(form.title.value.length<2 || form.title.value.length>80) {
 		alert('작품명은 2자 이상 80자 이내로 입력해주세요.');
@@ -203,21 +214,20 @@ function addProdValidate(form) {
 		<div class="col-sm-10" style="padding-left:50px;">
 			<ul class="nav nav-tabs" style="width: 112px; float: right;">
 				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="sell-tab" data-bs-toggle="tab" data-bs-target="#sellP" type="button" role="tab" aria-controls="sell" aria-selected="true" onClick="location.href='/artist/addProduct'">
+					<button class="nav-link" id="sell-tab" data-bs-toggle="tab" data-bs-target="#sellP" type="button" role="tab" aria-controls="sell" aria-selected="false" onClick="location.href='/artist/addProduct'">
 						판매
 					</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="auction-tab" data-bs-toggle="tab" data-bs-target="#auctionP" type="button" role="tab" aria-controls="sell" aria-selected="false" onClick="location.href='/artist/addAuction'">
+					<button class="nav-link active" id="auction-tab" data-bs-toggle="tab" data-bs-target="#auctionP" type="button" role="tab" aria-controls="sell" aria-selected="true" onClick="location.href='/artist/addAuction'">
 						경매
 					</button>
 				</li>
 			</ul>
 			<!-- <span class="btn1" style="float: right; cursor: pointer;">경매</span>
 			<span class="btn1" style="float: right; cursor: pointer;">판매</span> -->
-			
-			<p class="headerL2 mb-5">판매작품 등록</p>
-			<form id="addProdFrm" action="/artist/addProduct.do" onSubmit="return addProdValidate(this);" enctype="multipart/form-data" method="post">
+			<p class="headerL2 mb-5">경매작품 등록</p>
+			<form id="addProdFrm" action="" onSubmit="return addProdValidate(this);" enctype="multipart/form-data" method="post">
 			<table class="mt-4" style="width: 85%;">
 				<colgroup>
 					<col width="15%"/>
@@ -236,11 +246,11 @@ function addProdValidate(form) {
 				</tr>
 				<tr style="height: 80px;">
 					<td>
-						<span>희망 판매가</span><br/>
+						<span>경매 시작가</span><br/>
 						<span style="color: gray;">(원)</span>
 					</td>
 					<td colspan="3">
-						<input type="number" name="price" style="width: 40%;"/>
+						<input type="number" name="price" min="10000" step="10000" style="width: 40%;" />
 						<span style="color: red;">판매수수료의 10%를 제외한 나머지가 정산됩니다.</span>
 					</td>
 				</tr>
@@ -249,13 +259,13 @@ function addProdValidate(form) {
 						<span>가로 사이즈(cm)</span>
 					</td>
 					<td>
-						<input name="size1" type="number"/>
+						<input name="size1" type="number" min="10"/>
 					</td>
 					<td>
 						<span>세로 사이즈(cm)</span>
 					</td>
 					<td>
-						<input name="size2" type="number"/>
+						<input name="size2" type="number" min="10"/>
 					</td>
 				</tr>
 				<tr style="height: 80px;">
@@ -347,9 +357,21 @@ function addProdValidate(form) {
 					</td>
 				</tr>
 				<tr style="height: 80px;">
+					<td colspan="4">
+						<p>경매종료일은 등록일로부터 최대 30일 내에서 설정 가능합니다.</p>
+					</td>
+				</tr>
+				<tr style="height: 80px;">
+					<td>
+						<span>경매종료일</span>
+					</td>
+					<td colspan="3">
+						<input type="date" id="enddate" name="enddate" style="width: 200px"/>
+					</td> 
+				</tr>
+				<tr style="height: 50px;">
 					<td class="text-center" colspan="4">
-						<input type="hidden" id="enddate" name="enddate" value=null/>
-						<input type="submit" class="btn btn-dark" style="max-width: 105px; height: 40px;" value="판매 상품 등록"/>
+						<input type="submit" class="btn btn-dark" style="max-width: 105px; height: 40px;" value="경매 상품 등록"/>
 					</td>
 				</tr>
 			</table>

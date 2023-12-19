@@ -17,11 +17,19 @@ table.order tr th, table.order tr td {padding-left:20px;}
 .headerL4 {border-left:5px solid black; font-weight:900; letter-spacing: 0.2em; padding-left: 23px; margin-top:100px; font-size: 16px;}
 #imgmask {border-radius: 50%; width: 100px; height:100px; overflow:hidden; }
 #profileImage {width: 100px; vertical-align: top; }
+span.count {position: relative; top: -30px; float: right; right: 15px;}
+
 </style>
 
 <script>
 function editIntro(){
 	let a_intro = document.getElementById("a_intro").value;
+	
+	//작가 소개 글자수 검증
+	if(a_intro.length<80 || a_intro.length>800) {
+		alert('작가 소개는 80자 이상, 800자 이내로 작성해주세요.');
+		form.a_intro.focus(); return;
+	}
 	
 	// XMLHttpRequest 객체 생성
     let xhr = new XMLHttpRequest();
@@ -50,6 +58,12 @@ function editIntro(){
 function editHistory(){
 	let a_history = document.getElementById("a_history").value;
 	
+	//작가 약력 글자수 검증
+	if(a_history.length<80 || a_history.length>800) {
+		alert('작가 약력은 80자 이상, 800자 이내로 작성해주세요.');
+		form.a_history.focus(); return;
+	}
+	
 	// XMLHttpRequest 객체 생성
     let xhr = new XMLHttpRequest();
 	
@@ -73,6 +87,34 @@ function editHistory(){
  	// 요청 전송
     xhr.send('a_history=' + encodeURIComponent(a_history));
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+	const aIntro = document.getElementById('a_intro');
+	const taCount = document.getElementById('ta_count');
+	const aHistory = document.getElementById('a_history');
+	const taCount2 = document.getElementById('ta_count_2');
+
+	aIntro.addEventListener('input', function () {
+		taCount.textContent = this.value.length;
+		if (this.value.length > 800) {
+		  alert("작가 소개는 800자 이내로 입력해주세요.");
+		  this.value = this.value.substring(0, 800);
+		  taCount.textContent = "800";
+		  this.focus();
+		}
+	});
+
+	aHistory.addEventListener('input', function () {
+		taCount2.textContent = this.value.length;
+		if (this.value.length > 800) {
+			alert("작가 약력은 800자 이내로 입력해주세요.");
+			this.value = this.value.substring(0, 800);
+			taCount2.textContent = "800";
+			this.focus();
+		}
+	});
+});
+
 </script>
 
 <%@ include file="artistIndex.jsp" %>
@@ -110,13 +152,14 @@ function editHistory(){
 		       		</div>
 		       		<div class="headerL2" style="clear: both;">작가소개</div>
 		       		<span class="border btn1" style="float: right; cursor: pointer;" onClick="editIntro();">수정</span>
-		       		${apdto.a_intro }
 			        <textarea id="a_intro" class="form-control mt-3" rows="11" style="white-space:pre-wrap; word-wrap: break-word;"> ${not empty adto ? adto.a_intro : "등록 정보가 없습니다." }</textarea>
+			        <span class="count"> <span id="ta_count">${adto.a_intro.length() } </span> / 800</span>
 		       	</div>
 		        <div class="col-sm-6">
 		            <div class="headerL2" style="margin-top:10px !important;">작가이력</div>
 		            <span class="border btn1" style="float: right; cursor: pointer;" onClick="editHistory();">수정</span>
 				        <textarea id="a_history" class="form-control mt-3" rows="30" style="white-space:pre-wrap; word-wrap: break-word;"> ${not empty adto ? adto.a_history : "등록 정보가 없습니다." } </textarea>
+				        <span class="count"> <span id="ta_count">${adto.a_history.length() } </span> / 800</span>
 		        </div>
 		    </div>
 		

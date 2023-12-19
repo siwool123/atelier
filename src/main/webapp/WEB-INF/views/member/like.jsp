@@ -91,8 +91,6 @@ table.order tr th, table.order tr td {
 	
 	//이미지 선택시 내공간에 띄우기
 	function loadChkImg(chk) {
-		console.log(chk.id);
-		console.log(chk.checked);
 		/*이미지 태그 name 값 마지막 부분(숫자로 되어있음)을 잘라 num이라는 변수로 선언한다.
 		이하 div태그 들에도 num을 붙여 뷰에서 foreach로 생성한 엘리먼트들에 각각 대응한다.*/ 
 		let num = chk.id.slice(-1);
