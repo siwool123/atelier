@@ -19,6 +19,9 @@
             <li class="nav-item"><a class="nav-link memmber" href="/admin/member"><i class="fas fa-fw fa-table"></i> <span>회원관리</span></a></li>
             <li class="nav-item"><a class="nav-link apply" href="/admin/artistApply"><i class="fas fa-fw fa-table"></i> <span>작가신청관리</span></a></li>
             <li class="nav-item"><a class="nav-link artist" href="/admin/artist"><i class="fas fa-fw fa-table"></i> <span>작가관리</span></a></li>
+            <li class="nav-item"><a class="nav-link artist" href="/admin/saleproduct"><i class="fas fa-fw fa-table"></i> <span>판매작품관리</span></a></li>
+            <li class="nav-item"><a class="nav-link artist" href="/admin/aucproduct"><i class="fas fa-fw fa-table"></i> <span>경매작품관리</span></a></li>
+            
             <hr class="sidebar-divider d-none d-md-block">
             
             

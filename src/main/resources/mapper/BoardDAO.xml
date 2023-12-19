@@ -212,6 +212,9 @@
 		SELECT * FROM member WHERE id = #{param1}
 	</select>
 	
+	<select id="mview2" resultType="com.edu.springboot.restboard.MemberDTO">
+		SELECT * FROM member WHERE midx = #{param1}
+	</select>
 	
 	<insert id="write" >
 		INSERT INTO product (pidx, title, content, id) VALUES (seq_product.nextval, #{title}, #{content}, #{id})
@@ -247,6 +250,9 @@
 		<choose>
 			<when test="status != null and !status.isEmpty() and status.equals('aa')"> and sold = 0</when>
 			<when test="status != null and !status.isEmpty() and status.equals('bb')"> and sold = 1</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('aa')"> and enddate &gt; sysdate</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('bb')"> and enddate &lt; sysdate and maxprice is null</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('cc')"> and enddate &lt; sysdate and maxprice is not null</when>
 		</choose>
 	</select>
 	
@@ -442,5 +448,19 @@ inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 	</select>
 	
 	<update id="updatepm"> update product set maxprice = #{param2} where pidx = #{param1} </update>
+	
+	<select id="selProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM product where auction=#{auction} 
+		<choose>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> and sold = 1</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> and sold = 0</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('aa')"> and enddate &gt; sysdate</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('bb')"> and enddate &lt; sysdate and maxprice is null</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('cc')"> and enddate &lt; sysdate and maxprice is not null</when>
+		</choose>
+	</select>
+	
+	<delete id="delProduct">delete from product where pidx=#{param1}</delete>
+	
 	
 </mapper> 

@@ -29,4 +29,5 @@ public class OrderDTO {
 	
 	private int add_point;
 	private int minus_point;
+	private int cancel;
 }
