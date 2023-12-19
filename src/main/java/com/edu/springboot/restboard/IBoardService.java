@@ -37,6 +37,7 @@ public interface IBoardService {
 	public ArtistDTO aviewbym(int midx);
 	public ReviewDTO rview(int pidx);
 	public MemberDTO mview(String user_id);
+	public MemberDTO mview2(int midx);
 	public List<CartDTO> cview(int midx);
 	
 	//게시물작성
@@ -85,6 +86,8 @@ public interface IBoardService {
 	
 	//회원번호로 주문리스트 조회
 	public List<OrderDTO> olist(int midx);
+	
+	public List<OrderDTO> olist11();
 	
 	//입금전 건수 조회
 	public List<OrderDTO> notPaid(int midx); 
@@ -162,5 +165,15 @@ public interface IBoardService {
 	//경매내역가져오기
 	public List<AUPjoinDTO> aucpjoin2(ParameterDTO parameterDTO);
 	
+	//전체판매작품/경매작품조회
+	public List<ProductDTO> selProduct(ParameterDTO parameterDTO);
 	
+	//작품삭제(관리자기능)
+	public int delProduct(int pidx);
+	
+	//경매작품의 입찰자리스트불러오기
+	public List<AMjoinDTO> amjoin(int pidx);
+	
+	//경매작품의 최고입찰자 정보가져오기
+	public AMjoinDTO amjoin2(int pidx);
 }

@@ -50,8 +50,8 @@
 		</choose>
 	</select>
 
-	<select id="selectProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
-		<!-- select * from product -->
+	<select id="selectProduct" resultType="com.edu.springboot.restboard.ProductDTO" 
+	parameterType="com.edu.springboot.restboard.ParameterDTO">
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT * FROM product where auction=0 
@@ -212,6 +212,9 @@
 		SELECT * FROM member WHERE id = #{param1}
 	</select>
 	
+	<select id="mview2" resultType="com.edu.springboot.restboard.MemberDTO">
+		SELECT * FROM member WHERE midx = #{param1}
+	</select>
 	
 	<insert id="write" >
 		INSERT INTO product (pidx, title, content, id) VALUES (seq_product.nextval, #{title}, #{content}, #{id})
@@ -247,6 +250,9 @@
 		<choose>
 			<when test="status != null and !status.isEmpty() and status.equals('aa')"> and sold = 0</when>
 			<when test="status != null and !status.isEmpty() and status.equals('bb')"> and sold = 1</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('aa')"> and enddate &gt; sysdate</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('bb')"> and enddate &lt; sysdate and maxprice is null</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('cc')"> and enddate &lt; sysdate and maxprice is not null</when>
 		</choose>
 	</select>
 	
@@ -293,6 +299,10 @@
 	
 	<select id="olist" resultType="com.edu.springboot.restboard.OrderDTO">
 		SELECT * FROM order1 WHERE midx=#{param1}
+	</select>
+	
+	<select id="olist11" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order1
 	</select>
 	
 	<select id="notPaid" resultType="com.edu.springboot.restboard.OrderDTO">
@@ -443,4 +453,24 @@ inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 	
 	<update id="updatepm"> update product set maxprice = #{param2} where pidx = #{param1} </update>
 	
+	<select id="selProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM product where auction=#{auction} 
+		<choose>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> and sold = 1</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> and sold = 0</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('aa')"> and enddate &gt; sysdate</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('bb')"> and enddate &lt; sysdate and maxprice is null</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('cc')"> and enddate &lt; sysdate and maxprice is not null</when>
+		</choose>
+	</select>
+	
+	<delete id="delProduct">delete from product where pidx=#{param1}</delete>
+	
+	<select id="amjoin" resultType="com.edu.springboot.restboard.AMjoinDTO" >
+	select * from auction2 inner join member on auction2.midx=member.midx 
+	where auction2.pidx=#{param1} order by auction2.aprice desc </select>
+	
+	<select id="amjoin2" resultType="com.edu.springboot.restboard.AMjoinDTO" >
+	select * from (select * from auction2 inner join member on auction2.midx=member.midx 
+	where auction2.pidx=#{param1} order by auction2.aprice desc) where rownum=1 </select>
 </mapper> 

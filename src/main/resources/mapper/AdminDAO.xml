@@ -35,9 +35,16 @@
 	
 	<!-- 아티스트 카운트 -->
 	<select id="artistTotalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
-		SELECT COUNT(*) from apply
-		<if test="searchKeyword!=null and !searchKeyword.equals('')"> 
-			WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+		SELECT COUNT(*) from apply A INNER JOIN member M ON A.midx=M.midx
+		<if test="searchKeyword!=null">
+			<choose>
+				<when test="searchKeyword eq 'x'.toString()">
+					WHERE ${sField} is null
+				</when>
+				<otherwise>
+					WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+				</otherwise>
+			</choose>
 		</if>
 	</select>
 	<!-- 아티스트 신청 목록 -->
@@ -45,8 +52,15 @@
 		SELECT * FROM (
 		    SELECT Tb.*, rownum rNum FROM (
 		        SELECT A.*, M.m_name FROM apply A INNER JOIN member M ON A.midx=M.midx
-		        <if test="searchKeyword!=null and !searchKeyword.equals('')"> 
-					WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+		        <if test="searchKeyword!=null">
+					<choose>
+						<when test="searchKeyword eq 'x'.toString()">
+							WHERE ${sField} is null
+						</when>
+						<otherwise>
+							WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+						</otherwise>
+					</choose>
 				</if>
 		        ORDER BY apply_idx DESC
 		    ) Tb
@@ -55,15 +69,31 @@
 	</select>
 	<!-- 아티스트 신청 상세보기 -->
 	<select id="artistView" resultType="com.edu.springboot.restboard.ApplyDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">			
-		SELECT A.*, M.m_name FROM apply A INNER JOIN member M ON A.midx=M.midx
-		where apply_idx=#{apply_idx}		
+		SELECT A.*, M.m_name, M.profiles FROM apply A INNER JOIN member M ON A.midx=M.midx
+		WHERE apply_idx=#{apply_idx}		
 	</select>
+	
+	<update id="artistPassChange" parameterType="com.edu.springboot.restboard.ParameterDTO">			
+		UPDATE apply SET 
+		<choose>
+			<when test="pass eq 'x'.toString()">
+				pass=''
+			</when>
+			<otherwise>
+				pass=#{pass} 
+			</otherwise>
+		</choose>
+		WHERE apply_idx=#{apply_idx}		
+	</update>
 	
 	<!-- 작가목록 -->
 	<select id="alist2" resultType="com.edu.springboot.restboard.ArtistDTO">
-		select * from artist            
+		SELECT * FROM ARTIST            
 	</select>
 	
-	
+	<insert id="artistNewInsert" parameterType="com.edu.springboot.restboard.ApplyDTO">
+		INSERT INTO artist (aidx, midx, m_name, profiles, a_intro, a_history)
+		VALUES (seq_artist.nextval, #{midx}, #{m_name}, #{profiles,jdbcType=VARCHAR}, #{a_intro}, #{a_history})
+	</insert>
 	
 </mapper>

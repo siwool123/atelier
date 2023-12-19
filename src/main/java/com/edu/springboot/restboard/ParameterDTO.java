@@ -34,4 +34,5 @@ public class ParameterDTO {
 	private String searchKeyword;
 	private String apply_idx;
 	private String id;
+	private String pass;
 }

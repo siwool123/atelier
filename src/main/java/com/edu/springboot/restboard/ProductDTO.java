@@ -31,4 +31,6 @@ public class ProductDTO {
 	private String bgimg;
 	
 	private Date enddate;
+	private int maxprice;
+	private int auccnt;
 }

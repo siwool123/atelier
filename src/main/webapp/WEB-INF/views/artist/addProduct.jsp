@@ -193,10 +193,6 @@ function addProdValidate(form) {
 		alert('작품 이미지를 업로드해주세요.');
 		form.addProdImg.focus(); return false;
 	}
-	if(form.enddate.value=="") {
-		alert('경매 종료일을 선택해주세요.');
-		form.enddate.focus(); return false;
-	}
 }
 </script>
 
@@ -220,8 +216,6 @@ function addProdValidate(form) {
 			<!-- <span class="btn1" style="float: right; cursor: pointer;">경매</span>
 			<span class="btn1" style="float: right; cursor: pointer;">판매</span> -->
 			
-			<c:choose>
-			<c:when test="${auction == 0}">
 			<p class="headerL2 mb-5">판매작품 등록</p>
 			<form id="addProdFrm" action="/artist/addProduct.do" onSubmit="return addProdValidate(this);" enctype="multipart/form-data" method="post">
 			<table class="mt-4" style="width: 85%;">
@@ -354,167 +348,12 @@ function addProdValidate(form) {
 				</tr>
 				<tr style="height: 80px;">
 					<td class="text-center" colspan="4">
+						<input type="hidden" id="enddate" name="enddate" value=null/>
 						<input type="submit" class="btn btn-dark" style="max-width: 105px; height: 40px;" value="판매 상품 등록"/>
 					</td>
 				</tr>
 			</table>
 			</form>
-			</c:when>
-			
-			<c:when test="${auction == 1}">
-			<p class="headerL2 mb-5">경매작품 등록</p>
-			<form id="addProdFrm" action="/artist/addProduct.do" onSubmit="return addProdValidate(this);" enctype="multipart/form-data" method="post">
-			<table class="mt-4" style="width: 85%;">
-				<colgroup>
-					<col width="15%"/>
-					<col width="35%"/>
-					<col width="15%"/>
-					<col width="35%"/>
-				</colgroup>
-				<tr style="height: 80px;">
-					<td>
-						<span>작품명</span><br/>
-						<span id="titleLength" style="color: gray;">0</span><span style="color: gray;">/80</span>
-					</td>
-					<td colspan="3">
-						<input name="title" type="text" placeholder="2자 이상 80자 이내로 입력하세요."></input>
-					</td>
-				</tr>
-				<tr style="height: 80px;">
-					<td>
-						<span>경매 시작가</span><br/>
-						<span style="color: gray;">(원)</span>
-					</td>
-					<td colspan="3">
-						<input type="number" name="price" style="width: 40%;"/>
-						<span style="color: red;">판매수수료의 10%를 제외한 나머지가 정산됩니다.</span>
-					</td>
-				</tr>
-				<tr style="height: 80px;">
-					<td>
-						<span>가로 사이즈(cm)</span>
-					</td>
-					<td>
-						<input name="size1" type="number"/>
-					</td>
-					<td>
-						<span>세로 사이즈(cm)</span>
-					</td>
-					<td>
-						<input name="size2" type="number"/>
-					</td>
-				</tr>
-				<tr style="height: 80px;">
-					<td>
-						<span>작품 주제</span>
-					</td>
-					<td>
-						<select name="theme">
-							<option value="0">작품주제를 선택하세요.</option>
-							<option value="자연/풍경">자연/풍경</option>
-							<option value="인물">인물</option>
-							<option value="동식물">동식물</option>
-							<option value="사물">사물</option>
-							<option value="추상">추상</option>
-							<option value="기타">기타</option>
-						</select>
-					</td>
-					<td>
-						<span>작품 타입</span>
-					</td>
-					<td>
-						<select name="p_type">
-							<option value="0">작품타입을 선택하세요.</option>
-							<option value="아크릴">아크릴</option>
-							<option value="유화">유화</option>
-							<option value="수채화">수채화</option>
-							<option value="수묵화">수묵화</option>
-							<option value="스케치">스케치</option>
-							<option value="혼합/기타">혼합/기타</option>
-						</select>
-					</td>
-				</tr>
-				<tr style="height: 80px;">
-					<td>
-						<span>프레임 유무</span>
-					</td>
-					<td>
-						<select name="framed"">
-							<option value="-1">프레임 유무를 선택하세요.</option>
-							<option value="1">유</option>
-							<option value="0">무</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td style="vertical-align: top;">
-						<span>작품 소개</span><br/>
-						<span id="introLength" style="color: gray">0</span><span style="color: gray">/800</span>
-					</td>
-					<td colspan="3">
-						<textarea name="p_intro" placeholder="80자이상 800자 이내로 입력하세요." rows="10" style="width: 100%;"></textarea>
-					</td>
-				<tr>
-				<tr style="height: 20px;"></tr>
-				<tr style="height: 80px;">
-					<td style="vertical-align: top;">
-						<span>작품 이미지</span><br/>
-						<span style="color: gray">(용량 최대 4MB)</span>
-					</td>
-					<td colspan="3" id="addProdTd" style="vertical-align: top;">
-						<label class="btn1" for="addProdImg" style="width: 50px; height: 50px; cursor: pointer;">+</label>
-						<input type="file" id="addProdImg" name="addProdImg" onChange="loadAddProdImg(this);" style="position: absolute; width: 0; height: 0; padding: 0; overflow: hidden; border: 0;"/>
-						<span id="childProdSpan"></span>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="4">
-						<span class="fw-bolder" >작품 배경 이미지 선택</span>
-						<span> / 업로드한 작품과 어울리는 배경 이미지를 선택하세요.</span>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="4" style="padding-top: 20px; padding-bottom: 40px;">
-						<img onClick="changeBgimg1();" id="bgimg1" src="/images/living11.jpg" style="max-width: 150px; max-height: 150px; cursor: pointer"/>
-						<img onClick="changeBgimg2();" id="bgimg2" src="/images/desk1.jpg" style="max-width: 150px; max-height: 150px; cursor: pointer;"/>
-						<img onClick="changeBgimg3();" id="bgimg3" src="/images/bed1.jpg" style="max-width: 150px; max-height: 150px; cursor: pointer;"/>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="4">
-						<p>작품이미지를 업로드하고 작품 배경 이미지를 선택하면 하단에 두 이미지가 겹쳐서 표시됩니다.<br/>
-						상단 레이어에 있는 작품 이미지를 적절한 위치로 움직이고 크기를 맞춰 작품이 공간에 걸린 모습을 연출해주세요.</p>
-					</td>
-				</tr>
-				<tr>
-					<td class="text-center" id="bgimgTd" colspan="4">
-						<img id="selectedBgimg" src="/images/living11.jpg" style="width: 100%"/>
-						<input type="hidden" id="bgimg" name="bgimg"/>
-					</td>
-				</tr>
-				<tr style="height: 80px;">
-					<td colspan="4">
-						<p>경매종료일은 등록일로부터 최대 30일 내에서 설정 가능합니다.</p>
-					</td>
-				</tr>
-				<tr style="height: 80px;">
-					<td>
-						<span>경매종료일</span>
-					</td>
-					<td colspan="3">
-						<input type="date" name="enddate" style="width: 200px"/>
-					</td> 
-				</tr>
-				<tr style="height: 50px;">
-					<td class="text-center" colspan="4">
-						<input type="hidden" name="auction" value="1"/>
-						<input type="submit" class="btn btn-dark" style="max-width: 105px; height: 40px;" value="경매 상품 등록"/>
-					</td>
-				</tr>
-			</table>
-			</form>
-			</c:when>
-			</c:choose>
 			
 		</div>
 	</div>

@@ -6,16 +6,22 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.edu.springboot.restboard.AMjoinDTO;
 import com.edu.springboot.restboard.ApplyDTO;
 import com.edu.springboot.restboard.ArtistDTO;
+import com.edu.springboot.restboard.EmailSending;
 import com.edu.springboot.restboard.IAdminService;
 import com.edu.springboot.restboard.IBoardService;
+import com.edu.springboot.restboard.InfoDTO;
 import com.edu.springboot.restboard.MemberDTO;
 import com.edu.springboot.restboard.ParameterDTO;
 import com.edu.springboot.restboard.ProductDTO;
@@ -30,8 +36,12 @@ public class AdminController {
 	//서비스 자동주입
 	@Autowired
 	IAdminService dao;
+	
 	@Autowired
 	IBoardService dao2;
+	
+	@Autowired
+	EmailSending email;
 	
 	//관리자 로그인 페이지
 	@RequestMapping("/admin")
@@ -142,8 +152,39 @@ public class AdminController {
 	@RequestMapping("/admin/artistApplyView")
 	public String adminArtistView(Model model, ParameterDTO parameterDTO) {
 		
-		model.addAttribute("row", dao.artistView(parameterDTO));
+		ApplyDTO applyDTO = dao.artistView(parameterDTO);
+		if(applyDTO.getPass()==null) {
+			model.addAttribute("checkedX", "checked");
+		}
+		else {
+			if(applyDTO.getPass().equals("1"))
+				model.addAttribute("checked1", "checked");
+			else if(applyDTO.getPass().equals("0"))
+				model.addAttribute("checked0", "checked");	
+		}
+		
+		model.addAttribute("row", applyDTO);
 		return "admin/artistApplyView";
+	}
+
+	@RequestMapping("/admin/artistPassChange")
+	@ResponseBody
+	public String artistPassChange(ParameterDTO parameterDTO) {
+		String retValue = "success";
+		
+		int result = dao.artistPassChange(parameterDTO);
+		if(result==0)
+			retValue = "fail";
+		
+		//합격이라면 artist테이블에 insert
+		if(parameterDTO.getPass().equals("1")) {
+			//신청정보 불러오기
+			ApplyDTO applyDTO = dao.artistView(parameterDTO);
+			System.out.println("applyDTO="+ applyDTO);
+			dao.artistNewInsert(applyDTO);
+		}
+		
+		return retValue;
 	}
 		
 	//아티스트 관리 목록
@@ -163,42 +204,77 @@ public class AdminController {
 	//아티스트 상세보기
 	@RequestMapping("/admin/artistView")
 	public String artistView(Model model, HttpServletRequest req, @RequestParam int aidx, ParameterDTO parameterDTO) {
-		
-		ArtistDTO adto = dao2.aview(aidx);
-		adto.setA_history(adto.getA_history().replaceAll("\n", "<br/>"));
-		adto.setA_intro(adto.getA_intro().replaceAll("\n", "<br/>"));
-		
-		List<ProductDTO> plist = dao2.selectbya(aidx);
-		
-		List<ReviewDTO> rlist = dao2.rvlistbya2(aidx);
 		int rstarsum = 0, staravg = 0;
-		for(ReviewDTO rdto:rlist) {
-			rstarsum += rdto.getStar();
-			rdto.setR_content(rdto.getR_content().replace("\r\n","</br>"));
+		try {
+			ArtistDTO adto = dao2.aview(aidx);
+			System.out.println("adto : "+adto);
+			
+			try{
+				List<ReviewDTO> rlist = dao2.rvlistbya2(aidx);
+				if(rlist!=null && rlist.size()!=0) {
+					for(ReviewDTO rdto:rlist) { rstarsum += rdto.getStar(); }
+					staravg = (int)rstarsum/rlist.size();
+					System.out.println("리뷰갯수 : "+staravg);
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				System.out.println("리뷰없음");
+			}
+			parameterDTO.setAidx(aidx);
+			parameterDTO.setAuction(0);
+			List<ProductDTO> naplist = dao2.productsbyas2(parameterDTO);
+			parameterDTO.setAuction(1);
+			List<ProductDTO> aplist = dao2.productsbyas2(parameterDTO);
+			System.out.println("naplist: "+naplist.size()+", aplist : "+aplist.size());
+			
+			model.addAttribute("staravg", staravg);
+			model.addAttribute("naplist", naplist);
+			model.addAttribute("aplist", aplist);
+			model.addAttribute("adto", adto);
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("작가정보가져오기실패");
 		}
-		if(rlist.size()!=0) {staravg = (int)rstarsum/rlist.size();}
-		model.addAttribute("staravg", staravg);
-		
-		int soldsum = 0, likesum = 0;
-		for(ProductDTO pdto:plist) {
-			if(pdto.getSold()==1) {soldsum++;}
-			likesum += pdto.getP_like();
-		}
-		
-		parameterDTO.setAidx(aidx);
-		parameterDTO.setAuction(0);
-		List<ProductDTO> naplist = dao2.productsbyas2(parameterDTO);
-		model.addAttribute("naplist", naplist);
-		
-		parameterDTO.setAuction(1);
-		List<ProductDTO> aplist = dao2.productsbyas2(parameterDTO);
-		model.addAttribute("aplist", aplist);
-		
-		model.addAttribute("adto", adto);
 		
 		return "admin/artistView";
 	}
 	
+	//판매작품관리
+	@RequestMapping("/admin/saleproduct")
+	public String saleproduct(Model model, HttpServletRequest req, ParameterDTO parameterDTO) {
+		parameterDTO.setAuction(0);
+		List<ProductDTO> salelist = dao2.selProduct(parameterDTO);
+		model.addAttribute("salelist", salelist);
+		return "admin/saleproduct";
+	}
 	
+	//경매작품관리
+	@RequestMapping("/admin/aucproduct")
+	public String aucproduct(Model model, HttpServletRequest req, ParameterDTO parameterDTO) {
+		parameterDTO.setAuction(1);
+		List<ProductDTO> auclist = dao2.selProduct(parameterDTO);
+		model.addAttribute("auclist", auclist);
+		return "admin/aucproduct";
+	}
 	
+	//경매작품상세보기
+	@RequestMapping("/admin/aucproduct/view")
+	public String aucpview(Model model, HttpServletRequest req) {
+		int pidx = Integer.parseInt(req.getParameter("pidx"));
+		ProductDTO pdto = dao2.pview(pidx);
+		model.addAttribute("pdto", pdto);
+		
+		List<AMjoinDTO> amlist = dao2.amjoin(pidx);
+		AMjoinDTO amdto = dao2.amjoin2(pidx);
+		
+		model.addAttribute("amlist", amlist);
+		model.addAttribute("amdto", amdto);
+		return "admin/aucpview";
+	}
+	
+	@PostMapping("/admin/aucmailsend.do")
+	public String aucmailsend(InfoDTO infoDTO) {
+		email.aucmsg(infoDTO);
+		return "redirect:/admin/aucpview";
+	}	
 }
