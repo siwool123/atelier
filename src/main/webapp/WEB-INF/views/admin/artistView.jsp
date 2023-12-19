@@ -155,7 +155,7 @@ const countDownTimer = function(id, date){
 				<c:set var="imageSource" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
    				 <img src="${imageSource}" alt="작품이미지" class="img1" /> </a></td>
              <td>${ row.title }</td>
-             <td>${ row.size1 } x ${{row.size2 } </td>
+             <td>${ row.size1 } x ${row.size2 } </td>
              <td>${ row.theme }</td>
              <td> ${ row.p_type }</td>
              <td class="price2">${ row.price }</td>
@@ -204,7 +204,7 @@ const countDownTimer = function(id, date){
 				<c:set var="imageSource" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
    				 <img src="${imageSource}" alt="작품이미지" class="img1" /> </a></td>
              <td>${ row.title }</td>
-             <td>${ row.size1 } x ${{row.size2 } </td>
+             <td>${ row.size1 } x ${row.size2 } </td>
              <td>${ row.theme }<br/> ${ row.p_type }</td>
              <td class="price2">${ not empty row.maxprice ? row.maxprice : row.price }</td>
              <td><span id="timeOut_${loop.index }" >${row.enddate}</span></td>

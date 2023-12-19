@@ -45,8 +45,8 @@ public class ArtistController {
         int midx = memberDTO.getMidx();
         
         ArtistDTO artistDTO = ardao.aview(midx);
-        artistDTO.setA_intro(artistDTO.getA_intro().replaceAll("\n", "<br/>"));
-        artistDTO.setA_history(artistDTO.getA_history().replaceAll("\n", "<br/>"));
+        artistDTO.setA_intro(artistDTO.getA_intro().replace("\r\n","<br />"));
+        artistDTO.setA_history(artistDTO.getA_history().replace("\r\n","<br />"));
         
         List<ProductDTO> aplist = ardao.aplist(midx);
         
