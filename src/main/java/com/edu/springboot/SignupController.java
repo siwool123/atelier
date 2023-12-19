@@ -175,6 +175,8 @@ public class SignupController {
 		
 		result = dao.minsert(memberDTO);
 		
+		dao.pinsert(memberDTO);
+		
 		if (result == 1 ) {
 			System.out.println("회원가입성공");
 			model.addAttribute("result", result);

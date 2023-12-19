@@ -280,4 +280,5 @@ public class AdminController {
 		email.aucmsg(infoDTO);
 		return "redirect:/admin/aucpview";
 	}	
+	
 }

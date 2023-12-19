@@ -113,6 +113,12 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
 				       		<td align="left" style="padding-left:50px;">리뷰작성 포인트 적립<br /><span style="color:#c0c0c0">${row.title }  |  ${row.m_name }</span></td><td></td>
 				       		<td align="center">${not empty row.point_date ? row.point_date : ''}</td></tr>
 				       	</c:when>
+				       	<c:when test="${empty row.ridx and empty oidx }">
+				       		<tr><td align="center" style="color:blue">적립</td>
+				       		<td align="right" style="color:blue">+ <span class="price2"> ${not empty row.add_point? row.add_point : '0' }</span> </td>
+				       		<td align="left" style="padding-left:50px;">가입기념 포인트 적립</td><td></td>
+				       		<td align="center">${not empty row.point_date ? row.point_date : ''}</td></tr>
+				       	</c:when>
 				       	<c:otherwise>
 				       	<c:if test="${row.add_point>0 }">
 				       		<tr><td align="center" style="color:blue">적립</td>

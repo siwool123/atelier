@@ -29,4 +29,5 @@ public class ProductDTO {
 	private int ridx;
 	private Date enddate;
 	private int maxprice;
+	private String bgimg;
 }

@@ -11,6 +11,10 @@ public interface IMemberService {
 	public List<MemberDTO> mlist();
 	//회원가입
 	public int minsert(MemberDTO memberDTO);
+	
+	//가입기념 1000 포인트 적립
+	public int pinsert(MemberDTO memberDTO);
+	
 	//회원정보출력
 	public MemberDTO mview(String id);
 	//회원정보수정
