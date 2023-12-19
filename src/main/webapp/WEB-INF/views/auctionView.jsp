@@ -81,7 +81,6 @@ function sucFunc(resD){
 
 function sucFunc2(resD){
 	console.log('입찰참가 콜백데이터', resD);
-	var cart = $('.cart');
 	if(resD==2) {
 		alert("입찰참가가 완료되었습니다.");
 		if(confirm("마이페이지 > 입찰내역 으로 이동하시겠습니까?")){window.location.href = '/member/auction';}
@@ -103,7 +102,6 @@ const countDownTimer = function(id, date){
 		if(distDt<=0){
 			clearInterval(timer);
 			document.getElementById(id).innerHTML = '경매종료';
-			//setEndAuction(); //경매가 종료표시되는 요소를 변경시킴
 			$('.auction').prop('disabled', true);
 			return;
 		}

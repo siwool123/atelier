@@ -65,7 +65,7 @@ function memberDelete(midx){
 	<%@ include file="../include/adminSidebar.jsp" %>
 
                 <div class="container-fluid p-5">
-                    <h3 class="mb-3 text-gray-800 fw-bolder">아티스트 신청관리</h3>
+                    <h3 class="mb-3 text-gray-800 fw-bolder">주문관리</h3>
                     <p class="mb-4">
                     	${error }
                     </p>
@@ -122,7 +122,7 @@ function memberDelete(midx){
 					       	</td>
                                             <td>${ row.title }</td>
                                             <td>${ row.a_name }</td>
-                                            <td>${ row.price }</td>
+                                            <td class="price2">${ row.price }</td>
 			
 										<td >
                                             	<%-- ${maps.totalCount - (((maps.pageNum-1) * maps.pageSize)	+ loop.index)} --%>
@@ -206,7 +206,7 @@ function memberDelete(midx){
 $( document ).ready( function() {
 	$('#navbarNavAltMarkup div a:first').removeClass( 'active' );
 	$('ul.navbar-nav li').removeClass( 'active' );
-	$('ul.navbar-nav li:eq(5)').addClass( 'active' );
+	$('ul.navbar-nav li:eq(6)').addClass( 'active' );
 	
 });
 </script>

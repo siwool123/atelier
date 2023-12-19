@@ -25,14 +25,9 @@
 
 .leftmenu li:nth-child(6) { background-color: black; }
 .leftmenu li:nth-child(6) a, .leftmenu li:nth-child(6) a i { color: white }
-
-.leftmenu li a {
-	line-height: 30px !important;
-}
-
-.btn3, .btn4 {
-	padding: 0 6% !important;
-}
+.leftmenu li a { line-height: 30px !important; }
+.leftmenu li a i { padding-top: 7px !important; }
+.btn3, .btn4 { padding: 0 6% !important; }
 
 .border li {
 	line-height: 40px;
@@ -210,11 +205,11 @@ table.order tr th, table.order tr td {
 			<div class="my-5" id="show_data">
 				<c:choose>
 					<c:when test="${ empty plist }">
-						<div class="text-center">등록된 작품이 없습니다.</div>
+						<div class="text-center">찜한 작품이 없습니다.</div>
 					</c:when>
 					<c:otherwise>
 						<div class="varrow" style="position: relative; display: inline; float: right; top: -100px;">
-							<i class="bi bi-chevron-left slbtn" style="font-size: 40px;"></i> <i class="bi bi-chevron-right slbtn" style="font-size: 40px;"></i>
+							<i class="bi bi-chevron-left slbtn prev" style="font-size: 40px;"></i> <i class="bi bi-chevron-right slbtn next" style="font-size: 40px;"></i>
 						</div>
 						<div class="swiper swiper-container sc3" style="position:relative; top:-30px">
 							<div class="swiper-wrapper" style="height: auto !important;">

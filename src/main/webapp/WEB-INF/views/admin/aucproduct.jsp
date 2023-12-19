@@ -135,7 +135,7 @@ const countDownTimer = function(id, date){
              <td><a href="/view?pidx=${ row.pidx }">
 				<c:set var="imageSource" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
    				 <img src="${imageSource}" alt="작품이미지" class="img1" /> </a></td>
-             <td><a href="./view?pidx=${row.pidx }"> ${ row.title }</a></td>
+             <td><a href="./aucproductview?pidx=${row.pidx }"> ${ row.title }</a></td>
              <td>${ row.size1 } x ${row.size2 } </td>
              <td>${ row.theme }<br/>${ row.p_type }</td>
              <td>${row.regidate }</td>

@@ -19,7 +19,9 @@ public interface IAdminService {
 	public ApplyDTO artistView(ParameterDTO parameterDTO);
 	public int artistPassChange(ParameterDTO parameterDTO);
 	public int artistNewInsert(ApplyDTO applyDTO);
+	public int authority(int midx);
 	
 	//작가관리
 	public List<ArtistDTO> alist2();
+	
 }

@@ -169,19 +169,22 @@ public class AdminController {
 
 	@RequestMapping("/admin/artistPassChange")
 	@ResponseBody
-	public String artistPassChange(ParameterDTO parameterDTO) {
+	public String artistPassChange(ParameterDTO parameterDTO, ArtistDTO artistDTO) {
 		String retValue = "success";
-		
-		int result = dao.artistPassChange(parameterDTO);
-		if(result==0)
-			retValue = "fail";
+		int result=0, result2 = 0, result3=0;
+		result = dao.artistPassChange(parameterDTO);
+		System.out.println("apply테이블 pass 1 or 0 결과 : "+result);
+		if(result==0) retValue = "fail";
 		
 		//합격이라면 artist테이블에 insert
 		if(parameterDTO.getPass().equals("1")) {
 			//신청정보 불러오기
 			ApplyDTO applyDTO = dao.artistView(parameterDTO);
-			System.out.println("applyDTO="+ applyDTO);
-			dao.artistNewInsert(applyDTO);
+			
+			result2 = dao.artistNewInsert(applyDTO);
+			System.out.println("artist테이블삽입결과="+ result2);
+			result3 = dao.authority(applyDTO.getMidx());
+			System.out.println("member테이블 ROLE_ARTIST로 업뎃결과 : "+result3);
 		}
 		
 		return retValue;
@@ -258,7 +261,7 @@ public class AdminController {
 	}
 	
 	//경매작품상세보기
-	@RequestMapping("/admin/aucproduct/view")
+	@RequestMapping("/admin/aucproductview")
 	public String aucpview(Model model, HttpServletRequest req) {
 		int pidx = Integer.parseInt(req.getParameter("pidx"));
 		ProductDTO pdto = dao2.pview(pidx);

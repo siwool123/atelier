@@ -33,7 +33,7 @@ button {border-radius: 0 !important;}
 
 .container { max-width: 1200px !important;  overflow: hidden; margin: 0 auto; }
 li, a { list-style: none; text-decoration: none; }
-#ptop {background-color: black; border-radius: 50%; opacity: 0.5 !important; z-index: 300; display:scroll; position:fixed; bottom:30px; right:30px; padding:5px 10px; }
+#ptop {background-color: black; border-radius: 50%; opacity: 0.5 !important; z-index: 300; display:scroll; position:fixed; bottom:30px; right:30px; width:50px; height:50px; text-align: center; line-height: 50px; }
 #ptop i {font-size: 20px; color: white; }
 .sticky-top {background-color: white; border-bottom: 1px solid grey;}
 
