@@ -20,36 +20,36 @@
 
 	<!-- 작가별 판매 중 작품 갯수 조회 -->
 	<select id="onselect" resultType="int">
-		select count(*) from product where aidx=#{param1} and sold=0;
+		select count(*) from product where aidx=#{param1} and sold=0
 	</select>
 	
 	<!-- 작가별 판매 완료 상품 갯수 조회 -->
 	<select id="solselect" resultType="int">
-		select count(*) from product where aidx=#{param1} and sold=1;
+		select count(*) from product where aidx=#{param1} and sold=1
 	</select>
 	
 	<!-- 작가별 판매된 작품들의 총가격 합산 -->
 	<select id="sumselect" parameterType="com.edu.springboot.restboard.ProductDTO"
 		resultType="int">
-		select sum(price) from product where aidx=#{param1} and sold=0;
+		select sum(price) from product where aidx=#{param1} and sold=0
 	</select>
 	
 	<!-- 작가별 경매중 상품의 갯수 -->
 	<select id="aucsselect" parameterType="com.edu.springboot.restboard.AuctionDTO"
 		resultType="int">
-		select count(*) from ateiler.auction1 where aidx=#{aidx} and enddate is null;
+		select count(*) from ateiler.auction1 where aidx=#{aidx} and enddate is null
 	</select>
 	
 	<!-- 작가별 경매 완료 상품의 갯수 -->
 	<select id="auceselect" parameterType="com.edu.springboot.restboard.AuctionDTO"
 		resultType="int">
-		select count(*) from ateiler.auction1 where aidx=#{param1} and enddate is not null;
+		select count(*) from ateiler.auction1 where aidx=#{param1} and enddate is not null
 	</select>
 	
 	<!-- 작가별 배송전 상품의 갯수 -->
 	<select id="shipsselect" parameterType="com.edu.springboot.restboard.ArtistDTO"
 		resultType="int">
-		select count(*) from shipment inner join order2 on shipment.oidx = order2.oidx where shipment.shipped = 0 and order2.aidx = #{param1};	
+		select count(*) from shipment inner join order2 on shipment.oidx = order2.oidx where shipment.shipped = 0 and order2.aidx = #{param1}	
 	</select>
 	
 	<!-- 작가별 받은 좋아요 갯수의 합 -->

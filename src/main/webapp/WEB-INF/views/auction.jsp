@@ -58,7 +58,7 @@ const countDownTimer = function(id, date){
 		if(distDt<0){
 			clearInterval(timer);
 			document.getElementById(id).innerHTML = '경매종료';
-			setEndAuction(); //경매가 종료표시되는 요소를 변경시킴
+			//setEndAuction(); //경매가 종료표시되는 요소를 변경시킴
 			return;
 		}
 		var days = Math.floor(distDt / _day);
@@ -175,7 +175,7 @@ const countDownTimer = function(id, date){
                    
                    <div class="auc"><span>시작가 : <span class="price2">${row.price }</span> 원</span><span style="float:right; color:red">입찰최고가 : <span class="price2">${row.price }</span> 원</span></div>
                    <div class="auc">종료일 : ${row.enddate }</div>
-                   <div class="auc">남은시간 : <span id="timeOut_${loop.index }" ></div>
+                   <div class="auc">남은시간 : <span id="timeOut_${loop.index }" >0</span></div>
                    
       <script>
     //경매종료시간

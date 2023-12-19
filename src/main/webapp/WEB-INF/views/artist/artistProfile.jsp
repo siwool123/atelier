@@ -15,7 +15,7 @@ input {margin-right:10px !important;}
 table.order tr th {background-color:#ededed;}
 table.order tr th, table.order tr td {padding-left:20px;}
 .headerL4 {border-left:5px solid black; font-weight:900; letter-spacing: 0.2em; padding-left: 23px; margin-top:100px; font-size: 16px;}
-.bi-star-fill {font-size:20px;}
+.star20 {font-size:20px !important;}
 </style>
 
 <%@ include file="artistIndex.jsp" %>
@@ -34,8 +34,8 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			            	<c:otherwise><i class="bi bi-person-circle bpc1"></i></c:otherwise>
 			            </c:choose>
 			            <div style="position: relative; top: 30px;">
-			                <c:forEach var="i" begin="1" end="${not empty staravg ? staravg : 0}"><i class="bi bi-star-fill starActive"></i></c:forEach>
-			                <c:forEach var="i" begin="1" end="${not empty staravg ? 5-staravg : 5}"><i class="bi bi-star-fill"></i></c:forEach>
+			                <c:forEach var="i" begin="1" end="${not empty staravg ? staravg : 0}"><i class="bi bi-star-fill starActive star20"></i></c:forEach>
+			                <c:forEach var="i" begin="1" end="${not empty staravg ? 5-staravg : 5}"><i class="bi bi-star-fill star20"></i></c:forEach>
 		                </div> <!-- 작가의 판매완료된작품이 받은 리뷰의 별점 평균 -->
 		       		</div>
 		       		<div class="aprofile" style="margin-bottom:200px; margin-top:10px;">

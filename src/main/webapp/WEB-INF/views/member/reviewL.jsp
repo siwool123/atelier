@@ -34,6 +34,16 @@ function delReview(pidx) {
     });
 	} 
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    var introElement = document.querySelector('.intro');
+    if (introElement) {
+        var introText = introElement.textContent;
+        if (introText.length > 100) {  // 수정된 부분: 5로 변경
+            introElement.innerHTML = introText.substring(0, 100) + '...';  // 수정된 부분: 5로 변경
+        }
+    }
+});
 </script>
 
 <style>

@@ -59,4 +59,11 @@
 		where apply_idx=#{apply_idx}		
 	</select>
 	
+	<!-- 작가목록 -->
+	<select id="alist2" resultType="com.edu.springboot.restboard.ArtistDTO">
+		select * from artist            
+	</select>
+	
+	
+	
 </mapper>

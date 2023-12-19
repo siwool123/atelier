@@ -16,6 +16,12 @@
 
             <hr class="sidebar-divider">
             
+            <li class="nav-item"><a class="nav-link memmber" href="/admin/member"><i class="fas fa-fw fa-table"></i> <span>회원관리</span></a></li>
+            <li class="nav-item"><a class="nav-link apply" href="/admin/artistApply"><i class="fas fa-fw fa-table"></i> <span>작가신청관리</span></a></li>
+            <li class="nav-item"><a class="nav-link artist" href="/admin/artist"><i class="fas fa-fw fa-table"></i> <span>작가관리</span></a></li>
+            <hr class="sidebar-divider d-none d-md-block">
+            
+            
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i> <span>Pages</span></a>
@@ -28,11 +34,6 @@
                     </div>
                 </div>
             </li>
-            
-            <hr class="sidebar-divider d-none d-md-block">
-            
-            <li class="nav-item"><a class="nav-link" href="/admin/member"><i class="fas fa-fw fa-table"></i> <span>회원관리</span><span class="badge badge-danger rounded-pill">0+</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="/admin/artist"><i class="fas fa-fw fa-table"></i> <span>아티스트관리</span><span class="badge badge-danger rounded-pill">0+</span></a></li>
             
             <hr class="sidebar-divider d-none d-md-block">
             

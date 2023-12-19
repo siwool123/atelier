@@ -39,21 +39,27 @@ public class ArtistController {
 		Map<Object, Object> map = payService.memberIndex(principal);
         model.addAttribute("map", map);
         
+        try {
         String id = principal.getName();
-        MemberDTO memberDTO = dao.mview(id);
-        int midx = memberDTO.getMidx();
-        
-        ArtistDTO adto = ardao.aview(midx);
-        adto.setA_intro(adto.getA_intro().replace("\r\n","<br />"));
-        adto.setA_history(adto.getA_history().replace("\r\n","<br />"));
-        
-        System.out.println("aidx: "+adto.getAidx());
-        List<ProductDTO> aplist = ardao.aplist(midx);
-        
-        model.addAttribute("adto", adto);
-        model.addAttribute("aplist", aplist);
-        model.addAttribute("soldsum", ardao.solselect(adto.getAidx()));
-        model.addAttribute("likesum", ardao.likesum(adto.getAidx()));
+         MemberDTO memberDTO = dao.mview(id);
+         int midx = memberDTO.getMidx();
+         
+         ArtistDTO adto = ardao.aview(midx);
+         adto.setA_history(adto.getA_history().replaceAll("\n", "<br/>"));
+         adto.setA_intro(adto.getA_intro().replaceAll("\n", "<br/>"));
+         
+         System.out.println("aidx: "+adto.getAidx());
+         List<ProductDTO> aplist = ardao.aplist(midx);
+         
+         model.addAttribute("adto", adto);
+         model.addAttribute("aplist", aplist);
+         model.addAttribute("soldsum", ardao.solselect(adto.getAidx()));
+         model.addAttribute("likesum", ardao.likesum(adto.getAidx()));
+        }catch(Exception e) {
+        	e.printStackTrace();
+        	System.out.println("작가정보조회실패");
+        }
+               
 		return "artist/profile";
 	}
 	

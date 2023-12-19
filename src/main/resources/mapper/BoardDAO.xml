@@ -231,12 +231,23 @@
 				SELECT * FROM review WHERE aidx = #{aidx}
 			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
 	</select>
+	<select id="rvlistbya2" resultType="com.edu.springboot.restboard.ReviewDTO">
+		SELECT * FROM review WHERE aidx = #{param1}
+	</select>
 	
 	<select id="productsbyas" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT * FROM product WHERE aidx=#{aidx} AND sold=#{sold}
 			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="productsbyas2" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM product WHERE aidx=#{aidx} AND auction=#{auction}
+		<choose>
+			<when test="status != null and !status.isEmpty() and status.equals('aa')"> and sold = 0</when>
+			<when test="status != null and !status.isEmpty() and status.equals('bb')"> and sold = 1</when>
+		</choose>
 	</select>
 	
 	<select id="cartview" resultType="com.edu.springboot.restboard.CartDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
