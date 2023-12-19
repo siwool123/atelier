@@ -111,9 +111,9 @@ public class MemberController2 {
 //	        	 dao.updateMprofile(uniqueFileName, req.getParameter("midx"));
 	        	 
 	        	 File destFile = new File(uploadDir, uniqueFileName);
-	        	 productDTO.setSfile(uniqueFileName);
 
 	            file.transferTo(destFile);
+	            productDTO.setSfile(uniqueFileName);
 	            dao.insertPProduct(productDTO);
 
 	            System.out.println("파일 업로드 성공");
