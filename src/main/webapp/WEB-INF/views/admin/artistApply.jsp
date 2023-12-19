@@ -59,24 +59,24 @@ function memberDelete(midx){
                     </p>
                     <div>
 <button type="button" class="btn btn-warning" 
-	onclick="location.href='?sField=authority&searchKeyword=ROLE_USER';">일반회원</button>                    		
+	onclick="location.href='?sField=A.pass&searchKeyword=x';">심사중</button>                    		
 <button type="button" class="btn btn-info" 
-	onclick="location.href='?sField=authority&searchKeyword=ROLE_ARTIST';">작가회원</button>
+	onclick="location.href='?sField=A.pass&searchKeyword=1';">합격</button>
 <button type="button" class="btn btn-dark" 
-	onclick="location.href='?sField=enabled&searchKeyword=0';">탈퇴회원</button>
+	onclick="location.href='?sField=A.pass&searchKeyword=0';">불합격</button>
                     </div>
 
                             <div class="table-responsive">
                                 <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
                                     <thead class="table-secondary">
                                         <tr>
-                                            <th>회원번호</th>
-                                            <th>회원명</th>
-                                            <th>신청일</th>
+                                            <th width="50">회원번호</th>
+                                            <th width="80">회원명</th>
+                                            <th width="100">신청일</th>
                                             <th>포트폴리오</th>
                                             <th>작가소개</th>
                                             <th>작가이력</th>
-                                            <th>작가심사</th>
+                                            <th width="60">작가심사</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -117,10 +117,10 @@ function memberDelete(midx){
 					<button type="button" class="btn btn-dark" onclick="">불합격</button>			                                         
 				</c:when>
 				<c:when test="${ row.pass eq 1 }">
-					<button type="button" class="btn btn-danger" onclick="">합격</button>
+					<button type="button" class="btn btn-info" onclick="">합격</button>
 				</c:when>
 				<c:otherwise>
-					<button type="button" class="btn btn-primary" onclick="">심사중</button>
+					<button type="button" class="btn btn-warning" onclick="">심사중</button>
 				</c:otherwise>
 			</c:choose>
                                             </td>
