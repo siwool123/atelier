@@ -26,6 +26,7 @@ public class OrderDTO {
 	private String apinum;
 	private int auction;
 	private String pidx;
+	private int cancel;
 	
 	private int add_point;
 	private int minus_point;

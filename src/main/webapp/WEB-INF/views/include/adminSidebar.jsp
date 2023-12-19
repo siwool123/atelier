@@ -33,6 +33,7 @@
             
             <li class="nav-item"><a class="nav-link" href="/admin/member"><i class="fas fa-fw fa-table"></i> <span>회원관리</span><span class="badge badge-danger rounded-pill">0+</span></a></li>
             <li class="nav-item"><a class="nav-link" href="/admin/artist"><i class="fas fa-fw fa-table"></i> <span>아티스트관리</span><span class="badge badge-danger rounded-pill">0+</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="/admin/pay"><i class="fas fa-fw fa-table"></i> <span>결제관리</span><span class="badge badge-danger rounded-pill">0+</span></a></li>
             
             <hr class="sidebar-divider d-none d-md-block">
             

@@ -9,6 +9,11 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface Imember2Service {
 	
+	/// 작품 판매 중 상태로 업데이트
+	public void updatePro(@Param("pidx") String pidx );
+	//// 스케줄러
+	public void updateOrder1(@Param("oidx") String oidx ,@Param("cancel") String cancel);
+	
 	public List<Member2DTO> seletMember
 		(@Param("searchField") String searchField, @Param("searchWord") String searchWord);
 	

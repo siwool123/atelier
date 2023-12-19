@@ -6,6 +6,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.edu.springboot.member.Imember2Service">
 
+	<!-- 작품 판매 중 상태로 업데이트 -->
+
+<update id="updatePro">
+		update product set sold = 0 where pidx = #{pidx}
+	</update>
+
+	<!-- order1 업데이트 -->
+	<update id="updateOrder1">
+		update order1 set cancel = #{cancel} where oidx = #{oidx}
+	</update>
+
+
+
 	<!-- 일반회원     -->
 
 	<select id="seletMember"

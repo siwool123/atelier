@@ -280,6 +280,10 @@
 		SELECT * FROM order1 WHERE midx=#{param1}
 	</select>
 	
+	<select id="olist11" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order1
+	</select>
+	
 	<select id="notPaid" resultType="com.edu.springboot.restboard.OrderDTO">
 		SELECT * FROM order1 WHERE midx=#{param1} and paydate is null
 	</select>

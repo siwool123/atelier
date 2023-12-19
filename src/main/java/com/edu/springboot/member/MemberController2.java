@@ -40,26 +40,26 @@ public class MemberController2 {
 	@Autowired
 	PPPayController payServic;
 
-	@RequestMapping("/rest/orderProc.do")
-	public Order11DTO orderProc(Order11DTO order11DTO, PointDTO pointDTO, HttpServletRequest req) {
-		
-		System.out.println("메시");
-		try {
-			return order11DTO = payServic.order11Proc(order11DTO, pointDTO, req);
-			
-//			model.addAttribute("odto", orderDTO);
-//			model.addAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
-//			session.setAttribute("odto", orderDTO);
-//			session.setAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
-//			return "redirect:/member/orderResult?oidx="+orderDTO.getOidx();
-		}catch (Exception e){ 
-			e.printStackTrace();
-			System.out.println("주문 처리 실패"); 
-//			model.addAttribute("resultMsg", "주문처리중 오류가 발생했습니다.");
-			return order11DTO;
-    	}	
-		
-	}
+//	@RequestMapping("/rest/orderProc.do")
+//	public Order11DTO orderProc(Order11DTO order11DTO, PointDTO pointDTO, HttpServletRequest req) {
+//		
+//		System.out.println("메시");
+//		try {
+//			return order11DTO = payServic.order11Proc(order11DTO, pointDTO, req);
+//			
+////			model.addAttribute("odto", orderDTO);
+////			model.addAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
+////			session.setAttribute("odto", orderDTO);
+////			session.setAttribute("resultMsg", "주문이 성공적으로 처리되었습니다.");
+////			return "redirect:/member/orderResult?oidx="+orderDTO.getOidx();
+//		}catch (Exception e){ 
+//			e.printStackTrace();
+//			System.out.println("주문 처리 실패"); 
+////			model.addAttribute("resultMsg", "주문처리중 오류가 발생했습니다.");
+//			return order11DTO;
+//    	}	
+//		
+//	}
 	
 	
 	@RequestMapping("/rest/insertMemberr.do")
