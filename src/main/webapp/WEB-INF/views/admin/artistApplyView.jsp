@@ -43,21 +43,14 @@ function stateUpdate(aIdx, pVal){
 					alert('상태가 업데이트 되었습니다.');
 					if(pVal==0)
 						$('#stateBtn').html('<button type="button" class="btn btn-dark">불합격</button>');
-					else
-						$('#stateBtn').html('<button type="button" class="btn btn-info">합격</button>');
+					else $('#stateBtn').html('<button type="button" class="btn btn-info">합격</button>');
 				}
-				else{
-					alert('업데이트 중 오류가 발생하였습니다.');
-				}
+				else{ alert('업데이트 중 오류가 발생하였습니다.');}
 			},		 
-			error : function(errData){ 
-				console.log(errData.state, errData.statusText); 
-			},
+			error : function(errData){  console.log(errData.state, errData.statusText);  },
 		});
 	}
-	else{
-		event.preventDefault();
-	}
+	else{ event.preventDefault(); }
 }
 </script>
 <style>
