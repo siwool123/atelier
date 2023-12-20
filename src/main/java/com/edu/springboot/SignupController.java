@@ -161,7 +161,7 @@ public class SignupController {
 		}
 	}
 	
-	//회원가입
+	//회원가입 
 	@PostMapping("/guest/regist")
 	public String Regist(MemberDTO memberDTO, Model model) {
 		int result = 0;
