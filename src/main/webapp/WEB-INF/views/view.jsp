@@ -117,10 +117,20 @@ th {color:#c5c5c5 !important;}
     <div class="container">
     <div class="row py-5">
         <div class="col-sm-6 imgback"><div class="image2">
-        	<c:if test="${not empty pdto}">
+        	<c:choose>
+        		<c:when test="${pdto.sfile.length() > 40}">
+        			<img src="${pdto.sfile}" alt="작품이미지" data-bs-toggle="modal" data-bs-target="#myModal_img" />
+        		</c:when>
+        		<c:otherwise>
+        			<img src="./uploads/${pdto.sfile}" alt="작품이미지" data-bs-toggle="modal" data-bs-target="#myModal_img" />
+        		</c:otherwise>
+        	</c:choose>
+        
+        	<%-- <c:if test="${not empty pdto}">
         		<c:set var="imageSource" value="${pdto.sfile.length() > 40 ? pdto.sfile : './uploads/' + pdto.sfile}" />
    				 <img src="${imageSource}" alt="작품이미지" data-bs-toggle="modal" data-bs-target="#myModal_img" />
-        	</c:if>
+        	</c:if> --%>
+        	
         </div></div>
         <div class="col-sm-6">
             <div class="border-bottom fs-5 fw-bolder pb-3 vtitle"> ${not empty pdto ? pdto.title : "등록된 정보가 없습니다."}</div> 
@@ -176,7 +186,15 @@ let currentUrl = window.document.location.href;
     <div class="container my-5 py-5">
     <%-- <div>${user_id } 님 로그인을 환영합니다.</div> --%>
     <div class="text-center">
-    	<img src="${imageSource}" alt="작품이미지" style="width: 10%; position:relative; left:35%; top:-100px; box-shadow: 2px 2px 4px #636363; z-index: 999;" id="frimg"  />
+   		 <c:choose>
+    		<c:when test="${pdto.sfile.length() > 40}">
+    			<img src="${pdto.sfile}" alt="작품이미지" style="width: 10%; position:relative; left:35%; top:-100px; box-shadow: 2px 2px 4px #636363; z-index: 999;" id="frimg" />
+    		</c:when>
+    		<c:otherwise>
+    			<img src="./uploads/${pdto.sfile}" alt="작품이미지" style="width: 10%; position:relative; left:35%; top:-100px; box-shadow: 2px 2px 4px #636363; z-index: 999;" id="frimg" />
+    		</c:otherwise>
+    	</c:choose>
+    	<%-- <img src="${imageSource}" alt="작품이미지" style="width: 10%; position:relative; left:35%; top:-100px; box-shadow: 2px 2px 4px #636363; z-index: 999;" id="frimg"  /> --%>
        <img src="./images/living11.jpg" id="bgimg" style="width: 80%; transform: translate(-9%);" />
        <%-- <c:choose>
        	<c:when test="${ empty pdto.bgimg }">

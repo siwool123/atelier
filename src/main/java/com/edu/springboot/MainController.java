@@ -121,7 +121,7 @@ public class MainController {
 			rdto.setR_content(rdto.getR_content().replace("\r\n","</br>"));
 			model.addAttribute("rdto", rdto);
 		}catch(Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.out.println("리뷰가져오기실패");
 		}
 		
