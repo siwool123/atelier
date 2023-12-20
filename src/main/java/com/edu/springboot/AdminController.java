@@ -162,7 +162,6 @@ public class AdminController {
 			else if(applyDTO.getPass().equals("0"))
 				model.addAttribute("checked0", "checked");	
 		}
-		
 		model.addAttribute("row", applyDTO);
 		return "admin/artistApplyView";
 	}

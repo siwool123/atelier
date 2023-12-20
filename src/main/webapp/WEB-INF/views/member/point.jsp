@@ -96,7 +96,7 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
 			       <th>포인트</th>
 			       <th>사용내용</th>
 			       <th>주문번호</th>
-			       <th>사용일시</th>
+			       <th>적용일시</th>
 			     </tr>
 			   </thead>
 			   <tbody>
@@ -113,24 +113,23 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
 				       		<td align="left" style="padding-left:50px;">리뷰작성 포인트 적립<br /><span style="color:#c0c0c0">${row.title }  |  ${row.m_name }</span></td><td></td>
 				       		<td align="center">${not empty row.point_date ? row.point_date : ''}</td></tr>
 				       	</c:when>
-				       	<c:when test="${empty row.ridx and empty oidx }">
-				       		<tr><td align="center" style="color:blue">적립</td>
-				       		<td align="right" style="color:blue">+ <span class="price2"> ${not empty row.add_point? row.add_point : '0' }</span> </td>
-				       		<td align="left" style="padding-left:50px;">가입기념 포인트 적립</td><td></td>
-				       		<td align="center">${not empty row.point_date ? row.point_date : ''}</td></tr>
-				       	</c:when>
-				       	<c:otherwise>
-				       	<c:if test="${row.add_point>0 }">
+				       	<c:when test="${not empty row.oidx and row.add_point>0 }">
 				       		<tr><td align="center" style="color:blue">적립</td>
 				       		<td align="right" style="color:blue">+ <span class="price2"> ${not empty row.add_point? row.add_point : '0' }</span> </td>
 				       		<td align="left" style="padding-left:50px;">주문 적립<br /><span style="color:#c0c0c0">${row.title }  |  ${row.m_name }</span></td>
 				       		<td align="center" >${not empty row.oidx? row.oidx : '' }</td><td align="center" >${not empty row.point_date ? row.point_date : ''}</td> </tr>
-				       	</c:if>	
-				       	<c:if test="${row.minus_point>0 }">
+				       	</c:when>	
+				       	<c:when test="${not empty row.oidx and row.minus_point>0 }">
 				       		<tr><td align="center" style="color:red">사용</td><td align="right" style="color:red">- <span class="price2"> ${not empty row.minus_point? row.minus_point : '0' }</span> </td>
 				       		<td align="left" style="padding-left:50px;">포인트 결제<br /><span style="color:#c0c0c0">${row.title }  |  ${row.m_name }</span></td>
 				       		<td align="center" >${not empty row.oidx? row.oidx : '' }</td><td align="center" >${not empty row.point_date ? row.point_date : ''}</td> </tr>
-				       	</c:if>
+				       	</c:when>
+				       	<c:otherwise>
+				       	<%-- <c:if test="${empty row.ridx and empty row.oidx and empty row.pidx and empty row.title }"> --%>
+				       		<tr><td align="center" style="color:blue">적립</td>
+				       		<td align="right" style="color:blue">+ <span class="price2"> ${not empty row.add_point? row.add_point : '0' }</span> </td>
+				       		<td align="left" style="padding-left:50px;">가입기념 포인트 적립</td><td></td>
+				       		<td align="center">${not empty row.point_date ? row.point_date : ''}</td></tr>
 				       	</c:otherwise>
 				       </c:choose>
 					</c:forEach>

@@ -16,6 +16,10 @@
 			(#{id}, #{pass}, #{m_name}, #{phone}, #{zip}, #{addr1}, #{addr2}, seq_member.nextval, 1000)
 	</insert> 
 	
+	<!-- 최대midx 찾기 -->
+	<select id="maxmidx">
+	select max(midx) from member</select>
+	
 	<!-- -가입기념1000포인트 -->
 	<insert id="pinsert" parameterType="com.edu.springboot.restboard.MemberDTO">
 	 insert into m_point (point_idx, midx, add_point, m_name) values (seq_point.nextval, #{midx}, 1000, #{m_name})

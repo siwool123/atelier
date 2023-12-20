@@ -174,7 +174,8 @@ public class SignupController {
 		memberDTO.setPass(securePw); //암호화하여 저장  
 		
 		result = dao.minsert(memberDTO);
-		
+		int midx = dao.maxmidx();
+		memberDTO.setMidx(midx);
 		dao.pinsert(memberDTO);
 		
 		if (result == 1 ) {

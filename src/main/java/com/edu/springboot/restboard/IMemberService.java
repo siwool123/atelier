@@ -12,6 +12,7 @@ public interface IMemberService {
 	//회원가입
 	public int minsert(MemberDTO memberDTO);
 	
+	public int maxmidx();
 	//가입기념 1000 포인트 적립
 	public int pinsert(MemberDTO memberDTO);
 	
