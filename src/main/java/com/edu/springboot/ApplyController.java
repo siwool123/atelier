@@ -15,6 +15,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.edu.springboot.pay.PayService;
 import com.edu.springboot.restboard.ApplyDTO;
 import com.edu.springboot.restboard.ArtistDTO;
 import com.edu.springboot.restboard.IApplyService;
@@ -34,9 +35,16 @@ public class ApplyController {
 	@Autowired
 	IApplyService adao;
 	
+	@Autowired
+	PayService payService;
+	
 	//작가신청 페이지
 	@RequestMapping("member/apply")
 	String apply(Principal principal, Model model, MemberDTO memberDTO, ApplyDTO applyDTO) {
+		
+		Map<Object, Object> map = payService.memberIndex(principal);
+        model.addAttribute("map", map);
+        
 		try {
 			String user_id = principal.getName(); //로그인아이디 얻어온다.
 			memberDTO = dao.mview(user_id);

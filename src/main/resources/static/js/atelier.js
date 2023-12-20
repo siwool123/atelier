@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
         slidesPerView: 4, // 한 번에 보여지는 슬라이드 개수
         spaceBetween: 0, // 슬라이드 사이의 간격 (픽셀)*/
         navigation: {
-            nextEl: ".bi-chevron-right",
-        	prevEl: ".bi-chevron-left",
+            nextEl: ".next",
+        	prevEl: ".prev",
         },
     	loop: false, // 무한 루프 활성화
     	//loopAdditionalSlides: 0,

@@ -177,15 +177,15 @@ let currentUrl = window.document.location.href;
     <%-- <div>${user_id } 님 로그인을 환영합니다.</div> --%>
     <div class="text-center">
     	<img src="${imageSource}" alt="작품이미지" style="width: 10%; position:relative; left:35%; top:-100px; box-shadow: 2px 2px 4px #636363; z-index: 999;" id="frimg"  />
-       <c:choose>
-       	<c:when test="${ not empty pdto.bgimg }">
-	       	<img src="/uploads/${pdto.bgimg }" id="bgimg" style="width: 80%; transform: translate(-9%);" />
+       <img src="./images/living11.jpg" id="bgimg" style="width: 80%; transform: translate(-9%);" />
+       <%-- <c:choose>
+       	<c:when test="${ empty pdto.bgimg }">
+       		<img src="./images/living11.jpg" id="bgimg" style="width: 80%; transform: translate(-9%);" />
        	</c:when>
        	<c:otherwise>
-	       	<img src="https://lh3.googleusercontent.com/fife/AGXqzDmL-10i-S5ddu6TtbHzQ65Zc-BAXKdrCndhojM8HLAsMtobleBC93j3NlzRvQBxloqcQ89Sp-YYzjm3Hu4VegzKhrqDilSJJ_IrBVKLJpzEvUVQuvwFRTl4_wmxEb6odU2xiExrnia6I1JSAvuQx41ZxwZJte4fYBVQrzvxGzSiurdpiebgdUpAtFZfzRkWJrjwx60sdV9zsB37-Z0quBd0U4hp0S4JCCOJzdDF0Cm6mU_f5fSdvwGrTpnkkVW9qe-Q_3gCWON2iV8Uv9tPX6i9LvH6j6uW1Zw2ZeHpFDR_D36qz3I511RUsqDOXR7o2htA5exdWvSr1gCKtVdTuOfDMchRY0hF0V5RqUgN6qmpvrQO2HgnEmKAAhPaPY2K6ObRH2ziffTi2wxLYk3NzaRi-A2KScAIcy-8DsjY5bk303yjNVGr2MrLMcG0QfvTgSixD-8cGOmQnK8GYxcJrWZ_q3PTcxi3oUL1hAJNSOnvm8zGAa2ygIFwF95xv95Bv7-TD0FZ0x3alw-sjPDI3LuLc3SviZjTLZNMD_9G1m3_S4reUpqgQgtVPFomojyQkbLVSyUpmSgpFLeePaB_RKh4oc0BsNBfJ9ao18lJO_SCgDlkjr3AsgSkm-VGwf8yMTcoTFrAcdJF-opv7wD0PVMnm5FoXaZRfBUzlbO3iQ65ffs01DZTUSkC5WcOf7m7kvk33BHR0H_doUCtOId3o44tRP04b3UAi94hY-YxCumOlFvJWnkK7NUx2HUOnoVu2BcuzPafZmdecvKgzD14PIw6BZ9-nuouDP7OVfDyVK_wnBWwFAsH91DwJxmeRRNSOvfsj-HsEcyY4k71NPJbWtfC-tFhRqZgVthuN8JvQfxVUVMOJ50VMWvvR2UBZjFxv4PkptZsv3cveTcw4eQOeYAHe6xMUdYWmTH35ZPqU-YRM34VcqnYGWXXxBwPVVpVAUAr0DbWV2lAOuJbG2OQgrZzRVENRKHsww7EEcBmuc0O2FOFg2WRxOoI2Nop7LJanUD5s-pOdbatSysTg2CScn8TBMjW9J1yAzUvEq9wh6zIpi1lj8yz4KjT4T76NeleHHmVfUem7plYP3NO-4HEg6oyHEzWnzXHaOTwQepqWuS7Dr36u_rlTBD1koJ8NK2fiwKB4w_fidReyc64kBqLK8nGup6rwMKMm7sJObC_YPIj0a4lplL0K7_89JwkAfFq4PEzMTeid-uIBEjeCt9vhEDxXdTg16jhacgTGQFBz-eNMEnygo3eJ0zsFmqFH6EHiyIilfZxMtzF6qnjhYR-Y5VXsG4l69IBUaJk_ESfdZHCMkDrMCmXQFkX3wfSe2aPZhJRPMvNH_7zf56unB0WPL4HM5dIDAGqlHIvCd8rAyPJ3UuTvAYGGS82inWkJRv0h2Ld-Mh-gUcLfujwtKFEPxv6JVb9_EzWc1KY7DFzXubBESmqRaoOm2TPeVv6ShTQs0Kmu3ro_-DcXruU34RE_m6VXogUK0ek1l_5szJv_9E4xcKvcd6KiGF6YSdlQf-AmE8" 
-        	id="bgimg" style="width: 80%; transform: translate(-9%);" />
+	       	<img src="./images/${pdto.bgimg }" id="bgimg" style="width: 80%; transform: translate(-9%);" />
        	</c:otherwise>
-       </c:choose>
+       </c:choose> --%> 
         
         <p class="my-3"><i class="bi bi-info-circle"></i>&nbsp;작품 및 미리보기 이미지를 무단 사용시 저작권 문제가 발생할 수 있습니다.</p>
     </div>

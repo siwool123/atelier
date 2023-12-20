@@ -19,6 +19,7 @@
 .leftmenu li:nth-child(7) {background-color: black;}
 .leftmenu li:nth-child(7) a, .leftmenu li:nth-child(7) a i {color:white}
 .leftmenu li a {line-height:30px !important;}
+.leftmenu li a i { padding-top: 7px !important; }
 .btn3, .btn4 {padding:0 6% !important;}
 .border li {line-height:40px;}
 input {margin-right:10px !important;}

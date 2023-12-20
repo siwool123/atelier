@@ -71,8 +71,6 @@ public class MemberController {
 		Map<Object, Object> map = payService.memberIndex(principal);
         model.addAttribute("map", map);
         
-        
-        
 		return "member/editMember";
 	}
 	

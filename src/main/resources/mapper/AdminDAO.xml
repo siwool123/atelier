@@ -96,4 +96,6 @@
 		VALUES (seq_artist.nextval, #{midx}, #{m_name}, #{profiles,jdbcType=VARCHAR}, #{a_intro}, #{a_history})
 	</insert>
 	
+	<update id="authority">update member set authority = 'ROLE_ARTIST' where midx=#{param1}</update>
+	
 </mapper>

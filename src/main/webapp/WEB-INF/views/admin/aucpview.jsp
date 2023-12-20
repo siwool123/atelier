@@ -11,7 +11,7 @@
 <link href="../css/sb-admin-2.min.css" rel="stylesheet" type="text/css">
 <link href="../css/all.min.css" rel="stylesheet" type="text/css">
 <link href="../css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
-<link href="/css/atelier.css" rel="stylesheet" type="text/css" />
+<link href="../css/atelier.css" rel="stylesheet" type="text/css" />
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js "></script>
 <style>
 .no-gutters {padding:0 10px !important;}
@@ -21,7 +21,6 @@ table.dataTable {border-collapse:collapse !important;}
 .custom-select {width:50px !important;}
 .portImg{max-width:50px;margin-right:5px;}
 .table thead tr th {vertical-align:middle !important;}
-.table tbody tr {height:100px; overflow:hidden;}
 .introtable tr th {background:#ededed;}
 .img1 {max-width:100px; max-height:100px;}
 .maintable tr {height:30px !important;}
@@ -101,7 +100,6 @@ const countDownTimer = function(id, date){
 
                 <div class="container-fluid p-5">
                     <h3 class="mb-3 text-gray-800 fw-bolder">경매작품 상세보기 </h3>
-                    <p class="mb-4"> ${error }  </p>
 
 
     <div class="container">
@@ -109,12 +107,13 @@ const countDownTimer = function(id, date){
         <div class="col-sm-6 imgback"><div class="image2">
         	<c:if test="${not empty pdto}">
         		<c:set var="imageSource" value="${pdto.sfile.length() > 40 ? pdto.sfile : './uploads/' + pdto.sfile}" />
-   				 <img src="${imageSource}" alt="작품이미지" data-bs-toggle="modal" data-bs-target="#myModal_img" />
+   				 <img src="${imageSource}" alt="작품이미지" />
         	</c:if>
         </div></div>
         <div class="col-sm-6">
             <table class="table table-borderless atable">
-                <tr><th>ARTIST</th><td>${not empty pdto ? pdto.m_name : "등록된 정보가 없습니다." } <a href="./vartist?aidx=${not empty pdto ? pdto.aidx : '' }" class="btn1 ml-5 abtn" > 작가정보</a></td></tr>
+            <tr> <th>TITLE</th><td class="fw-bolder">${ not empty pdto ? pdto.title : '' }</td>  </tr>
+                <tr><th>ARTIST</th><td>${not empty pdto ? pdto.m_name : "등록된 정보가 없습니다." }</td></tr>
                 <tr><th>TYPE</th><td>${not empty pdto ? pdto.p_type : "등록된 정보가 없습니다." }</td></tr>
                 <tr><th>SIZE</th><td>${not empty pdto ? pdto.size1 : "0" } X ${not empty pdto ? pdto.size2 : "0" } CM</td></tr>
                 <tr><th>FRAMED</th><td>
@@ -152,14 +151,14 @@ const countDownTimer = function(id, date){
     </div>
     </div>
  <div class="container text-center mx-auto">
- <h3 class="mb-3 text-gray-800 fw-bolder">최고낙찰자 정보 </h3>
+ <h4 class="mb-3 text-gray-800 fw-bolder mt-5">최고낙찰자 정보 </h4>
  <table class="table table-hover">
 	     <thead class="table-secondary">
 	         <tr align="center">
 	         	<th>회원번호</th>
 	        	 <th>아이디</th>
 	             <th>회원명</th>
-	             <th>회원번호</th>
+	             <th>휴대폰번호</th>
 	             <th>주소</th>
 	             <th>입찰일자</th>
 	             <th>입찰가(원)</th>
@@ -188,26 +187,46 @@ const countDownTimer = function(id, date){
     </table>
  </div>
 
+<div class="container mt-5">
 <c:if test="${ not empty amdto }">
- <h4>최고 낙찰자에게 이메일 전송하기</h4>
+ <h4 class="fw-bolder" style="color:red;">최고 낙찰자에게 이메일 전송하기</h4>
 <form method="post" action="admin/aucmailsend.do">
-<table class="table">
-    <tr> <td> 보내는 사람 : <input type="text" name="from" /> </td> </tr>
-    <tr> <td> 받는 사람 : <input type="text" name="to" value="" /> </td> </tr>
-    <tr> <td>제목 : <input type="text" name="subject" size="50" value="제목은 제목일뿐" /></td></tr>
-    <tr><td>형식 :
-            <input type="radio" name="format" value="text" checked />Text
-            <input type="radio" name="format" value="html" />HTML
-        </td></tr>
-    <tr> <td> <textarea name="content" cols="60" rows="10">내용은 내용일뿐</textarea> </td></tr>
-    <tr><td><button type="submit">전송하기</button></td></tr>
+<table class="table table-borderless">
+    <tr> <td> 받는 사람 : <input type="text" name="to" value="${amdto.id }" /> </td> </tr>
+    <tr> <td>제목 : <input type="text" name="subject" size="50" value="atelier | 입찰하신 경매 마감 및 낙찰 알림" /></td></tr>
+    <tr> <td> <textarea name="contentD" cols="60" rows="10"> 
+    안녕하세요  ${ amdto.m_name } 회원님, 아뜰리에 입니다.
+    
+   회원님께서  ${ amdto.aucdate } 에 입찰하신 아래의 작품의 경매가 종료되었습니다.
+   
+   회원님의 입찰가로 낙찰되어 메일 수신으로부터 72 시간 이내에 결제 진행을 요청드립니다.
+   
+   낙찰후 72시간 이내 미결제시 한달간 입찰이 제한됨을 양해바랍니다.
+   
+   작품이미지 : <img src="${imageSource}" alt="작품이미지" style="max-width:200px;" />
+   
+   작품번호 : ${pdto.pidx}
+     
+   작품명 : ${ not empty pdto.title ? pdto.title : '' }
+   
+   낙찰가 : ${ amdto.aprice } 원
+   
+   경매마감일시 : ${ not empty pdto.enddate ? pdto.enddate : '' }
+   
+   <a href="http://192.168.35.59:8586/member/paynow">바로 결제하러 가기 </a>
+   
+    </textarea>
+    <textarea name="content" id="content" cols="60" rows="10" type="hidden"></textarea>
+     </td></tr>
+    <tr><td><button type="submit" class="btn1">전송하기</button></td></tr>
 </table>
 </form>
- </c:if>
-    
- <h3 class="mb-3 text-gray-800 fw-bolder">입찰자 정보 </h3>
+ </c:if></div>
+  
+  <div class="container">  
+ <h4 class="mb-3 text-gray-800 fw-bolder text-center mt-5">입찰자 정보 </h4>
 <div class="table-responsive">
-	 <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+	 <table class="table table-hover" id="dataTable">
 	     <thead class="table-secondary">
 	         <tr align="center">
 	         	<th>회원번호</th>
@@ -240,24 +259,8 @@ const countDownTimer = function(id, date){
 	</c:choose>
         </tbody>
     </table>
-</div>
+</div></div>
 
-<div class="container">
-	<table class="table table-hover mx-auto" style="width:70%" >
-		<thead class="table-secondary"><tr align="center" > <th>아이디</th> <th>입찰가</th> <th>일자</th> </tr></thead><tbody>
-		<c:choose>
-		<c:when test="${empty amlist }"> <tr> <td colspan="3" align="center">입찰 내역이 없습니다.</td> </tr></c:when>
-		<c:otherwise>
-			<c:forEach items="${ amlist }" var="row" varStatus="loop">
-				<tr> <td align="left" style="padding-left:30px;">${row.id }</td> 
-				<td align="right"><span class="price2">${row.aprice }</span> 원</td> <td align="center">${row.aucdate }</td> </tr>
-			</c:forEach>
-		</c:otherwise>
-		</c:choose>
-	</tbody></table>
-</div>
-
-                    
     </div></div>
 <%@ include file="../include/footer.jsp" %>
 </body>
@@ -269,7 +272,7 @@ const countDownTimer = function(id, date){
 <script src="../js/jquery.dataTables.min.js"></script>
 <script src="../js/dataTables.bootstrap4.min.js"></script>
 <script src="../js/datatables-demo.js"></script>
-<script src="/js/atelier.js"></script>
+<script src="../js/atelier.js"></script>
 <script type="text/javascript">
 $( document ).ready( function() {
 	$('ul.sidebar li').removeClass( 'active' );
