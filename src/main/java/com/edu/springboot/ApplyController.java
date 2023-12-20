@@ -44,6 +44,7 @@ public class ApplyController {
 		
 		Map<Object, Object> map = payService.memberIndex(principal);
         model.addAttribute("map", map);
+        System.out.println(map);
         
 		try {
 			String user_id = principal.getName(); //로그인아이디 얻어온다.
