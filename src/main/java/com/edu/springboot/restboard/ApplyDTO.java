@@ -21,4 +21,6 @@ public class ApplyDTO {
 	private String apply10;
 	private String a_intro;
 	private String a_history;
+	private String m_name;
+	private String profiles;
 }

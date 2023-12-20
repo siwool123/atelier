@@ -5,10 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Atelier</title>
-<!-- <script src="./js/atelier.js"></script> -->
+<script src="./js/atelier.js"></script> 
 <link href="./css/atelier.css" rel="stylesheet" type="text/css" />
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script type="text/javascript">
+
 $( document ).ready( function() {
 	$('#navbarNavAltMarkup div a:first').addClass( 'active' );
  	$('#kakaotalk-sharing-btn').click(function(){$(this).removeClass('active');});
@@ -47,6 +48,18 @@ $( document ).ready( function() {
  		var pidx = getParameterByName('pidx');
  		window.location.href = '/member/paynow?pidx='+pidx;
 	}); 
+	
+	$('.thumb').click(function(){
+		if('${user_id}'=='') {alert('로그인이 필요합니다.'); return;}  
+		
+		alert("리뷰 도움돼요 1 증가");
+		$(this).css({'background-color':'red', 'color':'white'});
+		let params = {pidx : ${pdto.pidx}};
+		$.post('/rest/thumbplus', params, function(resD){
+			console.log('콜백데이터', resD);
+			$('.thumb2').html(parseInt($('.thumb2').text())+1);
+		});
+	});
 });
 function sucFunc(resD){
 	console.log('콜백데이터', resD);
@@ -82,9 +95,16 @@ th {color:#c5c5c5 !important;}
 @media (max-width: 600px) {
   .cart {padding:15px 30px !important;}
   .pay {padding:15px 44px !important}
+  .d-block {height: auto !important;  width: 100% !important;}
 }
 .modal {--bs-modal-width: 96% !important}
 .modal-content {background-color: black; border-radius:0 !important}
+.bi-star-fill {font-size:20px;}
+.img2 {max-width:200px; max-height:200px; margin-right:15px; margin-left:-30px}
+.d-block {height:800px;}
+.next, .prev {font-size:50px; color:black;}
+.carousel-control-next, .carousel-control-prev {width:6% !important;}
+.bi-zoom-in {opacity:0.5; position:relative; left: 80px; font-size: 30px; }
 </style>
 </head>
 <body>
@@ -157,8 +177,16 @@ let currentUrl = window.document.location.href;
     <%-- <div>${user_id } 님 로그인을 환영합니다.</div> --%>
     <div class="text-center">
     	<img src="${imageSource}" alt="작품이미지" style="width: 10%; position:relative; left:35%; top:-100px; box-shadow: 2px 2px 4px #636363; z-index: 999;" id="frimg"  />
-        <img src="https://lh3.googleusercontent.com/fife/AK0iWDyUcU4Bi2hZ2Z6mK2g7E_FOL2q4nU7OoC_CzEMlA8ElOzQ0JiUXs4zzKgTNCmHP4Q3qkfYCku8nxQ3fD1Frqq6HuBvMz1n8vXdb8Bv45JUL58CnkESu3ujWC0Ek3o_-0L7XMmDgVeKD3i9mNgYXT-iAOOx-qcbNsjmGkL-q0_Pr5FV47kt1xWqTGocBuPf3s0jER8z9hs3vrdJTRlcQWechKQhYDbbKj95xcWJaDQmKbtf4o--pd1G5qes7ABuWhwu-dCrsPMw7qQKNjfDmjxPYwdPT6NbohhlZwfzpvfqbuIxwz1aJHdhgbe3W29InyGOMnnJXV0xX9-x2c_k2AwdAeWmVRP1tdP7DJpgV0IaPG4Ug68O8vZ4z9eTtcvhHSp4pyDTEPdzlmfwad5HvSmzGiLV7doVrpfH9pVDYre-AOnofujXwf74QnTprRR8PPmYmsW_EgpsRz9Qh7iAcCZtoa3CpTagAlPDqq1BM_iqnywTGB3r7XZ2QrmfKIpYi3apgrhEqQlCJIzBbCvrTJQf3cIEgmb41Y_Br8v-3IJEHACt1DH8rIAvcGvyieaDJbvChOexh7nmclmZooeHqiI-VewVEzEZbIb29oNyBOXYCWKWL5cpoTZa4NPGWZbdL8HMIKbo1T6PLJaXWq68XQEOabFu92ChIORabxCc6DREWDrL-GbgIIVxGOwtasmy4mwjXo1hu7Vz6rqc_itdWcUyQQZ733qmw2NvqGzOIjmTaIIr7uc8tI5bMzVbGTVruXIceJuhEQCzOxl-eLGWhW-nkR9zQxhK6qKLZSED9rzh-_BNV0M8CU1exJ1y312zIljmSd0lvsMy5NH4TVLgyEatvuVXLt7HqYjHygqKtkZzr7P3p2Tlhz7JXGM-S54tmGcXeM5KJF-ZK9VSk4AUJDsXX5U2I_WNvFGlwnp83YiW96t1GO1_FXBIYNYYupXHPiWsppeJr2H2Z6yG9046FrP4VsL0LCspwoY8f2gvdrT-xEpZ1ZpfpVpcPWsg0fxsjTG1g4R8jJFKv723u00COVR9f5jE57ACkgPByax5v1eAxU_DiFhcMdgWmLpCZe_77Cs2TNNtxw1YMoBrZJ9v_XNQZagNR8wmFwEohkvickjdbqMZcNXxpAWE5TwJBnFRa7m_ClHVoYiJW3yEnQA13lw6rEhPiu5qDAf4-f52Ju-dL33_FWDcSWhoETxwy6aALIeK9Z27t1d5HA1PX177J3hO9lYDhzA1DRD_wag9Ao0UO0jprAiuxSmHCtobGViSVaBD3-guWD-qNi0AVIoz3Ywf1NOVvRcr6c5gHripYRWJBUY0OR4Zs1NIeSla7QEtJqEiX4ebJg8pdPHf6MpiSDV_poA-9cQ5uG5HQyMMgEePuBVJ7CzS5uBgCbxaASd8bqnd4Ndw4y1Y_XW3ByvP79eP6R3bj5TySKoEtq1-NOVMwUZmgMjsu7OGkRFuK-FX5fkLjdRSrgYe_-hQEbWEIoXAp-yziQS_xjU54K7uzVdi0OZGxcP3CPznlCQ" 
+       <c:choose>
+       	<c:when test="${ not empty pdto.bgimg }">
+	       	<img src="/uploads/${pdto.bgimg }" id="bgimg" style="width: 80%; transform: translate(-9%);" />
+       	</c:when>
+       	<c:otherwise>
+	       	<img src="https://lh3.googleusercontent.com/fife/AGXqzDmL-10i-S5ddu6TtbHzQ65Zc-BAXKdrCndhojM8HLAsMtobleBC93j3NlzRvQBxloqcQ89Sp-YYzjm3Hu4VegzKhrqDilSJJ_IrBVKLJpzEvUVQuvwFRTl4_wmxEb6odU2xiExrnia6I1JSAvuQx41ZxwZJte4fYBVQrzvxGzSiurdpiebgdUpAtFZfzRkWJrjwx60sdV9zsB37-Z0quBd0U4hp0S4JCCOJzdDF0Cm6mU_f5fSdvwGrTpnkkVW9qe-Q_3gCWON2iV8Uv9tPX6i9LvH6j6uW1Zw2ZeHpFDR_D36qz3I511RUsqDOXR7o2htA5exdWvSr1gCKtVdTuOfDMchRY0hF0V5RqUgN6qmpvrQO2HgnEmKAAhPaPY2K6ObRH2ziffTi2wxLYk3NzaRi-A2KScAIcy-8DsjY5bk303yjNVGr2MrLMcG0QfvTgSixD-8cGOmQnK8GYxcJrWZ_q3PTcxi3oUL1hAJNSOnvm8zGAa2ygIFwF95xv95Bv7-TD0FZ0x3alw-sjPDI3LuLc3SviZjTLZNMD_9G1m3_S4reUpqgQgtVPFomojyQkbLVSyUpmSgpFLeePaB_RKh4oc0BsNBfJ9ao18lJO_SCgDlkjr3AsgSkm-VGwf8yMTcoTFrAcdJF-opv7wD0PVMnm5FoXaZRfBUzlbO3iQ65ffs01DZTUSkC5WcOf7m7kvk33BHR0H_doUCtOId3o44tRP04b3UAi94hY-YxCumOlFvJWnkK7NUx2HUOnoVu2BcuzPafZmdecvKgzD14PIw6BZ9-nuouDP7OVfDyVK_wnBWwFAsH91DwJxmeRRNSOvfsj-HsEcyY4k71NPJbWtfC-tFhRqZgVthuN8JvQfxVUVMOJ50VMWvvR2UBZjFxv4PkptZsv3cveTcw4eQOeYAHe6xMUdYWmTH35ZPqU-YRM34VcqnYGWXXxBwPVVpVAUAr0DbWV2lAOuJbG2OQgrZzRVENRKHsww7EEcBmuc0O2FOFg2WRxOoI2Nop7LJanUD5s-pOdbatSysTg2CScn8TBMjW9J1yAzUvEq9wh6zIpi1lj8yz4KjT4T76NeleHHmVfUem7plYP3NO-4HEg6oyHEzWnzXHaOTwQepqWuS7Dr36u_rlTBD1koJ8NK2fiwKB4w_fidReyc64kBqLK8nGup6rwMKMm7sJObC_YPIj0a4lplL0K7_89JwkAfFq4PEzMTeid-uIBEjeCt9vhEDxXdTg16jhacgTGQFBz-eNMEnygo3eJ0zsFmqFH6EHiyIilfZxMtzF6qnjhYR-Y5VXsG4l69IBUaJk_ESfdZHCMkDrMCmXQFkX3wfSe2aPZhJRPMvNH_7zf56unB0WPL4HM5dIDAGqlHIvCd8rAyPJ3UuTvAYGGS82inWkJRv0h2Ld-Mh-gUcLfujwtKFEPxv6JVb9_EzWc1KY7DFzXubBESmqRaoOm2TPeVv6ShTQs0Kmu3ro_-DcXruU34RE_m6VXogUK0ek1l_5szJv_9E4xcKvcd6KiGF6YSdlQf-AmE8" 
         	id="bgimg" style="width: 80%; transform: translate(-9%);" />
+       	</c:otherwise>
+       </c:choose>
+        
         <p class="my-3"><i class="bi bi-info-circle"></i>&nbsp;작품 및 미리보기 이미지를 무단 사용시 저작권 문제가 발생할 수 있습니다.</p>
     </div>
         <div class="headerL2">ARTIST’S NOTE</div>
@@ -192,19 +220,30 @@ let currentUrl = window.document.location.href;
 <c:choose>
 	<c:when test="${ empty rdto }"><div class="text-center"> 등록된 리뷰가 없습니다.</div></c:when> 
 	<c:otherwise>
-            <div class="col-sm-1"> <i class="bi bi-person-circle bpc2"></i></div>
+            <div class="col-sm-1">
+            <c:choose>
+	    		<c:when test="${not empty rdto.profiles }"><img src="/uploads/${rdto.profiles }" alt="작성자프로필" style="width:50px; border-radius:50%" /></c:when>
+	    		<c:otherwise><i class="bi bi-person-circle bpc2" style="font-size:50px;"></i></c:otherwise>
+	    	</c:choose>
+            </div>
             <div class="col-sm-11">
-                <b>${rdto.m_name}</b> <span>${rdto.r_date}</span> 
+                <b>${rdto.m_name}</b> <span class="mx-5">${rdto.r_date}</span> 
                 <span>
                 <c:forEach var="i" begin="1" end="${rdto.star}"><i class="bi bi-star-fill starActive"></i></c:forEach>
                 <c:forEach var="i" begin="1" end="${5-rdto.star}"><i class="bi bi-star-fill"></i></c:forEach>
                 </span> 
-                <i class="bi bi-heart-fill fs-4"></i><span>도움돼요</span><span style="color: red;">${rdto.r_like }</span><br/>
-                <div class="my-3">${rdto.r_content}</div>
+                <span style="color: red; float:right; border-radius: 30px;" class="thumb border py-1 px-4 btn"
+                type="button" >리뷰가 도움이 되었나요? <i class="bi bi-hand-thumbs-up fs-3 mx-3"></i> <span class="thumb2">${rdto.r_like }</span></span>
+                <%-- <button class="report ms-3">신고&nbsp; ${rdto.report }</button> --%>
+                <input type="hidden" name="pidx" id="pidx"  value="${rdto.pidx }" />
+                <div class="my-4">${rdto.r_content}</div>
                 <div class="rimg">
-                <c:if test="${rdto.sfile1 !=null }"><img src="./uploads/${ rdto.sfile1 }" style="max-width:300px" /></c:if>
-                <c:if test="${rdto.sfile2 !=null }"><img src="./uploads/${ rdto.sfile2 }" style="max-width:300px" /></c:if>
-                <c:if test="${rdto.sfile3 !=null }"><img src="./uploads/${ rdto.sfile3 }" style="max-width:300px" /></c:if>
+                <i class="bi bi-zoom-in"></i>
+                <img src="./uploads/${ rdto.sfile1 }" class="img2" alt="리뷰이미지1" data-bs-toggle="modal" data-bs-target="#myModal_${rdto.pidx }" />
+                <c:if test="${rdto.sfile2 !=null }"><i class="bi bi-zoom-in"></i>
+                <img src="./uploads/${ rdto.sfile2 }" class="img2" alt="리뷰이미지2" data-bs-toggle="modal" data-bs-target="#myModal_${rdto.pidx }" /></c:if>
+                <c:if test="${rdto.sfile3 !=null }"><i class="bi bi-zoom-in"></i>
+                <img src="./uploads/${ rdto.sfile3 }" class="img2" alt="리뷰이미지3" data-bs-toggle="modal" data-bs-target="#myModal_${rdto.pidx }" /></c:if>
                 </div>
             </div>
 	</c:otherwise>
@@ -285,6 +324,44 @@ let currentUrl = window.document.location.href;
       <c:set var="imgsize" value="${pdto.size1 / pdto.size2 >1.7 ? 'width' : 'height' }" />
       <div class="modal-body text-center" style="height:88vh"> <img src="${imageSource}" style="${imgsize}:100%" /> </div>
 
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="myModal_${rdto.pidx }">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="border-radius:0 !important;">
+        <h4 class="modal-title fw-bolder">리뷰 상세 이미지 </h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center" style="height:88vh">
+          <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+              </div>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="/uploads/${rdto.sfile1 }" class="d-block mx-auto" alt="..."> </div>
+                <c:if test="${rdto.sfile2 !=null }"><div class="carousel-item">
+                  <img src="/uploads/${rdto.sfile2 }" class="d-block mx-auto" alt="..."> </div></c:if>
+                <c:if test="${rdto.sfile3 !=null }"><div class="carousel-item">
+                  <img src="/uploads/${rdto.sfile3 }" class="d-block mx-auto" alt="..."> </div></c:if>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                  <i class="bi bi-chevron-left prev"></i>
+                  <!-- <span class="carousel-control-prev-icon" aria-hidden="true"></span> -->
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                  <i class="bi bi-chevron-right next"></i> 
+                  <!-- <span class="carousel-control-next-icon" aria-hidden="true"></span> -->
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+      </div>
     </div>
   </div>
 </div>

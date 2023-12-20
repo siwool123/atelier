@@ -10,91 +10,83 @@
 		SELECT * from product WHERE aidx=#{param1}
 	</select>
 	
-	<select id="minprice">
-		SELECT min(price) from product
-	</select>
-	<select id="maxprice">
-		SELECT max(price) from product
-	</select>
+	<select id="minprice"> SELECT min(price) from product </select>
+	<select id="maxprice"> SELECT max(price) from product </select>
 
 	<select id="totalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
-		SELECT count(*) from product
+		SELECT count(*) from product where auction=0 
 		<!-- 검색어가 null, 빈값이 아닐때만 where 절을 동적으로 추가한다. -->
-		<where>
 		<choose>
 			<when test="sWord!=null and !sWord.isEmpty()">
-				<foreach collection="sWord" item="str" separator="or">
-					title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+				and <foreach collection="sWord" item="str" open="(" close=")" separator="or">
+					 title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
 				</foreach>
 			</when>
 			<when test="pmin!=null and !pmin.isEmpty() and pmax!=null and !pmax.isEmpty()">
-				price BETWEEN #{pmin} AND #{pmax}
+				 and price BETWEEN #{pmin} AND #{pmax}
 			</when>
-			<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> sold = 1</when>
-			<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> sold = 0</when>
-			<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> size1=size2</when>
-			<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> size1 &gt; size2</when>
-			<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> size1 &lt; size2</when>
-			<when test="size!=null and !size.isEmpty() and size.equals('xs')"> size2 BETWEEN 0 and 15</when>
-			<when test="size!=null and !size.isEmpty() and size.equals('ss')"> size2 BETWEEN 15 and 25</when>
-			<when test="size!=null and !size.isEmpty() and size.equals('mm')"> size2 BETWEEN 25 and 50</when>
-			<when test="size!=null and !size.isEmpty() and size.equals('ll')"> size2 BETWEEN 50 and 100</when>
-			<when test="size!=null and !size.isEmpty() and size.equals('xl')"> size2 &gt; 100</when>
-			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('ac')"> p_type='아크릴'</when>
-			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('oi')"> p_type='유화'</when>
-			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('wa')"> p_type='수채화'</when>
-			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('in')"> p_type='수묵화'</when>
-			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('sk')"> p_type='스케치'</when>
-			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('mi')"> p_type='혼합/기타'</when>
-			<when test="cate!=null and !cate.isEmpty() and cate.equals('na')"> theme='자연/풍경'</when>
-			<when test="cate!=null and !cate.isEmpty() and cate.equals('pe')"> theme='인물'</when>
-			<when test="cate!=null and !cate.isEmpty() and cate.equals('an')"> theme='동식물'</when>
-			<when test="cate!=null and !cate.isEmpty() and cate.equals('ob')"> theme='사물'</when>
-			<when test="cate!=null and !cate.isEmpty() and cate.equals('ab')"> theme='추상'</when>
-			<when test="cate!=null and !cate.isEmpty() and cate.equals('ot')"> theme='기타'</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> and sold = 1</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> and sold = 0</when>
+			<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> and size1=size2</when>
+			<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> and size1 &gt; size2</when>
+			<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> and size1 &lt; size2</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('xs')"> and size2 BETWEEN 0 and 15</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('ss')"> and size2 BETWEEN 15 and 25</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('mm')"> and size2 BETWEEN 25 and 50</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('ll')"> and size2 BETWEEN 50 and 100</when>
+			<when test="size!=null and !size.isEmpty() and size.equals('xl')"> and size2 &gt; 100</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('ac')"> and p_type='아크릴'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('oi')"> and p_type='유화'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('wa')"> and p_type='수채화'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('in')"> and p_type='수묵화'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('sk')"> and p_type='스케치'</when>
+			<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('mi')"> and p_type='혼합/기타'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('na')"> and theme='자연/풍경'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('pe')"> and theme='인물'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('an')"> and theme='동식물'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('ob')"> and theme='사물'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('ab')"> and theme='추상'</when>
+			<when test="cate!=null and !cate.isEmpty() and cate.equals('ot')"> and theme='기타'</when>
 		</choose>
-		</where>
 	</select>
 
-	<select id="selectProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
-		<!-- select * from product -->
+	<select id="selectProduct" resultType="com.edu.springboot.restboard.ProductDTO" 
+	parameterType="com.edu.springboot.restboard.ParameterDTO">
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
-				SELECT * FROM product 
-					<where>
-						<choose>
-							<when test="sWord!=null and !sWord.isEmpty()">
-								<foreach collection="sWord" item="str" separator="or">
-									title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
-								</foreach>
-							</when>
-							<when test="pmin!=null and !pmin.isEmpty() and pmax!=null and !pmax.isEmpty()">
-								price BETWEEN #{pmin} AND #{pmax}
-							</when>
-							<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> sold = 1</when>
-							<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> sold = 0</when>
-							<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> size1=size2</when>
-							<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> size1 &gt; size2</when>
-							<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> size1 &lt; size2</when>
-							<when test="size!=null and !size.isEmpty() and size.equals('xs')"> size2 BETWEEN 0 and 15</when>
-							<when test="size!=null and !size.isEmpty() and size.equals('ss')"> size2 BETWEEN 15 and 25</when>
-							<when test="size!=null and !size.isEmpty() and size.equals('mm')"> size2 BETWEEN 25 and 50</when>
-							<when test="size!=null and !size.isEmpty() and size.equals('ll')"> size2 BETWEEN 50 and 100</when>
-							<when test="size!=null and !size.isEmpty() and size.equals('xl')"> size2 &gt; 100</when>
-							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('ac')"> p_type='아크릴'</when>
-							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('oi')"> p_type='유화'</when>
-							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('wa')"> p_type='수채화'</when>
-							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('in')"> p_type='수묵화'</when>
-							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('sk')"> p_type='스케치'</when>
-							<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('mi')"> p_type='혼합/기타'</when>
-							<when test="cate!=null and !cate.isEmpty() and cate.equals('na')"> theme='자연/풍경'</when>
-							<when test="cate!=null and !cate.isEmpty() and cate.equals('pe')"> theme='인물'</when>
-							<when test="cate!=null and !cate.isEmpty() and cate.equals('an')"> theme='동식물'</when>
-							<when test="cate!=null and !cate.isEmpty() and cate.equals('ob')"> theme='사물'</when>
-							<when test="cate!=null and !cate.isEmpty() and cate.equals('ab')"> theme='추상'</when>
-							<when test="cate!=null and !cate.isEmpty() and cate.equals('ot')"> theme='기타'</when>
-						</choose>
-				</where>
+				SELECT * FROM product where auction=0 
+					<choose>
+						<when test="sWord!=null and !sWord.isEmpty()">
+							and <foreach collection="sWord" item="str" open="(" close=")" separator="or">
+								 title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+							</foreach>
+						</when>
+						<when test="pmin!=null and !pmin.isEmpty() and pmax!=null and !pmax.isEmpty()">
+							 and price BETWEEN #{pmin} AND #{pmax}
+						</when>
+						<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> and sold = 1</when>
+						<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> and sold = 0</when>
+						<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> and size1=size2</when>
+						<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> and size1 &gt; size2</when>
+						<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> and size1 &lt; size2</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('xs')"> and size2 BETWEEN 0 and 15</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('ss')"> and size2 BETWEEN 15 and 25</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('mm')"> and size2 BETWEEN 25 and 50</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('ll')"> and size2 BETWEEN 50 and 100</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('xl')"> and size2 &gt; 100</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('ac')"> and p_type='아크릴'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('oi')"> and p_type='유화'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('wa')"> and p_type='수채화'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('in')"> and p_type='수묵화'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('sk')"> and p_type='스케치'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('mi')"> and p_type='혼합/기타'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('na')"> and theme='자연/풍경'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('pe')"> and theme='인물'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('an')"> and theme='동식물'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('ob')"> and theme='사물'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('ab')"> and theme='추상'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('ot')"> and theme='기타'</when>
+					</choose>
 				<if test='orderby != null and !orderby.isEmpty()'>
 				<choose>
 						<when test='orderby.equals("11")'> ORDER BY p_like DESC</when>
@@ -106,12 +98,98 @@
 			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
 	</select>
 	
+	<select id="selAuction" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				select * from product where auction=1 
+					<choose>
+						<when test="sWord!=null and !sWord.isEmpty()">
+							and <foreach collection="sWord" item="str" open="(" close=")" separator="or">
+								  title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+							</foreach>
+						</when>
+						<when test="pmin!=null and !pmin.isEmpty() and pmax!=null and !pmax.isEmpty()">
+							  and price BETWEEN #{pmin} AND #{pmax}
+						</when>
+						<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> and enddate &lt; sysdate </when>
+						<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> and enddate &gt; sysdate</when>
+						<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> and size1 = size2</when>
+						<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> and size1 &gt; size2</when>
+						<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> and size1 &lt; size2</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('xs')"> and size2 BETWEEN 0 and 15</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('ss')"> and size2 BETWEEN 15 and 25</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('mm')"> and size2 BETWEEN 25 and 50</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('ll')"> and size2 BETWEEN 50 and 100</when>
+						<when test="size!=null and !size.isEmpty() and size.equals('xl')"> and size2 &gt; 100</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('ac')"> and p_type='아크릴'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('oi')"> and p_type='유화'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('wa')"> and p_type='수채화'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('in')"> and p_type='수묵화'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('sk')"> and p_type='스케치'</when>
+						<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('mi')"> and p_type='혼합/기타'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('na')"> and theme='자연/풍경'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('pe')"> and theme='인물'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('an')"> and theme='동식물'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('ob')"> and theme='사물'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('ab')"> and theme='추상'</when>
+						<when test="cate!=null and !cate.isEmpty() and cate.equals('ot')"> and theme='기타'</when>
+					</choose>
+				<if test='orderby != null and !orderby.isEmpty()'>
+				<choose>
+						<when test='orderby.equals("11")'> ORDER BY p_like DESC</when>
+						<when test='orderby.equals("22")'> ORDER BY price</when>
+						<when test='orderby.equals("33")'> ORDER BY price DESC</when>
+						<otherwise> ORDER BY pidx DESC </otherwise>
+				</choose>
+				</if>
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="atotalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select count(*) from product where auction=1 
+			<choose>
+				<when test="sWord!=null and !sWord.isEmpty()">
+					and <foreach collection="sWord" item="str" open="(" close=")" separator="or">
+						  title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+					</foreach>
+				</when>
+				<when test="pmin!=null and !pmin.isEmpty() and pmax!=null and !pmax.isEmpty()">
+					  and price BETWEEN #{pmin} AND #{pmax}
+				</when>
+				<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> and enddate &lt; sysdate </when>
+				<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> and enddate &gt; sysdate</when>
+				<when test="ori!=null and !ori.isEmpty() and ori.equals('sq')"> and size1 = size2</when>
+				<when test="ori!=null and !ori.isEmpty() and ori.equals('la')"> and size1 &gt; size2</when>
+				<when test="ori!=null and !ori.isEmpty() and ori.equals('po')"> and size1 &lt; size2</when>
+				<when test="size!=null and !size.isEmpty() and size.equals('xs')"> and size2 BETWEEN 0 and 15</when>
+				<when test="size!=null and !size.isEmpty() and size.equals('ss')"> and size2 BETWEEN 15 and 25</when>
+				<when test="size!=null and !size.isEmpty() and size.equals('mm')"> and size2 BETWEEN 25 and 50</when>
+				<when test="size!=null and !size.isEmpty() and size.equals('ll')"> and size2 BETWEEN 50 and 100</when>
+				<when test="size!=null and !size.isEmpty() and size.equals('xl')"> and size2 &gt; 100</when>
+				<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('ac')"> and p_type='아크릴'</when>
+				<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('oi')"> and p_type='유화'</when>
+				<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('wa')"> and p_type='수채화'</when>
+				<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('in')"> and p_type='수묵화'</when>
+				<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('sk')"> and p_type='스케치'</when>
+				<when test="ptype!=null and !ptype.isEmpty() and ptype.equals('mi')"> and p_type='혼합/기타'</when>
+				<when test="cate!=null and !cate.isEmpty() and cate.equals('na')"> and theme='자연/풍경'</when>
+				<when test="cate!=null and !cate.isEmpty() and cate.equals('pe')"> and theme='인물'</when>
+				<when test="cate!=null and !cate.isEmpty() and cate.equals('an')"> and theme='동식물'</when>
+				<when test="cate!=null and !cate.isEmpty() and cate.equals('ob')"> and theme='사물'</when>
+				<when test="cate!=null and !cate.isEmpty() and cate.equals('ab')"> and theme='추상'</when>
+				<when test="cate!=null and !cate.isEmpty() and cate.equals('ot')"> and theme='기타'</when>
+			</choose>
+	</select>
+	
+	
+	<select id="aminprice"> SELECT min(price) from product where auction=1 </select>
+	<select id="amaxprice"> SELECT max(price) from product where auction=1 </select>
+	
 	<select id="search" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
-		SELECT * FROM product
+		SELECT * FROM product where auction=0 
 		<if test="sWord!=null">
-			WHERE
-			<foreach collection="sWord" item="str" open="(" close=")" separator="or">
-				title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
+			and <foreach collection="sWord" item="str" open="(" close=")" separator="or">
+				 title LIKE '%' || #{str} || '%' OR m_name LIKE '%' || #{str} || '%'
 			</foreach>
 		</if>
 		ORDER BY pidx DESC
@@ -123,6 +201,10 @@
 	<select id="aview" resultType="com.edu.springboot.restboard.ArtistDTO">
 		SELECT * FROM artist WHERE aidx = #{param1}
 	</select>
+	<select id="aviewbym" resultType="com.edu.springboot.restboard.ArtistDTO">
+		SELECT * FROM artist WHERE midx = #{param1}
+	</select>
+	
 	<select id="rview" resultType="com.edu.springboot.restboard.ReviewDTO">
 		SELECT * FROM review WHERE pidx = #{param1}
 	</select>
@@ -130,6 +212,9 @@
 		SELECT * FROM member WHERE id = #{param1}
 	</select>
 	
+	<select id="mview2" resultType="com.edu.springboot.restboard.MemberDTO">
+		SELECT * FROM member WHERE midx = #{param1}
+	</select>
 	
 	<insert id="write" >
 		INSERT INTO product (pidx, title, content, id) VALUES (seq_product.nextval, #{title}, #{content}, #{id})
@@ -149,12 +234,26 @@
 				SELECT * FROM review WHERE aidx = #{aidx}
 			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
 	</select>
+	<select id="rvlistbya2" resultType="com.edu.springboot.restboard.ReviewDTO">
+		SELECT * FROM review WHERE aidx = #{param1}
+	</select>
 	
 	<select id="productsbyas" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT * FROM product WHERE aidx=#{aidx} AND sold=#{sold}
 			) Tb) WHERE rNum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="productsbyas2" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM product WHERE aidx=#{aidx} AND auction=#{auction}
+		<choose>
+			<when test="status != null and !status.isEmpty() and status.equals('aa')"> and sold = 0</when>
+			<when test="status != null and !status.isEmpty() and status.equals('bb')"> and sold = 1</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('aa')"> and enddate &gt; sysdate</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('bb')"> and enddate &lt; sysdate and maxprice is null</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus.equals('cc')"> and enddate &lt; sysdate and maxprice is not null</when>
+		</choose>
 	</select>
 	
 	<select id="cartview" resultType="com.edu.springboot.restboard.CartDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
@@ -169,13 +268,13 @@
 	<delete id="delCart">DELETE FROM cart WHERE pidx=#{param1}</delete>
 	
 	<insert id="payorder" parameterType="com.edu.springboot.restboard.OrderDTO">
-		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message, apinum) VALUES 
-		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{apinum})
+		INSERT INTO order1 (oidx, midx, paymethod, price, paydate, receiver, r_phone, r_address, message, apinum, pidx, add_point, minus_point) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, sysdate, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{apinum}, #{pidx}, #{add_point}, #{minus_point})
 	</insert>
 	
 	<insert id="bankorder" parameterType="com.edu.springboot.restboard.OrderDTO">
-		INSERT INTO order1 (oidx, midx, paymethod, price, receiver, r_phone, r_address, message, owner) VALUES 
-		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{owner})
+		INSERT INTO order1 (oidx, midx, paymethod, price, receiver, r_phone, r_address, message, owner, pidx, add_point, minus_point) VALUES 
+		(fn_create_orderno, #{midx}, #{paymethod}, #{price}, #{receiver}, #{r_phone}, #{r_address}, #{message}, #{owner}, #{pidx}, #{add_point}, #{minus_point})
 	</insert>
 	
 	<insert id="insertorder2" parameterType="com.edu.springboot.restboard.Order2DTO">
@@ -189,24 +288,21 @@
 	SELECT oidx FROM (SELECT oidx FROM order1 WHERE midx=#{param1} ORDER BY orderdate DESC) WHERE ROWNUM = 1
 	</select>
 		
-	<update id="minusPoint">
+	<update id="memberPoint">
 		UPDATE member SET total_point = total_point - #{param1} WHERE midx=#{param2}
 	</update>
 	
-	<insert id="pminsert" parameterType="com.edu.springboot.restboard.PointDTO">
-		INSERT INTO m_point (point_idx, midx, minus_point, oidx) VALUES 
-		(seq_point.nextval, #{midx}, #{minus_point}, #{oidx})
+	<insert id="pinsert" parameterType="com.edu.springboot.restboard.PointDTO">
+		INSERT INTO m_point (point_idx, midx, minus_point, add_point, oidx, pidx, title, m_name) VALUES 
+		(seq_point.nextval, #{midx}, #{minus_point}, #{add_point}, #{oidx}, #{pidx}, #{title}, #{m_name})
 	</insert>
 	
-	<select id="ordersview" resultType="com.edu.springboot.restboard.Order2DTO">
-		SELECT * FROM order2 WHERE oidx=#{param1}
-	</select>
-	<select id="oview" resultType="com.edu.springboot.restboard.OrderDTO">
-		SELECT * FROM order1 WHERE oidx=#{param1}
+	<select id="olist" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order1 WHERE midx=#{param1}
 	</select>
 	
-	<select id="olist" resultType="com.edu.springboot.restboard.OrderDTO">
-		SELECT * FROM order1 WHERE midx=#{midx}
+	<select id="olist11" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order1
 	</select>
 	
 	<select id="notPaid" resultType="com.edu.springboot.restboard.OrderDTO">
@@ -216,4 +312,165 @@
 	<select id="notShipped" resultType="com.edu.springboot.restboard.OrderDTO">
 		SELECT * FROM order1 WHERE midx=#{param1} and shipdate is null
 	</select>
+	
+	<select id="totalLikeCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT count(*) from p_like where midx=#{param1}
+	</select>
+	
+	<select id="selectLikeProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		<!-- select * from product -->
+		<!-- SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM product inner join p_like on product.pidx = p_like.pidx where p_like.midx=#{midx}
+			) Tb) WHERE rNum BETWEEN #{start} AND #{end} -->
+			SELECT * FROM product inner join p_like on product.pidx = p_like.pidx where p_like.midx=#{midx}
+	</select>
+	
+	<select id="opjoin" resultType="com.edu.springboot.restboard.OPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select order2.o2idx, order1.oidx, order1.midx, order1.paymethod, order1.price as tprice, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, 
+ order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.owner, 
+order1.auction, order1.add_point, order1.minus_point, product.pidx, product.sfile, product.title, product.m_name, product.size1, product.size2, product.price, product.ridx
+from order2 inner join product on order2.pidx = product.pidx
+inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
+			<choose>
+				<when test="status != null and !status.isEmpty() and status.equals('aa')"> and order1.paydate is null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('bb')"> and order1.paydate is not null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('cc')"> and order1.paydate is not null and order1.shipdate is not null</when>
+				<when test="dmin!=null and !dmin.isEmpty() and dmax!=null and !dmax.isEmpty()">
+					 and order1.orderdate BETWEEN #{dmin} AND #{dmax}
+				</when>
+				<when test="sWord!=null and !sWord.isEmpty()">
+					<foreach collection="sWord" item="str" separator="or">
+						and product.title LIKE '%' || #{str} || '%' OR product.m_name LIKE '%' || #{str} || '%'
+					</foreach>
+				</when>
+			</choose>
+	</select>
+	
+	<select id="o2list" resultType="com.edu.springboot.restboard.Order2DTO">
+		SELECT * FROM order2 WHERE oidx=#{param1}
+	</select>
+	
+	<select id="oview" resultType="com.edu.springboot.restboard.OrderDTO">
+		SELECT * FROM order1 WHERE oidx=#{param1}
+	</select>
+	<select id="orderdate">
+		select to_char(orderdate, 'yyyy-mm-dd hh:mi:ss') from order1 where oidx = #{param1}
+	</select>
+	
+	<select id="opjoin2" resultType="com.edu.springboot.restboard.OPjoinDTO" >
+		select order2.o2idx, order2.oidx, order1.price as tprice, order2.midx, order1.paymethod, order1.orderdate, order1.paydate, order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.shipdate, order1.courier, order1.t_num,
+		 order1.owner, order1.auction, product.pidx, product.title, product.size1, product.size2, product.price, product.sfile, product.m_name, m_point.add_point, m_point.minus_point
+		from order2 
+		    inner join order1 on order2.oidx = order1.oidx 
+		    inner join product on order2.pidx = product.pidx
+		    inner join m_point on order2.oidx = m_point.oidx where order2.oidx=#{param1}
+	</select>
+	
+	<insert id="rinsert" parameterType="com.edu.springboot.restboard.ReviewDTO">
+	 	insert into review (ridx, pidx, aidx, midx, r_content, star, sfile1, sfile2, sfile3, m_name, psfile, title, a_name, size1, size2, profiles)
+	 	values (seq_review.nextval, #{pidx}, #{aidx}, #{midx}, #{r_content}, #{star}, #{sfile1}, #{sfile2}, #{sfile3}, #{m_name}, #{psfile}, #{title}, #{a_name}, #{size1}, #{size2}, #{profiles})
+	</insert>
+	
+	<update id="setreview"> update product set ridx = #{param2} where pidx=#{param1} </update>
+	<update id="setreview2"> update product set ridx = null where pidx=#{param1} </update>
+	
+	<select id="reviewL" resultType="com.edu.springboot.restboard.ReviewDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select * from review where midx = #{midx} 
+		<if test="dmin!=null and !dmin.isEmpty() and dmax!=null and !dmax.isEmpty()">
+			 and r_date BETWEEN #{dmin} AND #{dmax}
+		</if>
+	</select>
+	
+	<insert id="rPoint" parameterType="com.edu.springboot.restboard.PointDTO">
+		INSERT INTO m_point (point_idx, midx, minus_point, add_point, pidx, ridx) VALUES 
+		(seq_point.nextval, #{midx}, 0, 10000, #{pidx}, #{ridx})
+	</insert>
+	
+	<update id="rPointM">update member set total_point = total_point+10000 where midx=#{param1}</update>
+	<delete id="delReview">delete from review where pidx=#{param1}</delete>
+	<select id="maxRnum">select max(ridx) from review</select>
+	
+	<delete id="delRpoint">delete from m_point where ridx=#{param1}</delete>
+	<update id="delRpointM">update member set total_point = total_point-10000 where midx=#{param1}</update>
+
+	<select id="vreview" resultType="com.edu.springboot.restboard.ReviewDTO">
+	select * from review where pidx = #{param1} </select>
+	
+	<update id="rupdate" parameterType="com.edu.springboot.restboard.ReviewDTO">
+		update review set r_content = #{r_content}, star = #{star}, sfile1 = #{sfile1}, sfile2 = #{sfile2}, sfile3 = #{sfile3} where pidx = #{pidx}
+	</update>
+	
+	<update id="rlikeplus">update review set r_like = r_like+1 where pidx = #{param1}</update>
+	
+	<select id="pointlist" resultType="com.edu.springboot.restboard.PointDTO">
+		select * from m_point where midx = #{param1}	
+	</select>
+	<update id="mpoint">update member set total_point = #{param1}</update>
+	
+	<select id="auclist" resultType="com.edu.springboot.restboard.AuctionDTO">
+		select * from auction2 where pidx = #{param1}
+	</select>
+	
+	<select id="aucmaxp">select max(aprice) from auction2</select>
+	
+	<insert id="auctionInsert" parameterType="com.edu.springboot.restboard.AuctionDTO">
+		insert into auction2 (bid_idx, pidx, midx, aprice, id) values 
+		(seq_auction2.nextval, #{pidx}, #{midx}, #{aprice}, #{id})
+	</insert>
+	
+<!-- 	<select id="aucpjoin" resultType="com.edu.springboot.restboard.OPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select order2.o2idx, order1.oidx, order1.midx, order1.paymethod, order1.price as tprice, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, 
+ order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.owner, 
+order1.auction, order1.add_point, order1.minus_point, product.pidx, product.sfile, product.title, product.m_name, product.size1, product.size2, product.price, product.ridx
+from order2 inner join product on order2.pidx = product.pidx
+inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
+			<choose>
+				<when test="status != null and !status.isEmpty() and status.equals('aa')"> and order1.paydate is null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('bb')"> and order1.paydate is not null and order1.shipdate is null</when>
+				<when test="status != null and !status.isEmpty() and status.equals('cc')"> and order1.paydate is not null and order1.shipdate is not null</when>
+				<when test="dmin!=null and !dmin.isEmpty() and dmax!=null and !dmax.isEmpty()">
+					 and order1.orderdate BETWEEN #{dmin} AND #{dmax}
+				</when>
+				<when test="sWord!=null and !sWord.isEmpty()">
+					<foreach collection="sWord" item="str" separator="or">
+						and product.title LIKE '%' || #{str} || '%' OR product.m_name LIKE '%' || #{str} || '%'
+					</foreach>
+				</when>
+			</choose>
+	</select> -->
+	
+	<select id="aucpjoin2"  resultType="com.edu.springboot.restboard.AUPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		select product.*, auction2.aprice, auction2.aucdate, auction2.id from product inner join auction2 on product.pidx = auction2.pidx where auction2.id=#{id}
+			<!-- <when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus eq 'aa')"> and product.enddate &lt; sysdate and auction2.aprice = product.maxprice</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus eq 'bb')"> and product.enddate &lt; sysdate and auction2.aprice != product.maxprice</when>
+			<when test="aucstatus != null and !aucstatus.isEmpty() and aucstatus eq 'cc')"> and product.enddate &gt; sysdate</when> -->
+			<if test="dmin!=null and !dmin.isEmpty() and dmax!=null and !dmax.isEmpty()">
+				 and auction2.aucdate BETWEEN #{dmin} AND #{dmax}
+			</if>
+			  order by auction2.aucdate desc
+	</select>
+	
+	<update id="updatepm"> update product set maxprice = #{param2} where pidx = #{param1} </update>
+	
+	<select id="selProduct" resultType="com.edu.springboot.restboard.ProductDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT * FROM product where auction=#{auction} 
+		<choose>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('so')"> and sold = 1</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('on')"> and sold = 0</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('aa')"> and enddate &gt; sysdate</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('bb')"> and enddate &lt; sysdate and maxprice is null</when>
+			<when test="sell!=null and !sell.isEmpty() and sell.equals('cc')"> and enddate &lt; sysdate and maxprice is not null</when>
+		</choose>
+	</select>
+	
+	<delete id="delProduct">delete from product where pidx=#{param1}</delete>
+	
+	<select id="amjoin" resultType="com.edu.springboot.restboard.AMjoinDTO" >
+	select * from auction2 inner join member on auction2.midx=member.midx 
+	where auction2.pidx=#{param1} order by auction2.aprice desc </select>
+	
+	<select id="amjoin2" resultType="com.edu.springboot.restboard.AMjoinDTO" >
+	select * from (select * from auction2 inner join member on auction2.midx=member.midx 
+	where auction2.pidx=#{param1} order by auction2.aprice desc) where rownum=1 </select>
 </mapper> 

@@ -42,7 +42,7 @@ public class WebSecurityConfig {
 		.authorizeHttpRequests((request) -> request
 				.dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD).permitAll()
 				.requestMatchers("/", "/css/**", "/js/**", "/images/**", "/rest/**", "/shop/**", "/shop", "/view/**", "/view", "/uploads/**", "/error").permitAll()
-				.requestMatchers("/vartist", "/guest", "/guest/**").permitAll()
+				.requestMatchers("/vartist", "/guest", "/guest/**", "/auction/**", "/auction").permitAll()
 				.requestMatchers("/member/**", "/pay/**").hasAnyRole("USER", "ARTIST", "ADMIN")
 				.requestMatchers("/artist/**", "/artist").hasAnyRole("ARTIST", "ADMIN")
 				.requestMatchers("/admin/**", "/admin").hasRole("ADMIN")
@@ -61,7 +61,6 @@ public class WebSecurityConfig {
 		logoutUrl : 로그아웃 위한 요청명
 		logoutSuccessUrl : 로그아웃후 이동할위치 		  */
 		
-		
 		http.formLogin(formLogin -> formLogin
 				.loginPage("/login") 		// default : /login
 				.loginProcessingUrl("/loginAction")
@@ -70,6 +69,17 @@ public class WebSecurityConfig {
 				.usernameParameter("my_id") 	// default : username
 				.passwordParameter("my_pass")	// default : password
 				.permitAll() );
+		
+//		http.formLogin(formLogin -> formLogin
+//				.loginPage("/login1") 		// default : /login
+//				.loginProcessingUrl("/loginAction1")
+////				.failureUrl("/error") 		// default : /login?error
+//				.failureHandler(myAuthFailureHandler)
+//				.usernameParameter("my_id") 	// default : username
+//				.passwordParameter("my_pass")	// default : password
+//				.permitAll() );
+		
+		
 		http.logout(logout -> logout
 				.logoutUrl("/logout")		// default : /logout
 				.logoutSuccessUrl("/")

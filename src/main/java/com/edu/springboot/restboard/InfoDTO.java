@@ -29,4 +29,5 @@ public class InfoDTO {
 	
 	private String searchField;
 	private ArrayList<String> searchWord;
+	
 }

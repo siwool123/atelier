@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var swiper = new Swiper('.swiper-container', {
+    var swiper = new Swiper('.sc1', {
         slidesPerView: 1, // 한 번에 보여지는 슬라이드 개수
         spaceBetween: 0, // 슬라이드 사이의 간격 (픽셀)*/
         pagination: {
@@ -33,7 +33,20 @@ document.addEventListener('DOMContentLoaded', function () {
             width:380,
             }}*/
     });
+    var swiper3 = new Swiper('.sc3', {
+        slidesPerView: 4, // 한 번에 보여지는 슬라이드 개수
+        spaceBetween: 0, // 슬라이드 사이의 간격 (픽셀)*/
+        navigation: {
+            nextEl: ".bi-chevron-right",
+        	prevEl: ".bi-chevron-left",
+        },
+    	loop: false, // 무한 루프 활성화
+    	//loopAdditionalSlides: 0,
+    });
+    
 });
+
+
 /*function handleActiveClass(selector, attributeName) {
     $(selector).each(function () {
         var hrefValue = $(this).attr('href').slice(-2);
@@ -359,7 +372,7 @@ $( document ).ready( function() {
 	$('a#total').addClass( 'active' );
 	
 	$('.btn2').click(function (e) {
-        e.preventDefault(); // 기존의 클릭 이벤트 방지
+        e.preventDefault(); // 기존의 클릭 이벤트 방지 
         // 현재 URL 가져오기
         var currentUrl = window.location.href.includes('orderby') ? window.location.href.slice(0, -11) : window.location.href;
         var orderbyValue = $(this).attr('href').replace('?', ''); // .btn2의 href 값 가져오기
@@ -380,7 +393,7 @@ $( document ).ready( function() {
         window.location.href = cUrl + separator + plValue;
     });
 	
-	if (window.location.pathname.endsWith("/shop")) {
+	if (window.location.pathname.endsWith("/shop") || window.location.pathname.endsWith("/auction")  || window.location.pathname.endsWith("/")) {
 		$('.btn1').removeClass('active'); $('.btn1').parent('li').removeClass('active');
         $('#total').addClass('active');
         
@@ -416,6 +429,13 @@ $( document ).ready( function() {
 	activeByParam2('orderby', '22', '#low');
 	activeByParam2('orderby', '33', '#high');
 
+	 activeByParam('status', 'aa', '#aa');
+	activeByParam('status', 'bb', '#bb');
+	activeByParam('status', 'cc', '#cc');
+	
+	activeByParam('aucstatus', 'aa', '#aa');
+	activeByParam('aucstatus', 'bb', '#bb');
+	activeByParam('aucstatus', 'cc', '#cc');
 	/*$('.orderby li a').click( function(){
 		$('.orderby li a').removeClass('active');
 		$('.orderby li').removeClass('active');
@@ -500,11 +520,11 @@ $( document ).ready( function() {
 	});
 	
 	//포인트 뺀 최종가격표시
-	/*var finalPrice = parseInt($('#tprice3').text().replace(/,/g, '')) - parseInt($('#point').val()); // , 제거 후 숫자로 변환
+	var finalPrice = parseInt($('#tprice3').text().replace(/,/g, '')) - parseInt($('#point').val()); // , 제거 후 숫자로 변환
 	
 	 $('#futurepoint').html(parseInt($('#tprice3').text().replace(/,/g, ''))*0.01);
 	$('#fprice').html(numberWithCommas(finalPrice));
-	$('input[name=oprice]').val(finalPrice);*/
+	$('input[name=oprice]').val(finalPrice);
 	 
 	/*$("#kakao").click(function(){
 		
@@ -595,6 +615,7 @@ $( document ).ready( function() {
 	
 	var title = $('#titleList').val();
 	if(title==''){title="test";}
+	var amount = parseInt($('#fprice').text().replace(/,/g, ''));
 	
   //IMP.request_pay(param, callback) 결제창 호출
   IMP.request_pay({ // param
@@ -603,7 +624,7 @@ $( document ).ready( function() {
       merchant_uid: $('#pidxList').val(), //주문(db에서 불러옴) 고유번호
       item_name : title,
       name : title,
-      amount: $('input[name="oprice"]').val(),
+      amount: amount,
       buyer_email: $('input[name="user_id"]').val(),
       buyer_name: $('input[name="m_name"]').val(),
       buyer_tel: $('input[name="phone"]').val(),
@@ -638,44 +659,63 @@ $( document ).ready( function() {
   });
 }
 
-const clientKey = 'test_ck_26DlbXAaV0dX9X9NJ2d5VqY50Q9R' // 테스트용 클라이언트 키
-const customerKey = $('input[name="user_id"]').val(); // 내 상점에서 고객을 구분하기 위해 발급한 고객의 고유 ID
+function trackWindow(tnum) {
+	var popupWidth = 500;
+	var popupHeight = 900;
 
-// 2. 결제위젯 SDK 초기화
-const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제
-// const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
+	var popupX = Math.round(window.screenX + (window.outerWidth / 2) - (popupWidth / 2));
+	var popupY = Math.round(window.screenY + (window.outerHeight / 2) - (popupHeight / 2));
 
-let currentURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1];
+	window.open('/member/trackWindow?tnum='+tnum, 'track', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupX + ', top=' + popupY);
+}
 
-// @docs https://docs.tosspayments.com/reference/widget-sdk#requestpayment결제-정보
-   function tossPay() {
-   	
-   	if($('input[name="m_name"]').val()=='') {
-   		alert('수령인 이름을 입력해 주세요');
-   		$('input[name="m_name"]').focus(); return;
-   	}
-   	if ($('input[name="phone"]').val()=='') {
-   		alert('수령인 휴대폰 번호를 입력해 주세요');
-   		$('input[name="phone"]').focus(); return;
-   	}
-   	if ($('input[name="zip"]').val() == '' || $('input[name="addr1"]').val() == ''|| $('input[name="addr2"]').val() == '') {
-   		alert('수령하실 주소를 입력해 주세요'); return;
-   	}
-   	if ($('input[name="msg2"]').val() == '') {
-   		alert('배송메세지를 입력해 주세요'); 
-   		$('input[name="msg2"]').focus(); return;
-   	}
-   	$('input[name="paymethod"]').val('tosspayments');
+function reviewWindow(pidx) {
+	var popupWidth = 900;
+	var popupHeight = 760;
 
-   	paymentWidget.requestPayment({
-   		amount: $('input[name="oprice"]').val(),
-        orderId: $('#pidxList').val(),
-        orderName: $('#titleList').val(),
-        successUrl: currentURL + "/success",
-        failUrl: currentURL + "/fail",
-        customerEmail: $('input[name="user_id"]').val(),
-        customerName: $('input[name="m_name"]').val(),
-        customerMobilePhone: $('input[name="phone"]').val(),
-      });
-   }
+	var popupX = Math.round(window.screenX + (window.outerWidth / 2) - (popupWidth / 2));
+	var popupY = Math.round(window.screenY + (window.outerHeight / 2) - (popupHeight / 2));
 
+	window.open('/member/reviewW?pidx='+pidx, 'review', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupX + ', top=' + popupY);
+}
+
+function reviewE(pidx) {
+	var popupWidth = 900;
+	var popupHeight = 900;
+
+	var popupX = Math.round(window.screenX + (window.outerWidth / 2) - (popupWidth / 2));
+	var popupY = Math.round(window.screenY + (window.outerHeight / 2) - (popupHeight / 2));
+
+	window.open('/member/reviewE?pidx='+pidx, 'reviewE', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupX + ', top=' + popupY);
+}
+
+//이미지 선택시 바로 이미지 띄우기
+ function loadApplyImage(img) {
+ 	/* 파일용량 제한*/
+ 	let maxSize = 4 * 1024 * 1024; //* 4MB 사이즈 제한
+ 	let fileSize = img.files[0].size; //업로드한 파일용량
+ 	
+ 	if(fileSize > maxSize){
+ 		alert("파일첨부 사이즈는 4MB 이내로 가능합니다.");
+ 		$(img).val(''); //업로드한 파일 제거
+ 		return; 
+ 	}
+ 	
+     var file = img.files[0]; //선택된 파일 가져오기
+ 	//이미지 태그 name 값 마지막 부분(숫자로 되어있음)을 잘라 num이라는 변수로 선언한다.
+ 	let num = img.name.slice(-1);
+ 	
+ 	var showImgSpan = document.getElementById('showImg_'+num);
+     //새로운 img 태그 만들기(img태그는 뷰에서 foreach로 만들어지지 않기 때문에 num을 붙일 필요없다.)
+ 	var selectedApplyImage = document.createElement("img");
+     //이미지 source 가져오기
+ 	selectedApplyImage.src = URL.createObjectURL(file);
+     //이미지 크기 조정
+ 	selectedApplyImage.setAttribute('style', 'max-width: 100px; max-height: 100px;');
+     //이미지를 showImageDiv에 추가
+ 	showImgSpan.appendChild(selectedApplyImage);
+ }
+ function toggleDiv(divId) {
+   var div = document.getElementById(divId);
+   div.style.display = (div.style.display === 'block') ? 'none' : 'block';
+}

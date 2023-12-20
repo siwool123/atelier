@@ -70,6 +70,9 @@ public class SignupController {
 			System.out.println("인증번호 발송 안됨");
 			authsuccess = -1;
 			e.printStackTrace();
+			model.addAttribute("dto", memberDTO);
+			model.addAttribute("authsuccess", authsuccess);
+			return "member/emailCheck";
 		}
 		
 		try {
@@ -78,20 +81,25 @@ public class SignupController {
 			System.out.println("인증번호 입력안함");
 			authsuccess = -2;
 			System.out.println("numberformatexception");
+			model.addAttribute("dto", memberDTO);
+			model.addAttribute("authsuccess", authsuccess);
+			return "member/emailCheck";
 		}
 		
 		if (Integer.parseInt((model.getAttribute("userContent")).toString()) == Integer.parseInt((infoDTO.getContent()).toString())) {
 			System.out.println("인증성공");
 			authsuccess = 1;
+			model.addAttribute("dto", memberDTO);
+			model.addAttribute("authsuccess", authsuccess);
+			return "member/emailCheck";
 
 		} else {
 			System.out.println("인증실패");
 			authsuccess = 0;
+			model.addAttribute("dto", memberDTO);
+			model.addAttribute("authsuccess", authsuccess);
+			return "member/emailCheck";
 		}
-		
-		model.addAttribute("dto", memberDTO);
-		model.addAttribute("authsuccess", authsuccess);
-		return "member/emailCheck";
 	}
 
 	@Autowired
@@ -127,6 +135,8 @@ public class SignupController {
 			System.out.println("인증번호 발송 안됨");
 			e.printStackTrace();
 			smsAuthsuccess = -1;
+			model.addAttribute("smsAuthsuccess", smsAuthsuccess);
+			return "member/smsCheck";
 		}
 		
 		try { int ckUserSmsContent = Integer.parseInt(model.getAttribute("userSmsContent").toString());
@@ -134,15 +144,21 @@ public class SignupController {
 			System.out.println("인증번호 입력 안됨");
 			e.printStackTrace();
 			smsAuthsuccess = -2;
+			model.addAttribute("smsAuthsuccess", smsAuthsuccess);
+			return "member/smsCheck";
 		}
 		
 		if (Integer.parseInt((model.getAttribute("smsContent")).toString()) == Integer.parseInt(model.getAttribute("userSmsContent").toString())) {
 			System.out.println("인증성공");
 			smsAuthsuccess = 1;
-		} else { System.out.println("인증실패"); smsAuthsuccess = 0; }
-		
-		model.addAttribute("smsAuthsuccess", smsAuthsuccess);
-		return "member/smsCheck";
+			model.addAttribute("smsAuthsuccess", smsAuthsuccess);
+			return "member/smsCheck";
+		} else { 
+			System.out.println("인증실패");
+			smsAuthsuccess = 0;
+			model.addAttribute("smsAuthsuccess", smsAuthsuccess);
+			return "member/smsCheck";
+		}
 	}
 	
 	//회원가입
@@ -173,6 +189,7 @@ public class SignupController {
 	//임시비번받기
 	@RequestMapping("/guest/resetPass")
 	public String findPass() {
+		
 		return "member/findPass";
 	}
 	

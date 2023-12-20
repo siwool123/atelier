@@ -11,7 +11,7 @@ public class ReviewDTO {
 	private int pidx;
 	private int aidx;
 	private int midx;
-	private java.sql.Date r_ate;
+	private java.sql.Date r_date;
 	private String r_content;
 	private int r_like;
 	private int star;
@@ -22,4 +22,7 @@ public class ReviewDTO {
 	private String psfile;
 	private String title;
 	private String a_name;
+	private int size1;
+	private int size2;
+	private String profiles;
 }

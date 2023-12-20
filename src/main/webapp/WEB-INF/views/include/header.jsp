@@ -34,11 +34,11 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a class="nav-link" href="/shop">SHOP</a>
-              <a class="nav-link" href="#">AUCTION</a>
+              <a class="nav-link" href="/auction">AUCTION</a>
               <a class="nav-link" href="#">FAQ</a>
               <a class="nav-link" href="#">COMPANY</a>
               <a class="nav-link" href="/member/cart">MYPAGE</a>
-              <a class="nav-link" href="#">작가페이지</a>
+              <a class="nav-link" href="/artist/profile">작가페이지</a>
               <a class="nav-link" href="/member/cart"><i class="bi bi-bag"></i></a>
               <c:choose>
 	              <c:when test="${empty pageContext.request.userPrincipal }">

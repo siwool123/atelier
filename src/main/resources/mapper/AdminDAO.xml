@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.edu.springboot.restboard.IAdminService">
+	<!-- 회원 카운트 -->
+	<select id="adminTotalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT COUNT(*) from member
+		<if test="searchKeyword!=null and !searchKeyword.equals('')"> 
+			WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+	<!-- 회원 목록 -->
+	<select id="adminList" resultType="com.edu.springboot.restboard.MemberDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">			
+		SELECT * FROM (
+		    SELECT Tb.*, rownum rNum FROM (
+		        SELECT * FROM member 
+		        <if test="searchKeyword!=null and !searchKeyword.equals('')"> 
+					WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
+		        ORDER BY midx DESC
+		    ) Tb
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}		
+	</select>
+	<!-- 회원강제탈퇴 -->
+	<update id="memberLeave" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		UPDATE member SET enabled=0 WHERE midx=#{midx}
+	</update>
+	<!-- 영구삭제 -->
+	<delete id="memberDelete" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		DELETE FROM member WHERE midx=#{midx}
+	</delete>
+	
+	<!-- 아티스트 카운트 -->
+	<select id="artistTotalCount" resultType="int" parameterType="com.edu.springboot.restboard.ParameterDTO">
+		SELECT COUNT(*) from apply A INNER JOIN member M ON A.midx=M.midx
+		<if test="searchKeyword!=null">
+			<choose>
+				<when test="searchKeyword eq 'x'.toString()">
+					WHERE ${sField} is null
+				</when>
+				<otherwise>
+					WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+				</otherwise>
+			</choose>
+		</if>
+	</select>
+	<!-- 아티스트 신청 목록 -->
+	<select id="artistList" resultType="com.edu.springboot.restboard.ApplyDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">			
+		SELECT * FROM (
+		    SELECT Tb.*, rownum rNum FROM (
+		        SELECT A.*, M.m_name FROM apply A INNER JOIN member M ON A.midx=M.midx
+		        <if test="searchKeyword!=null">
+					<choose>
+						<when test="searchKeyword eq 'x'.toString()">
+							WHERE ${sField} is null
+						</when>
+						<otherwise>
+							WHERE ${sField} LIKE '%'||#{searchKeyword}||'%'
+						</otherwise>
+					</choose>
+				</if>
+		        ORDER BY apply_idx DESC
+		    ) Tb
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}		
+	</select>
+	<!-- 아티스트 신청 상세보기 -->
+	<select id="artistView" resultType="com.edu.springboot.restboard.ApplyDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">			
+		SELECT A.*, M.m_name, M.profiles FROM apply A INNER JOIN member M ON A.midx=M.midx
+		WHERE apply_idx=#{apply_idx}		
+	</select>
+	
+	<update id="artistPassChange" parameterType="com.edu.springboot.restboard.ParameterDTO">			
+		UPDATE apply SET 
+		<choose>
+			<when test="pass eq 'x'.toString()">
+				pass=''
+			</when>
+			<otherwise>
+				pass=#{pass} 
+			</otherwise>
+		</choose>
+		WHERE apply_idx=#{apply_idx}		
+	</update>
+	
+	<!-- 작가목록 -->
+	<select id="alist2" resultType="com.edu.springboot.restboard.ArtistDTO">
+		SELECT * FROM ARTIST            
+	</select>
+	
+	<insert id="artistNewInsert" parameterType="com.edu.springboot.restboard.ApplyDTO">
+		INSERT INTO artist (aidx, midx, m_name, profiles, a_intro, a_history)
+		VALUES (seq_artist.nextval, #{midx}, #{m_name}, #{profiles,jdbcType=VARCHAR}, #{a_intro}, #{a_history})
+	</insert>
+	
+</mapper>
