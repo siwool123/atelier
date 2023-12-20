@@ -44,6 +44,7 @@ public class ApplyController {
 		
 		Map<Object, Object> map = payService.memberIndex(principal);
         model.addAttribute("map", map);
+        System.out.println(map);
         
 		try {
 			String user_id = principal.getName(); //로그인아이디 얻어온다.
@@ -74,6 +75,11 @@ public class ApplyController {
 	//작가신청 페이지
 		@RequestMapping("member/applyResult")
 		String applyResult(Principal principal, Model model, MemberDTO memberDTO, ApplyDTO applyDTO) {
+			
+			Map<Object, Object> map = payService.memberIndex(principal);
+	        model.addAttribute("map", map);
+	        System.out.println(map);
+			
 			try {
 				String user_id = principal.getName(); //로그인아이디 얻어온다.
 				memberDTO = dao.mview(user_id);

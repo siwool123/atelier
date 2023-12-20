@@ -91,6 +91,13 @@ const countDownTimer = function(id, date){
 	}
 	timer = setInterval(showRemaining, 1000);
 }
+
+//div#contentDiv의 내용을 가져와서 input#content의 값으로 설정
+var contentDiv = document.getElementById('contentDiv');
+var contentInput = document.getElementById('content');
+
+// div의 텍스트 내용을 input의 값으로 설정
+contentInput.value = contentDiv.innerText || contentDiv.textContent;
 </script>
 
 <form name="stateChange"> <input type="hidden" name="midx" /> </form>
@@ -194,29 +201,30 @@ const countDownTimer = function(id, date){
 <table class="table table-borderless">
     <tr> <td> 받는 사람 : <input type="text" name="to" value="${amdto.id }" /> </td> </tr>
     <tr> <td>제목 : <input type="text" name="subject" size="50" value="atelier | 입찰하신 경매 마감 및 낙찰 알림" /></td></tr>
-    <tr> <td> <textarea name="contentD" cols="60" rows="10"> 
-    안녕하세요  ${ amdto.m_name } 회원님, 아뜰리에 입니다.
+    <tr> <td> <div id="contentDiv" contentEditable="true">
+    안녕하세요  ${ amdto.m_name } 회원님, 아뜰리에 입니다.<br/>
     
-   회원님께서  ${ amdto.aucdate } 에 입찰하신 아래의 작품의 경매가 종료되었습니다.
+   회원님께서  ${ amdto.aucdate } 에 입찰하신 아래의 작품의 경매가 종료되었습니다.<br/>
    
-   회원님의 입찰가로 낙찰되어 메일 수신으로부터 72 시간 이내에 결제 진행을 요청드립니다.
+   회원님의 입찰가로 낙찰되어 메일 수신으로부터 72 시간 이내에 결제 진행을 요청드립니다.<br/>
    
-   낙찰후 72시간 이내 미결제시 한달간 입찰이 제한됨을 양해바랍니다.
+   낙찰후 72시간 이내 미결제시 한달간 입찰이 제한됨을 양해바랍니다.<br/>
    
-   작품이미지 : <img src="${imageSource}" alt="작품이미지" style="max-width:200px;" />
+   작품이미지 : <br/>
+   <img src="${imageSource}" alt="작품이미지" style="max-width:200px;" /> <br/>
    
-   작품번호 : ${pdto.pidx}
+   작품번호 : ${pdto.pidx}<br/>
      
-   작품명 : ${ not empty pdto.title ? pdto.title : '' }
+   작품명 : ${ not empty pdto.title ? pdto.title : '' }<br/>
    
-   낙찰가 : ${ amdto.aprice } 원
+   낙찰가 : ${ amdto.aprice } 원<br/>
    
-   경매마감일시 : ${ not empty pdto.enddate ? pdto.enddate : '' }
+   경매마감일시 : ${ not empty pdto.enddate ? pdto.enddate : '' }<br/>
    
-   <a href="http://192.168.35.59:8586/member/paynow">바로 결제하러 가기 </a>
+   <a href="http://192.168.35.59:8586/member/paynow?pidx=${pdto.pidx}">바로 결제하러 가기 </a><br/><br/>
    
-    </textarea>
-    <textarea name="content" id="content" cols="60" rows="10" type="hidden"></textarea>
+    </div> 
+    <input type="hidden" name="content" id="content" />
      </td></tr>
     <tr><td><button type="submit" class="btn1">전송하기</button></td></tr>
 </table>
