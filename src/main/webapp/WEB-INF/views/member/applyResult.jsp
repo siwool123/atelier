@@ -55,7 +55,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 					</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="auction-tab" data-bs-toggle="tab" data-bs-target="#auctionP" type="button" role="tab" aria-controls="sell" aria-selected="true" onClick="gotoApply();">
+					<button class="nav-link active" id="auction-tab" data-bs-toggle="tab" data-bs-target="#auctionP" type="button" role="tab" aria-controls="sell" aria-selected="true" onClick="location.href='/member/applyResult'">
 						작가 신청 결과
 					</button>
 				</li>
@@ -65,9 +65,11 @@ table.order tr th, table.order tr td {padding-left:20px;}
 			<span class="me-3 fw-bolder">신청일</span>
 			<span class="me-3">${apdto.apply_date }</span>
 			<span class="mx-3 fw-bolder">심사단계</span>
-			<c:if test="${apdto.pass == null}"><span class="border btn1">심사중</span></c:if>
-			<c:if test="${apdto.pass == '1'}"><span class="border btn1">합격</span></c:if>
-			<c:if test="${apdto.pass == '0'}"><span class="border btn1">불합격</span></c:if>
+			<c:choose>
+			<c:when test="${apdto.pass == 1}"><span class="border btn1">합격</span></c:when>
+			<c:when test="${apdto.pass == 0}"><span class="border btn1">불합격</span></c:when>
+			<c:otherwise><span class="border btn1">심사중</span></c:otherwise>
+			</c:choose>
 		<div class="row">
 				<div class="col-6">
 					<div class="headerL4 my-5" style="margin-top:10px;">포트폴리오</div>

@@ -11,7 +11,7 @@
 	</insert>
 	
 	<select id="aview" resultType="com.edu.springboot.restboard.ApplyDTO">
-		select * from apply where midx=#{param1}
+		select * from (select * from apply where midx=#{param1} order by apply_idx desc) where rownum=1
 	</select>
 
 </mapper>

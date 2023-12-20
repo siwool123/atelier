@@ -152,7 +152,7 @@ table.order tr th, table.order tr td {padding-left:20px;}
 					</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="auction-tab" data-bs-toggle="tab" data-bs-target="#auctionP" type="button" role="tab" aria-controls="sell" aria-selected="false" onClick="gotoApply();">
+					<button class="nav-link" id="auction-tab" data-bs-toggle="tab" data-bs-target="#auctionP" type="button" role="tab" aria-controls="sell" aria-selected="false" onClick="location.href='/member/applyResult'">
 						작가 신청 결과
 					</button>
 				</li>
