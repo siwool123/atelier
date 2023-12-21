@@ -176,7 +176,8 @@ span.count {position: relative; top: -30px; float: right; right: 15px;}
 					       <td align="center">
 					       <c:set var="currentDate" value="<%= LocalDate.now() %>" />
 					       	  <c:choose>
-						       	<c:when test="${ row.shipdate==null }"><button class="btn6">주문취소</button></c:when>
+					       	  	<c:when test="${ row.cancel==-1 }">취소완료</c:when>
+						       	<c:when test="${ row.cancel != -1 and row.shipdate==null }"><button class="btn6">주문취소</button></c:when>
 						       	<c:otherwise>
 						       	<button class="btn6" disabled > 반품</button></c:otherwise>
 						       </c:choose>

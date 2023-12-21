@@ -24,8 +24,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateOrder1">
 		update order1 set cancel = #{cancel} where oidx = #{oidx}
 	</update>
-
-
+	
+	<!-- product sold 업뎃 -->
+	<update id="setsold0">
+	 	UPDATE product SET sold = 0 WHERE pidx IN (
+    SELECT p.pidx FROM order2 o INNER JOIN product p ON o.pidx = p.pidx WHERE o.oidx = #{param1}) 
+	</update>
 
 	<!-- 일반회원     -->
 

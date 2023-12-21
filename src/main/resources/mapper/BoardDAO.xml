@@ -328,10 +328,10 @@
 	
 	<select id="opjoin" resultType="com.edu.springboot.restboard.OPjoinDTO" parameterType="com.edu.springboot.restboard.ParameterDTO">
 		select order2.o2idx, order1.oidx, order1.midx, order1.paymethod, order1.price as tprice, order1.orderdate, order1.paydate, order1.shipdate, order1.courier, order1.t_num, 
- order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.owner, 
-order1.auction, order1.add_point, order1.minus_point, product.pidx, product.sfile, product.title, product.m_name, product.size1, product.size2, product.price, product.ridx
-from order2 inner join product on order2.pidx = product.pidx
-inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
+			 order1.receiver, order1.r_phone, order1.r_address, order1.message, order1.owner, order1.cancel, 
+			order1.auction, order1.add_point, order1.minus_point, product.pidx, product.sfile, product.title, product.m_name, product.size1, product.size2, product.price, product.ridx, product.sold
+			 from order2 inner join product on order2.pidx = product.pidx
+			 inner join order1 on order1.oidx = order2.oidx where order1.midx=#{midx}
 			<choose>
 				<when test="status != null and !status.isEmpty() and status.equals('aa')"> and order1.paydate is null and order1.shipdate is null</when>
 				<when test="status != null and !status.isEmpty() and status.equals('bb')"> and order1.paydate is not null and order1.shipdate is null</when>

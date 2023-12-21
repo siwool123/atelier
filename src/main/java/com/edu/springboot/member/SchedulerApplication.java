@@ -30,7 +30,6 @@ public class SchedulerApplication {
 	Imember2Service daao;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 //		SpringBootApplication.run
 		SpringApplication.run(SchedulerApplication.class, args);
 	}
@@ -45,10 +44,12 @@ public class SchedulerApplication {
 		List<OrderDTO> olist11 = dao.olist11();
 		for(OrderDTO od: olist11) {
 			LocalDate orderDate = od.getOrderdate().toLocalDate();
-			if(od.getPaymethod().equalsIgnoreCase("bank")  && orderDate.isBefore(oneDayAgo)) {
+			if(od.getPaymethod().equalsIgnoreCase("bank")  && orderDate.isBefore(oneDayAgo)
+					&& od.getPaydate()==null ) {
 				List<Order2DTO> o2 = daao.selector2("oidx", od.getOidx().toString());
 				
 				daao.updateOrder1(od.getOidx(), "-1");
+				daao.setsold0(od.getOidx());
 				
 				for(Order2DTO o1 : o2) {
 					daao.updatePro(Integer.toString(o1.getPidx()));					

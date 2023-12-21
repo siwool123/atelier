@@ -20,6 +20,8 @@ public interface Imember2Service {
 	//// 스케줄러
 	public void updateOrder1(@Param("oidx") String oidx ,@Param("cancel") String cancel);
 	
+	public int setsold0(String oidx);
+	
 	public List<Member2DTO> seletMember
 		(@Param("searchField") String searchField, @Param("searchWord") String searchWord);
 	

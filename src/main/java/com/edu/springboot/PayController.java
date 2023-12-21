@@ -197,8 +197,10 @@ public class PayController {
 	
 	@RequestMapping("/member/orderhistory")
 	public String orderhistory (Principal principal, Model model, ParameterDTO parameterDTO, HttpServletRequest req) {
+		
+		Map<Object, Object> map = payService.memberIndex(principal);
+		model.addAttribute("map", map);
 		try {
-			Map<Object, Object> map = payService.memberIndex(principal);
 			
 			int midx = dao.mview(principal.getName()).getMidx();
 			System.out.println("midx="+ midx);
@@ -214,7 +216,6 @@ public class PayController {
 			List<OPjoinDTO> oplist = dao.opjoin(parameterDTO);
 			System.out.println("oplist="+ oplist);
 			
-			model.addAttribute("map", map);
 			model.addAttribute("oplist", oplist);
 		}
 		catch (Exception e) {

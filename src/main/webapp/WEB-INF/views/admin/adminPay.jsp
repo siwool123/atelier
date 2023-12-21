@@ -141,9 +141,9 @@ function memberDelete(midx){
                                             	${ row.t_num }
                                             </td> 
                                             <c:choose>
-				<c:when test="${ row.state eq '-1' }">
+				<c:when test="${ empty row.paydate and row.state eq '-1' }">
 					<td>
-						구매취소
+						취소완료
 					</td>
 				</c:when>
 				<c:when test="${ row.state eq '0' }">

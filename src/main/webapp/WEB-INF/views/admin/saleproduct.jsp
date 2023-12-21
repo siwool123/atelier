@@ -100,8 +100,10 @@ function deletepidx(pidx) {
              <td> ${ row.pidx }  </td>
              <td> ${ row.regidate }  </td>
              <td><a href="/view?pidx=${ row.pidx }">
-				<c:set var="imageSource" value="${row.sfile.length() > 40 ? row.sfile : './uploads/' + row.sfile}" />
-   				 <img src="${imageSource}" alt="작품이미지" class="img1" /> </a></td>
+             <c:choose>
+	    		<c:when test="${row.sfile.length() > 40}"> <img src="${row.sfile}" alt="작품이미지" class="img1" /> </c:when>
+	    		<c:otherwise> <img src="./uploads/${row.sfile}" alt="작품이미지" class="img1" /> </c:otherwise>
+    		</c:choose>
              <td>${ row.title }</td>
              <td>${ row.size1 } x ${row.size2 } </td>
              <td>${ row.theme }</td>
