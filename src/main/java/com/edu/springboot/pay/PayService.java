@@ -88,7 +88,7 @@ public class PayService {
 			order2DTO.setPrice(productDTO.getPrice());
 			order2DTO.setMidx(memberDTO.getMidx());
 			
-			int resulto2 = dao.insertorder2(order2DTO); //order2테이블에 삽입결과 
+			int resulto2 = dao.insertorder2(order2DTO); //order2테이블에 삽입결과  
 			int resultDelCart = dao.delCart(Integer.parseInt(i)); //주문된 작품 장바구니에서 삭제결과
 			
 			resListo2.add(resulto2);
