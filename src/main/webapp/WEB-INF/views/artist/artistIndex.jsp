@@ -46,9 +46,7 @@ $( document ).ready( function() {
             <div class="col-sm-4" style="padding-top:10px;" id="indexDiv"><p id="indexImgmask">
             	<c:choose>
 				<c:when test="${map.mdto.profiles != null }">
-					
-						<img src="/uploads/${map.mdto.profiles }" id="indexMypageProfileImage" class="me-4">
-					
+					<img src="/uploads/${map.mdto.profiles }" id="indexMypageProfileImage" class="me-4">
 				</c:when>
 				<c:otherwise>
 					<i class="bi bi-person-circle bpc1" style="position: relative; top: 0px;"></i>
@@ -57,29 +55,36 @@ $( document ).ready( function() {
                 <table class="table table-borderless mtable">
                     <tr><th style="color: black; font-weight: bolder;">  ${map.mdto.m_name } 님</th><td style="padding:0 !important">
                     <a class="btn10" style="position: relative; right: 8px;" href="/artist/profile">정보수정</a></td></tr>
-                    <tr><th>총 판매</th><td align="right"><span class="price2">${map.orderSum}</span> 원 <br />(${ not empty map.olist ? map.olist.size() : "0" } 건)</td></tr>
-                    <tr><th>총 정산</th><td> <span id="point" class="price2"> ${map.mdto.total_point }</span> P</td></tr>
+                    <tr><th>총 판매</th><td align="right"><span class="price2">${ not empty map.sellSum ? map.sellSum : '0'}</span> 원 <br />(${ not empty map.cntsold ? map.cntsold+map.cntendauction : '0' } 건)</td></tr>
+                    <tr><th>총 정산</th><td> <span id="point" class="price2"> 0</span> 원</td></tr>
                 </table>
             </div>
             <div class="col-sm-2">
-                <a href="member/order">입금전 <i class="bi bi-chevron-right"></i>
-                <div class="red">${not empty map.nplistSize ? map.nplistSize : "0" }</div> </a>
-            </div>
-            <div class="col-sm-2">
-                <a href="member/order">배송준비중 <i class="bi bi-chevron-right"></i>
-                <div class="red">${not empty map.nslistSize ? map.nslistSize : "0" }</div></a>
+                <table class="table table-borderless mtable2">
+                    <tr><th> <a href="artist/sellHistory">판매중 <i class="bi bi-chevron-right"></i></a></th>
+                    <td><span class="red">${ not empty map.cntonsale ? map.cntonsale : '0'}</span></td></tr>
+                     <tr><th><a href="artist/sellHistory">판매완료<i class="bi bi-chevron-right"></i></a></th>
+                     <td><span class="red">${ not empty map.cntsold ? map.cntsold : '0'}</span></td></tr>
+                 </table>
             </div>
             <div class="col-sm-2">
                 <table class="table table-borderless mtable2">
-                    <tr><th> <a href="member/order">배송중 <i class="bi bi-chevron-right"></i></a></th><td><span class="red">0</span></td></tr>
-                     <tr><th><a href="member/order">배송완료<i class="bi bi-chevron-right"></i></a></th><td><span class="red">0</span></td></tr>
+                    <tr><th> <a href="artist/sellHistory">경매중 <i class="bi bi-chevron-right"></i></a></th>
+                    <td><span class="red">${ not empty map.cntonauction ? map.cntonauction : '0'}</span></td></tr>
+                     <tr><th><a href="artist/sellHistory">경매완료<i class="bi bi-chevron-right"></i></a></th>
+                     <td><span class="red">${ not empty map.cntendauction ? map.cntendauction : '0'}</span></td></tr>
+                 </table>
+            </div>
+            <div class="col-sm-2">
+                <table class="table table-borderless mtable2">
+                    <tr><th> <a href="artist/sellHistory">배송전 <i class="bi bi-chevron-right"></i></a></th><td><span class="red">0</span></td></tr>
+                     <tr><th><a href="artist/sellHistory">배송완료<i class="bi bi-chevron-right"></i></a></th><td><span class="red">0</span></td></tr>
                  </table>
             </div>
             <div class="col-sm-2" style="padding:20px 10px;">
                 <table class="table table-borderless mtable">
-                   <tr><th> <a href="member/order">취소</a></th><td>0</td></tr>
-                    <tr><th><a href="member/order">반품</a></th><td>0</td></tr>
-                    <tr><th><a href="member/point">포인트</a></th><td><span class="price2"> ${map.mdto.total_point }</span> P</td></tr>
+                   <tr><th><a href="artist/payHistory">정산예정</a></th><td>0</td></tr>
+                   <tr><th><a href="artist/payHistory">정산완료</a></th><td>0</td></tr>
                 </table>
             </div>
         </div>

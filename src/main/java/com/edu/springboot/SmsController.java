@@ -43,7 +43,7 @@ public class SmsController {
 
     public SmsController() {
         // 반드시 계정 내 등록된 유효한 API 키, API Secret Key를 입력해주셔야 합니다!
-        this.messageService = NurigoApp.INSTANCE.initialize("NCSYNCDAEARIAT4C", "Q4LFL5AFILIFTZM8QPHDPEWDKKBM56WR", "https://api.coolsms.co.kr");
+        this.messageService = NurigoApp.INSTANCE.initialize("NCSHCT3PXBR2KGMM", "J4YPWZWSEDZAIUX1MELMDFTF3RJYAPVQ", "https://api.coolsms.co.kr");
     }
 
     /**  단일 메시지 발송 예제 */
@@ -61,7 +61,7 @@ public class SmsController {
         }
         
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-        message.setFrom("01052558591");
+        message.setFrom("01056371055");
         message.setTo(memberDTO.getPhone());
         message.setText("atelier 휴대폰 인증번호 : "+numStr);
         // 형식에 맞지 않는 번호를 입력하면 nurigo 예외로 인해 화이트 라벨이 출력된다.
@@ -93,7 +93,7 @@ public class SmsController {
         }
         
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-        message.setFrom("01052558591");
+        message.setFrom("01056371055");
         message.setTo(req.getParameter("phone").toString());
         message.setText("atelier 휴대폰 인증번호 : "+numStr);
         // 형식에 맞지 않는 번호를 입력하면 nurigo 예외로 인해 화이트 라벨이 출력된다.
@@ -109,6 +109,24 @@ public class SmsController {
         	System.out.println("휴대폰번호 형식 또는 문자발송 서비스 api키 또는 addmessage에 문제가 있음");
         	return null;
         }
+    }
+    
+    //최고낙찰자에게 문자발송
+    public int aucsms(HttpServletRequest req) {
+    	int r2 = 0;
+        Message message = new Message();
+        message.setFrom("01056371055");
+        message.setTo(req.getParameter("phone"));
+        message.setText("atelier 경매 낙찰 결과 : "+req.getParameter("content"));
+        try {
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        System.out.println(response);
+        r2 = 1;
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	System.out.println("휴대폰번호 형식 또는 문자발송 서비스 api키 또는 addmessage에 문제가 있음");
+        }
+        return r2;
     }
     
     /** 메시지 조회 예제*/

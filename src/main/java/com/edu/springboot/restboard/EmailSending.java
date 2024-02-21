@@ -136,8 +136,8 @@ public class EmailSending {
 		}
 	}
 	
-	public void aucmsg(InfoDTO infoDTO) {
-		
+	public int aucmsg(InfoDTO infoDTO) {
+		int r1 = 0;
 		try {
 			MimeMessage m = mailSender.createMimeMessage(); // 메일을 보내가 위한 설정
 			MimeMessageHelper h = new MimeMessageHelper(m, "UTF-8"); // 인코딩 설정
@@ -147,17 +147,19 @@ public class EmailSending {
 
 			/* HTML 형식으로 지정한 경우 미리 만들어둔 메일템플릿(HTML)의 내용을 읽어온 후 우리가 입력한 내용으로 변경하는 작업이 필요하다. */
 			String emailTpl = readHTMLFile();
-			String contents = infoDTO.getContent().replace("\r\n", "<br>"); // 우리가 입력한 내용을 줄바꿈 처리 한다.
+			String contents = infoDTO.getContent().replace("\r\n", "<br/>"); // 우리가 입력한 내용을 줄바꿈 처리 한다.
 			emailTpl = emailTpl.replace("__CONTENT__", contents); // 메일 템플릿에 우리가 작성한 내용을 삽입한다.
 			h.setText(emailTpl, true); // HTML인 경우에는 두번째 인수를 true로 설정해야한다.
 			
 			mailSender.send(m); // 여기서 메일 발송
 			System.out.println("메일 전송 완료");
+			r1=1;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("메일 전송 실패");
 		}
+		return r1;
 	}
 	
 	// HTML문서를 읽어 그 내용을 반환한다.

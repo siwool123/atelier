@@ -71,8 +71,8 @@ $( document ).ready( function() {
             </div>
             <div class="col-sm-2" style="padding:20px 10px;">
                 <table class="table table-borderless mtable">
-                   <tr><th> <a href="member/order">취소</a></th><td>0</td></tr>
-                    <tr><th><a href="member/order">반품</a></th><td>0</td></tr>
+                   <tr><th> <a href="member/order">취소</a></th><td>${map.cancelcnt }</td></tr>
+                    <tr><th><a href="member/order">반품</a></th><td>${map.returncnt }</td></tr>
                     <tr><th><a href="member/point">포인트</a></th><td><span class="price2"> ${map.totalPoint }</span> P</td></tr>
                 </table>
             </div>

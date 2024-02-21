@@ -28,6 +28,7 @@ import com.edu.springboot.restboard.ProductDTO;
 import com.edu.springboot.restboard.ReviewDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import utils.BoardPage;
 
 @Controller
@@ -42,6 +43,9 @@ public class AdminController {
 	
 	@Autowired
 	EmailSending email;
+	
+	@Autowired
+	SmsController sms;
 	
 	//관리자 로그인 페이지
 	@RequestMapping("/admin")
@@ -261,7 +265,14 @@ public class AdminController {
 	
 	//경매작품상세보기
 	@RequestMapping("/admin/aucproductview")
-	public String aucpview(Model model, HttpServletRequest req) {
+	public String aucpview(Model model, HttpServletRequest req, HttpSession session) {
+		try {
+			String aucmailsmsResult = session.getAttribute("aucmailsmsResult").toString();
+			if(aucmailsmsResult.equals("2")) {model.addAttribute("aucmailsmsResult", aucmailsmsResult);}
+		}catch(Exception e) {
+			System.out.println("낙찰자메일문자발송전");
+		}
+		
 		int pidx = Integer.parseInt(req.getParameter("pidx"));
 		ProductDTO pdto = dao2.pview(pidx);
 		model.addAttribute("pdto", pdto);
@@ -274,10 +285,15 @@ public class AdminController {
 		return "admin/aucpview";
 	}
 	
+	//낙찰알림발송
 	@PostMapping("/admin/aucmailsend.do")
-	public String aucmailsend(InfoDTO infoDTO) {
-		email.aucmsg(infoDTO);
-		return "redirect:/admin/aucpview";
+	@ResponseBody
+	public int aucmailsms(InfoDTO infoDTO, HttpServletRequest req, HttpSession session) {
+		int r1 = 0, r2 = 0;
+		r1 = email.aucmsg(infoDTO);
+		r2 = sms.aucsms(req);
+		session.setAttribute("aucmailsmsResult", r1+r2);
+		return r1+r2;
 	}	
 	
 }

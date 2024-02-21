@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 
+import com.edu.springboot.restboard.ArtistDTO;
 import com.edu.springboot.restboard.IBoardService;
 import com.edu.springboot.restboard.MemberDTO;
 import com.edu.springboot.restboard.Order2DTO;
 import com.edu.springboot.restboard.OrderDTO;
 import com.edu.springboot.restboard.PointDTO;
 import com.edu.springboot.restboard.ProductDTO;
+import com.edu.springboot.restboard.ReviewDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
@@ -131,8 +133,12 @@ public class PayService {
     	MemberDTO memberDTO = dao.mview(principal.getName());
         
         List<OrderDTO> olist = dao.olist(memberDTO.getMidx());
-        int sum = 0;
-        for(OrderDTO odto : olist) { sum += odto.getPrice();}
+        int sum = 0, cancelcnt=0, returncnt=0;
+        for(OrderDTO odto : olist) { 
+        	sum += odto.getPrice();
+        	if(odto.getCancel()==-1) cancelcnt++;
+        	else if(odto.getCancel()==-3) returncnt++;
+        }
         System.out.println("주문작품수 : " + olist.size() + ", 주문합계 : "+sum);
         
         List<OrderDTO> nplist = dao.notPaid(memberDTO.getMidx());
@@ -155,7 +161,8 @@ public class PayService {
        map.put("nplistSize", nplist.size());
        map.put("nslistSize", nslist.size());
        map.put("totalPoint", total);
-       
+       map.put("cancelcnt", cancelcnt);
+       map.put("returncnt", returncnt);
        return map;
     }
     
@@ -178,5 +185,37 @@ public class PayService {
 		}
        
        return savedFileName;
+    }
+    
+    public Map<Object, Object> artistIndex (Principal principal) {
+
+    	Map<Object, Object> map = new HashMap<>();
+    	
+    	MemberDTO mdto = dao.mview(principal.getName());
+        ArtistDTO adto = dao.aviewbym(mdto.getMidx());
+        List<ProductDTO> aplist = dao.selectbya(adto.getAidx());
+        //List<ReviewDTO> rlist = dao.rvlistbya2(adto.getAidx());
+        
+        int sum = 0, cntonsale = 0, cntsold=0, cntonauction=0, cntendauction=0;
+        for(ProductDTO pdto : aplist) { 
+        	if(pdto.getAuction()==0 && pdto.getSold()==0 ) {cntonsale++; }
+        	else if(pdto.getAuction()==0 && pdto.getSold()==1 ) {sum += pdto.getPrice(); cntsold++; }
+        	else if(pdto.getAuction()==1) {
+        		if( pdto.getMaxprice()>0 ) {sum += pdto.getMaxprice(); cntendauction++; }
+        		else { cntonauction++;}
+        	}
+        }
+        System.out.println("총판매 건수 : "+(cntsold+cntendauction)+", 총판매 합계 : "+sum);
+        
+       map.put("mdto", mdto);
+       map.put("adto", adto);
+       map.put("aplist", aplist);
+       map.put("sellSum", sum);
+       map.put("cntonsale", cntonsale);
+       map.put("cntsold", cntsold);
+       map.put("cntonauction", cntonauction);
+       map.put("cntendauction", cntendauction);
+       
+       return map;
     }
 }

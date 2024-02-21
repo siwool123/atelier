@@ -132,7 +132,7 @@ const countDownTimer = function(id, date){
              <td> ${ row.m_name }  </td>
              <td> ${ row.pidx }  </td>
              <td> ${ row.regidate }  </td>
-             <td><a href="/view?pidx=${ row.pidx }">
+             <td><a href="/auction/view?pidx=${ row.pidx }">
 			<c:choose>
 	    		<c:when test="${row.sfile.length() > 40}"> <img src="${row.sfile}" alt="작품이미지" class="img1" /> </c:when>
 	    		<c:otherwise> <img src="./uploads/${row.sfile}" alt="작품이미지" class="img1" /> </c:otherwise>

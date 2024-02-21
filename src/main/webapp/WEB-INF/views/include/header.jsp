@@ -28,7 +28,7 @@
 <body id="pageTop">
     <nav class="navbar navbar-expand-sm sticky-top borer-bottom">
         <div class="container">
-        <a class="navbar-brand" href="/shop" ><img src="../images/atelier.png" alt="logo" style="width:140px;" ></a>
+        <a class="navbar-brand" href="/shop" ><img src="/images/atelier.png" alt="logo" style="width:140px;" ></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">

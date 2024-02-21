@@ -44,7 +44,7 @@ public class ArtistController {
 	@RequestMapping("artist/profile")
 	public String artistProfile(Principal principal, Model model) {
 
-		Map<Object, Object> map = payService.memberIndex(principal);
+		Map<Object, Object> map = payService.artistIndex(principal);
         model.addAttribute("map", map);
         
         try {
@@ -74,7 +74,7 @@ public class ArtistController {
 	@RequestMapping("artist/addProduct")
 	public String addProduct(Principal principal, Model model, HttpServletRequest req) {
 		
-		Map<Object, Object> map = payService.memberIndex(principal);
+		Map<Object, Object> map = payService.artistIndex(principal);
         model.addAttribute("map", map);
 		
 		try {
@@ -105,7 +105,7 @@ public class ArtistController {
 	@RequestMapping("artist/addAuction")
 	public String addAuction(Principal principal, Model model, HttpServletRequest req) {
 		
-		Map<Object, Object> map = payService.memberIndex(principal);
+		Map<Object, Object> map = payService.artistIndex(principal);
         model.addAttribute("map", map);
 		
 		try {
@@ -239,7 +239,7 @@ public class ArtistController {
 	//판매작품내역
 	@RequestMapping("artist/sellHistory")
 	public String sellHistory(Principal principal, Model model) {
-		Map<Object, Object> map = payService.memberIndex(principal);
+		Map<Object, Object> map = payService.artistIndex(principal);
         model.addAttribute("map", map);
 		
 		try {
@@ -266,9 +266,9 @@ public class ArtistController {
 	}
 	
 	//정산내역
-	@RequestMapping("artist/settleHistory")
+	@RequestMapping("artist/payHistory")
 	public String settleHistory(Principal principal, Model model) {
-		Map<Object, Object> map = payService.memberIndex(principal);
+		Map<Object, Object> map = payService.artistIndex(principal);
         model.addAttribute("map", map);
 		
 		try {
@@ -291,6 +291,6 @@ public class ArtistController {
 	        	e.printStackTrace();
 	        	System.out.println("작가정보조회실패");
 	        }
-		return "artist/settleHistory";
+		return "artist/payHistory";
 	}
 }

@@ -40,25 +40,28 @@ table.dataTable {border-collapse:collapse !important;}
 .carousel-control-next, .carousel-control-prev {width:6% !important;}
 .bi-zoom-in {opacity:0.5; position:relative; left: 80px; font-size: 30px; }
 .btn4 {height:40px; padding:0 30% !important;}
+.image2 a img {max-width:80%; max-height:80%;}
 </style>
 </head>
 <body>
 <%@ include file="../include/header.jsp" %>
 
 <script>
-function aucmsg(midx, pidx) {
+function aucmsg(mailsmsfm) {
     if (confirm("해당 낙찰자에게 알림을 발송하시겠습니까?")) {
    $.ajax({
         type: 'POST',
-        url: '/rest/aucmsg',  
-        data: { midx: midx, pidx:pidx },
+        url: '/admin/aucmailsend.do',  
+        data: $(mailsmsfm).serialize(),
+        dataType : "text",
         success: function (response) {
-            if (response==1) { 
-            	alert('알림을 발송이 완료되었습니다.');
+            if (response==2) { 
+            	alert('메일과 문자 발송이 완료되었습니다.');
             	location.reload();
             } else { alert('알림 발송 실패');}
         },
-        error: function () { alert('알림 발송 중 오류가 발생했습니다.'); }
+        error: function (errData) { alert('알림 발송 중 오류가 발생했습니다.');
+        console.log(errData.state, errData.statusText);}
     });
 	} 
 }
@@ -87,7 +90,6 @@ const countDownTimer = function(id, date){
 		var seconds = Math.floor((distDt % _minute) / _second);
 		
 		document.getElementById(id).innerHTML = days+'일 '+hours+'시간 '+minutes+'분 '+seconds+'초';
-		document.getElementById(id).style.color = 'red';
 	}
 	timer = setInterval(showRemaining, 1000);
 }
@@ -106,19 +108,21 @@ contentInput.value = contentDiv.innerText || contentDiv.textContent;
 	<%@ include file="../include/adminSidebar.jsp" %>
 
                 <div class="container-fluid p-5">
-                    <h3 class="mb-3 text-gray-800 fw-bolder">경매작품 상세보기 </h3>
+                    <h3 class="ps-5 text-gray-800 fw-bolder">경매작품 상세보기 </h3>
 
 
     <div class="container">
     <div class="row py-5">
-        <div class="col-sm-6 imgback"><div class="image2">
-        	<c:if test="${not empty pdto}">
-        		<c:set var="imageSource" value="${pdto.sfile.length() > 40 ? pdto.sfile : './uploads/' + pdto.sfile}" />
-   				 <img src="${imageSource}" alt="작품이미지" />
+        <div class="col-sm-6 imgback">
+        	<c:if test="${not empty pdto}"><a href="/auction/view?pidx=${ pdto.pidx }" class="image2">
+        		<c:choose>
+        		<c:when test="${pdto.sfile.length() > 40}"><img src="${pdto.sfile}" alt="작품이미지" /> </c:when>
+        		<c:otherwise><img src="./uploads/${pdto.sfile}" alt="작품이미지" /></c:otherwise>
+        		</c:choose></a>
         	</c:if>
-        </div></div>
+        </div>
         <div class="col-sm-6">
-            <table class="table table-borderless atable">
+            <table class="table table-borderless atable" style="position: relative; top: -28px;"><tbody>
             <tr> <th>TITLE</th><td class="fw-bolder">${ not empty pdto ? pdto.title : '' }</td>  </tr>
                 <tr><th>ARTIST</th><td>${not empty pdto ? pdto.m_name : "등록된 정보가 없습니다." }</td></tr>
                 <tr><th>TYPE</th><td>${not empty pdto ? pdto.p_type : "등록된 정보가 없습니다." }</td></tr>
@@ -133,8 +137,8 @@ contentInput.value = contentDiv.innerText || contentDiv.textContent;
             	<tr><th>시작가</th><td><span class="price2">${not empty pdto ? pdto.price : '0' }</span> 원</td> </tr>
 				<tr><th>입찰시작일</th><td>${not empty pdto ? pdto.regidate : '' }</td> </tr>
 				<tr><th>입찰종료일</th><td>${not empty pdto ? pdto.enddate : '' }</td> </tr>
-				<tr><th>남은시간</th><td id="timeOut"></td>0 </tr>
-            	<tr><th>현재최고입찰가</th><td><span style="color:red;" class="price2" id="maxprice">${not empty maxprice ? maxprice : pdto.price }</span> 원 </td> </tr>
+				<tr><th>남은시간</th><td id="timeOut" style="color:red">경매종료</td> </tr>
+            	<tr><th>최고낙찰가</th><td><span style="color:red;" class="price2" id="maxprice">${ not empty amdto ? amdto.aprice : pdto.price }</span> 원 </td> </tr>
 				<tr><th>추정가</th><td><span class="price2">${not empty pdto ? pdto.price*3 : '0' }</span> ~ <span class="price2">${not empty pdto ? pdto.price*6 : '0' }</span> 원</td> </tr>
 				<tr> <th>상태</th> <td id="divide"> ${ not empty pdto ? pdto.enddate : '' }</td></tr>
             <script>
@@ -152,14 +156,14 @@ contentInput.value = contentDiv.innerText || contentDiv.textContent;
 		           } else { $('#divide').html('유찰').css('color', '#c0c0c0');  }
 		       } else { $('#divide').html('경매중').css('color', 'blue');}
 			</script>
-            </table>
+            </tbody></table>
 			
         </div>
     </div>
     </div>
  <div class="container text-center mx-auto">
  <h4 class="mb-3 text-gray-800 fw-bolder mt-5">최고낙찰자 정보 </h4>
- <table class="table table-hover">
+ <table class="table">
 	     <thead class="table-secondary">
 	         <tr align="center">
 	         	<th>회원번호</th>
@@ -186,7 +190,13 @@ contentInput.value = contentDiv.innerText || contentDiv.textContent;
              <td> ${ amdto.zip } | ${ amdto.addr1 } | ${ amdto.addr2 }  </td>
              <td> ${ amdto.aucdate }</td>
              <td class="price2"> ${ amdto.aprice }</td>
-             <td><button class="btn1" onclick="aucmsg(${ amdto.midx }, ${amdto.pidx });">발송</button></td>
+             <td id="stateBtn">
+             <c:choose>
+             	<c:when test="${not empty aucmailsmsResult and aucmailsmsResult eq '2' }">
+             		<span style="color:red;">발송완료함</span></c:when>
+             	<c:otherwise>발송필요</c:otherwise>
+             </c:choose>
+             </td>
          </tr>
 	</c:otherwise>    
 	</c:choose>
@@ -196,37 +206,40 @@ contentInput.value = contentDiv.innerText || contentDiv.textContent;
 
 <div class="container mt-5">
 <c:if test="${ not empty amdto }">
- <h4 class="fw-bolder" style="color:red;">최고 낙찰자에게 이메일 전송하기</h4>
-<form method="post" action="admin/aucmailsend.do">
+ <h4 class="fw-bolder" style="color:red;">최고 낙찰자에게 이메일/문자 전송하기</h4>
+<form method="post" name="mailsmsfm">
 <table class="table table-borderless">
-    <tr> <td> 받는 사람 : <input type="text" name="to" value="${amdto.id }" /> </td> </tr>
+	<tr> <td>받는 사람 (문자) : <input type="text" name="phone" value="${ amdto.phone }" /></td> </tr>
+    <tr> <td> 받는 사람 (메일주소) : <input type="text" name="to" value="${amdto.id }" /> </td> </tr>
     <tr> <td>제목 : <input type="text" name="subject" size="50" value="atelier | 입찰하신 경매 마감 및 낙찰 알림" /></td></tr>
-    <tr> <td> <div id="contentDiv" contentEditable="true">
-    안녕하세요  ${ amdto.m_name } 회원님, 아뜰리에 입니다.<br/>
+    <tr> <td> <textarea name="content" cols="120" rows="10" id="content">
+    안녕하세요  ${ amdto.m_name } 회원님, 아뜰리에 입니다.
     
-   회원님께서  ${ amdto.aucdate } 에 입찰하신 아래의 작품의 경매가 종료되었습니다.<br/>
+   회원님께서  ${ amdto.aucdate } 에 입찰하신 아래의 작품의 경매가 종료되었습니다.
    
-   회원님의 입찰가로 낙찰되어 메일 수신으로부터 72 시간 이내에 결제 진행을 요청드립니다.<br/>
+   회원님의 입찰가로 낙찰되어 메일 수신으로부터 72 시간 이내에 결제 진행을 요청드립니다.
    
-   낙찰후 72시간 이내 미결제시 한달간 입찰이 제한됨을 양해바랍니다.<br/>
+   낙찰후 72시간 이내 미결제시 한달간 입찰이 제한됨을 양해바랍니다.
    
-   작품이미지 : <br/>
-   <img src="${imageSource}" alt="작품이미지" style="max-width:200px;" /> <br/>
+   작품이미지 : 
+   <c:choose>
+	<c:when test="${pdto.sfile.length() > 40}"><img src="${pdto.sfile}" alt="작품이미지" style="max-width:200px;" /></c:when>
+	<c:otherwise><img src="./uploads/${pdto.sfile}" alt="작품이미지" style="max-width:200px;" /></c:otherwise>
+	</c:choose>
    
-   작품번호 : ${pdto.pidx}<br/>
+   작품번호 : ${pdto.pidx}
      
-   작품명 : ${ not empty pdto.title ? pdto.title : '' }<br/>
+   작품명 : ${ not empty pdto.title ? pdto.title : '' }
    
-   낙찰가 : ${ amdto.aprice } 원<br/>
+   낙찰가 : ${ amdto.aprice } 원
    
-   경매마감일시 : ${ not empty pdto.enddate ? pdto.enddate : '' }<br/>
+   경매마감일시 : ${ not empty pdto.enddate ? pdto.enddate : '' }
    
-   <a href="http://192.168.35.59:8586/member/paynow?pidx=${pdto.pidx}">바로 결제하러 가기 </a><br/><br/>
+   <a href="http://localhost:8586/member/paynow?pidx=${pdto.pidx}" class="btn1">바로 결제하러 가기 </a>
    
-    </div> 
-    <input type="hidden" name="content" id="content" />
+    </textarea> 
      </td></tr>
-    <tr><td><button type="submit" class="btn1">전송하기</button></td></tr>
+    <tr><td><button class="btn1" onclick="aucmsg(this.form);">전송하기</button></td></tr>
 </table>
 </form>
  </c:if></div>
@@ -240,7 +253,7 @@ contentInput.value = contentDiv.innerText || contentDiv.textContent;
 	         	<th>회원번호</th>
 	        	 <th>아이디</th>
 	             <th>회원명</th>
-	             <th>회원번호</th>
+	             <th>연락처</th>
 	             <th>주소</th>
 	             <th>입찰일자</th>
 	             <th>입찰가(원)</th>
@@ -254,13 +267,13 @@ contentInput.value = contentDiv.innerText || contentDiv.textContent;
 	<c:otherwise> 
 	<c:forEach items="${ amlist }" var="row" varStatus="loop">    
          <tr id="row_${row.pidx}">
-         	<td> ${ row.midx }  </td>
+         	<td align="center"> ${ row.midx }  </td>
          	<td> ${row.id }</td>
-             <td> ${ row.m_name }  </td>
-             <td> ${ row.phone }  </td>
+             <td align="center"> ${ row.m_name }  </td>
+             <td align="center"> ${ row.phone }  </td>
              <td> ${ row.zip } | ${ row.addr1 } | ${ row.addr2 }  </td>
-             <td> ${ row.aucdate }</td>
-             <td class="price2"> ${ row.aprice }</td>
+             <td align="center"> ${ row.aucdate }</td>
+             <td align="right" class="price2" > ${ row.aprice }</td>
          </tr>
 	</c:forEach>        
 	</c:otherwise>    

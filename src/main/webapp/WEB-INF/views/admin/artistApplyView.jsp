@@ -49,8 +49,7 @@ function stateUpdate(aIdx, pVal){
 			},		 
 			error : function(errData){  console.log(errData.state, errData.statusText);  },
 		});
-	}
-	else{ event.preventDefault(); }
+	} else{ event.preventDefault(); }
 }
 </script>
 <style>
