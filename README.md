@@ -1,3 +1,2 @@
 # atelier
-project 1team
-afafdf
+## 프로젝트소개 
