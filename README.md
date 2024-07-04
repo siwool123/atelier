@@ -11,7 +11,8 @@
 |팀장|팀원|팀원|  
 |------|---|---|
 |![강이화](https://github.com/siwool123/atelier/assets/138649745/fb9efb48-7b25-4d7d-b82b-c5a4bd94fa15)|
-|테스트3||박진웅|
+|[테스트3](https://github.com/siwool123/atelier/issues/4#issue-2389685858)|
+|[박진웅](https://github.com/siwool123/atelier/issues/5#issue-2389686337)|
 |강이화|이준석|박진웅||박진웅|
 |테스트1|테스트2|테스트3|
 
