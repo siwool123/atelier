@@ -8,13 +8,12 @@
 ##### ● 배포링크: ATELIER(아뜰리에)
 
 ## 팀원소개
-|팀장|팀원|팀원|  
+|팀원|업무|업무|  
 |------|---|---|
-|![강이화](https://github.com/siwool123/atelier/assets/138649745/fb9efb48-7b25-4d7d-b82b-c5a4bd94fa15)|
-|[테스트3](https://github.com/siwool123/atelier/issues/4#issue-2389685858)|
-|[박진웅](https://github.com/siwool123/atelier/issues/5#issue-2389686337)|
-|강이화|이준석|박진웅||박진웅|
-|테스트1|테스트2|테스트3|
+|![강이화](https://github.com/siwool123/atelier/assets/138649745/fb9efb48-7b25-4d7d-b82b-c5a4bd94fa15)|강이화(팀장)|총괄PM, 기획, 메인페이지, 판매/경매, 작품, 상세페이지, 작가소개 페이지, 커뮤니티, (FAQ, 공지사항), 관리자 페이지, 장바구니에서 결제, 바로결제 ,마이페이지 (장바구니, 주문내역, 입찰내역,포인트)
+|![이준석](https://github.com/siwool123/atelier/assets/138649745/b19edeac-8686-4a88-a01c-de175e32feb0)|이준석(팀원)|회원가입, 로그인, 마이페이지 (내공간에 찜, 작가신청, 정보수집),작가페이지 (작가프로필, 판매작품등록, 판매작품내역,정산내역)|
+|![박진웅](https://github.com/siwool123/atelier/assets/138649745/b19edeac-8686-4a88-a01c-de175e32feb0)|박진웅(팀원)|앱 : 관심작가알림, AI 큐레이터 ,포함 모든 기능|
+|![김지원](https://github.com/siwool123/atelier/assets/138649745/b19edeac-8686-4a88-a01c-de175e32feb0)|김지(팀원)|앱 : 작가회원 ,실시간채팅구현, ppt작성 |
 
 ## 기술스택
 ![image](https://github.com/siwool123/atelier/assets/138649745/8eea34ff-ca6d-4135-9f03-67aacd701bb0)
