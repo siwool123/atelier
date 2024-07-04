@@ -19,9 +19,9 @@
 ![image](https://github.com/siwool123/atelier/assets/138649745/8eea34ff-ca6d-4135-9f03-67aacd701bb0)
 
 ## 페이지
-|메인페이지|설명|
+|메인페이지|판매페이지|
 |---|---|
-|ㅁㄹㄹ|테스트2|
+|<img src="https://github.com/siwool123/atelier/assets/138649745/d4fc571f-c7ab-4d0c-9538-6b61ffecf100" width="300" height="400"/>| <img src="https://github.com/siwool123/atelier/assets/138649745/d4fc571f-c7ab-4d0c-9538-6b61ffecf100" width="300" height="400"/>|
 |**테스트1**|**테스트2**|
 |테스트1|테스트2|
 |**테스트1**|**테스트2**|
