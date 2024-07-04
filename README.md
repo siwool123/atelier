@@ -22,8 +22,8 @@
 |메인페이지|판매페이지|
 |---|---|
 |<img src="https://github.com/siwool123/atelier/assets/138649745/d4fc571f-c7ab-4d0c-9538-6b61ffecf100" width="300" height="400"/>| <img src="https://github.com/siwool123/atelier/assets/138649745/ebbab3d7-7b3f-4d59-ad0a-4813a64c8cd3" width="300" height="500"/>|
-|**테스트1**|**테스트2**|
-|테스트1|테스트2|
+|**판매작품**|**테스트2**|
+|<img src="https://github.com/siwool123/atelier/assets/138649745/493af314-e387-4ae0-8e1a-876668cd7d60" width="300" height="400"/>|<img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>|
 |**테스트1**|**테스트2**|
 |테스트1|테스트2|
 
