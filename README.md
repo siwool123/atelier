@@ -19,11 +19,11 @@
 ![image](https://github.com/siwool123/atelier/assets/138649745/8eea34ff-ca6d-4135-9f03-67aacd701bb0)
 
 ## 페이지
-|메인페이지|판매페이지|판매작품|
+|메인페이지|로그인|회원가입|
 |---|---|----|
-|<img src="https://github.com/siwool123/atelier/assets/138649745/d4fc571f-c7ab-4d0c-9538-6b61ffecf100" width="300" height="400"/>| <img src="https://github.com/siwool123/atelier/assets/138649745/ebbab3d7-7b3f-4d59-ad0a-4813a64c8cd3" width="300" height="500"/>|<img src="<img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>" width="300" height="500"/>|
-|**판매작품**|**작품등록**|
-|ㅁㄹㅇㅁㄹㅇㄹ|<img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>|
+|<img src="https://github.com/siwool123/atelier/assets/138649745/d4fc571f-c7ab-4d0c-9538-6b61ffecf100" width="300" height="400"/>| ㄱ|ㄹ
+|**작가프로필**|**판매작품등록**|**판매작품내역**|
+|ㅁㄹㅇㄹ|<img src="https://github.com/siwool123/atelier/assets/138649745/0a5bab8f-4506-4959-8650-7f3f95bb2b02" width="300" height="400"/>|<img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>
 |**테스트1**|**테스트2**|
 |테스트1|테스트2|
 
