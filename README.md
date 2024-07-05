@@ -1,6 +1,5 @@
 # ATELIER
 ## 프로젝트소개
-# <p align="center"> ATELIER </p>                 
 #### 아뜰리에는 아뜰리에는 건강한 미술 생태계를 꿈꾸고 있습니다. <br/><br/>소수에게 주어진 기회로 역량 있는 작가의 활동기회가 박탈되지 않기 위한 방안이 무엇인지 고민하고,<br/><br/>대중과 미술이 보다 쉽게 소통할 수 있는 환경을 조성합니다.
 ##### ● 프로젝트명: ATELIER(아뜰리에)
 ##### ● 프로젝트 기간: 2023.11.23~2023.12.20
@@ -26,8 +25,7 @@
 |<img src="https://github.com/siwool123/atelier/assets/138649745/d4fc571f-c7ab-4d0c-9538-6b61ffecf100" width="400" height="400"/>|<img src="https://github.com/siwool123/atelier/assets/138649745/152e54ab-994b-48c8-8bcf-8e317586a262" width="400" height="400"/>|<img src="https://github.com/siwool123/atelier/assets/138649745/b3416840-b27a-420a-8e48-2cf501877488" width="400" height="400"/>
 |**작가프로필**|**판매작품등록**|**판매작품내역**|
 |<img src="https://github.com/siwool123/atelier/assets/138649745/60a33d4b-ac15-4d5c-ad5b-7d17048cbc51" width="300" height="400"/>|<img src="https://github.com/siwool123/atelier/assets/138649745/0a5bab8f-4506-4959-8650-7f3f95bb2b02" width="300" height="400"/>|<img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>
-|**테스트1**|**테스트2**|
-|테스트1|테스트2|
+
 
 ## ERD
 <details>
@@ -38,7 +36,7 @@
 ## Usecase Diagram
 <details>
   <summary>ERD</summary>
-  <img src=" https://github.com/siwool123/atelier/assets/138649745/7fc54ba2-0933-49df-b2f7-8fabdb463c69"/>
-  <img src="https://github.com/siwool123/atelier/assets/138649745/29a037b9-b1e4-4a70-b6b7-8bdb0a1d28d3"/>
+  <img src="https://github.com/siwool123/atelier/assets/138649745/7fc54ba2-0933-49df-b2f7-8fabdb463c69"/>
+  <img src= "https://github.com/siwool123/atelier/assets/138649745/5d63eb48-c2e3-4e10-9626-1f969577be77"/>
 </details>
 
