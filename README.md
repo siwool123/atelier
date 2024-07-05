@@ -35,3 +35,10 @@
   <img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>
 </details>
 
+## Usecase Diagram
+<details>
+  <summary>ERD</summary>
+  <img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>
+  <img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>
+</details>
+
