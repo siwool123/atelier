@@ -32,13 +32,13 @@
 ## ERD
 <details>
   <summary>ERD</summary>
-  <img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>
+  <img src="https://github.com/siwool123/atelier/assets/138649745/7baf8da8-c90d-465d-8c4a-b4efc7831eb1"/>
 </details>
 
 ## Usecase Diagram
 <details>
   <summary>ERD</summary>
-  <img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>
-  <img src="https://github.com/siwool123/atelier/assets/138649745/1dd4bcc6-166b-4453-9c01-785244b33a2a" width="300" height="400"/>
+  <img src=" https://github.com/siwool123/atelier/assets/138649745/7fc54ba2-0933-49df-b2f7-8fabdb463c69"/>
+  <img src="https://github.com/siwool123/atelier/assets/138649745/29a037b9-b1e4-4a70-b6b7-8bdb0a1d28d3"/>
 </details>
 
