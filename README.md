@@ -34,7 +34,7 @@
 
 ## Usecase Diagram
 <details>
-  <summary>ERD</summary>
+  <summary>Usecase Diagram</summary>
   <img src="https://github.com/siwool123/atelier/assets/138649745/7fc54ba2-0933-49df-b2f7-8fabdb463c69"/>
   <img src= "https://github.com/siwool123/atelier/assets/138649745/5d63eb48-c2e3-4e10-9626-1f969577be77"/>
 </details>
